@@ -1,0 +1,13 @@
+# Mostra apenas aplicativos instalados (drun)
+show=drun
+width=800
+height=740
+location=center
+always_parse_dot_desktop=true
+show_io=false
+exec_search=false
+hide_scroll=true
+insensitive=true
+prompt=Search...
+allow_images=true
+image_size=24

@@ -1,0 +1,38 @@
+{
+  "positionX": "right",
+  "positionY": "botom",
+  "layer": "overlay",
+
+  "control-center-margin-top": 10,
+  "control-center-margin-bottom": 10,
+  "control-center-margin-right": 10,
+  "control-center-margin-left": 10,
+
+  "notification-icon-size": 82,
+  "notification-body-image-height": 100,
+  "notification-body-image-width": 200,
+ 
+ "timeout": 10,
+  "active-monitor": 0,
+  "buttons-grid": {
+    "actions": [
+      {
+        "label": "󰂚",
+        "command": "swaync-client -d -sw",
+        "type": "toggle"
+      },
+      {
+        "label": "󰖔",
+        "command": "swaync-client -t -sw",
+        "type": "toggle"
+      }
+    ]
+  },
+
+  "widgets": [
+    "title",
+    "dnd",
+    "notifications",
+    "mpris"
+  ]
+}
