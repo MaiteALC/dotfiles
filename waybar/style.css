@@ -3,7 +3,7 @@
     font-family: "JetBrainsMono Nerd Font Propo", FontAwesome;
     font-size: 17px;
 
-    margin-top: 3px;
+    margin-top: 2px;
     padding: 0;
 }
 
@@ -87,12 +87,14 @@ window#waybar {
     padding-right: 12px;
 }
 
-#custom.notification {
+#custom-notification {
     border: 1px solid #bd93f9;
-    min-width: 100px;
+    border-radius: 80px;
 
-    margin-right: 20px;
-    margin-left: 10px;
+    min-height: 42px;
+    min-width: 42px;
+
+    margin-right: 5px;
 }
 
 #tray {
