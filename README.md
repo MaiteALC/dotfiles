@@ -39,7 +39,7 @@ The distinguishing feature of this repository is its self-sufficient post instal
 | **Colors** | [Catppuccin](https://github.com/catppuccin/catppuccin) | Mocha flavor for all the system |
 | **App Launcher** | [Wofi](https://wiki.archlinux.org/title/Wofi) | Fast and minimalist app launcher stylized using CSS
 | **Notifications** | [SwayNC](https://github.com/ErikReider/SwayNotificationCenter) | Complete notification center
-| **Terminal Emulator** | [Kitty](https://sw.kovidgoyal.net/kitty/index.html) | 
+| **Terminal Emulator** | [Kitty](https://sw.kovidgoyal.net/kitty/index.html) | GPU-accelerated terminal emulator
 | **Shell** | [Zsh](https://www.zsh.org/) | Modern, powerfull and customazible shell with starship prompt
 | **Clipboard** | [Cliphist](https://github.com/sentriz/cliphist) | Minimalist and integrated with Wofi 
 | **Wallpapers** | [Hyprpaper](https://wiki.hypr.land/Hypr-Ecosystem/hyprpaper/) |  Native tool from hypr ecossystem
