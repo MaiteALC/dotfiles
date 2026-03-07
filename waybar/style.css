@@ -99,8 +99,7 @@ window#waybar {
     min-height: 42px;
     min-width: 42px;
 
-    margin-right: 5px;
-    margin-left: 5px;
+    margin-left: 4px;
 }
 
 #tray {
