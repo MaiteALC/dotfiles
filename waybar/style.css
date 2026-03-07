@@ -17,10 +17,10 @@ window#waybar {
 }
 
 #workspaces button { 
-    min-width: 37px;
-    min-height: 33px;
+    min-width: 40px;
+    min-height: 35px;
 
-    border-radius: 80px;
+    border-radius: 100%;
     padding-bottom: 3px;
 
     margin-left: 3px;
@@ -31,7 +31,6 @@ window#waybar {
     background-color:  rgba(30, 30, 46, 0.9);
 
     transition: all 300ms ease;
-
 }
 
 #workspaces button.active {
@@ -100,6 +99,7 @@ window#waybar {
     min-width: 42px;
 
     margin-right: 5px;
+    margin-left: 5px;
 }
 
 #tray {
