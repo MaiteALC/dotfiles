@@ -67,7 +67,7 @@ window#waybar {
     color: #89b4fa;
 }
 
-#battery, #network, #pulseaudio, #backlight, #clock, #tray, #custom-notifcation, #custom- {
+#battery, #network, #pulseaudio, #backlight, #clock, #tray, #custom-notifcation, #custom-sysmonitor {
     min-width: 20px;
 
     margin-left: 4px;

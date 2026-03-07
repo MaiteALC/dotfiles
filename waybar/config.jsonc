@@ -1,7 +1,7 @@
 {
     "layer": "top", 
     "position": "top",  
-    "modules-left": [ "tray", "hyprland/workspaces"],
+    "modules-left": ["custom/sysmonitor", "tray", "hyprland/workspaces"],
     "modules-center": ["clock"],
     "modules-right": ["network", "backlight", "pulseaudio", "battery", "custom/notification"],
     "scroll-step": 1,
@@ -59,6 +59,15 @@
     "tray": {
         "icon-size": 20,
         "spacing": 10
+    },
+
+    "custom/sysmonitor": {
+        "format": "{}",
+        "return-type": "json",
+        "interval": 10,
+        "tooltip": true,
+        "exec": "~/dotfiles/system-monitor.sh",
+        "escape": true
     },
 
     "custom/notification": {
