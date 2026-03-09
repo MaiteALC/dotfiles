@@ -65,7 +65,7 @@
     "custom/sysmonitor": {
         "format": "{}",
         "return-type": "json",
-        "interval": 10,
+        "interval": 5,
         "tooltip": true,
         "exec": "~/dotfiles/system-monitor.sh",
         "escape": true
