@@ -1,19 +1,42 @@
 #!/bin/bash
 
-CPU=$(top -bn1 | grep "%Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print $1}' )
+read cpu user nice system idle iowait irq softirq steal guest guest_nice < /proc/stat
+
+total1=$((user + nice + system + idle + iowait + irq + softirq + steal))
+idle1=$idle
 
 RAM=$(free -h | awk '/Mem:/ {print $3 "/" $2}')
 
-GPU="-"
+DISK=$(df / | awk 'NR==2 {print $5}')
 
-if lspci | grep -iE 'vga|3d' | grep -iq nvidia; then
-	GPU=$(nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits 2>/dev/null)
+NVIDIA_PCI_DIR=$(ls -d /sys/bus/pci/drivers/nvidia/0000:* 2>/dev/null | head -n 1)
+
+if [ -n "$NVIDIA_PCI_DIR" ]; then
+    GPU_STATUS=$(cat "$NVIDIA_PCI_DIR/power/runtime_status" 2>/dev/null)
+    
+    if [ "$GPU_STATUS" = "suspended" ]; then
+        GPU="0"
+    else
+        GPU=$(nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits 2>/dev/null)
+        
+        [ -z "$GPU" ] && GPU="0" 
+    fi
 else
-	GPU="No Nvidia GPU detected" # Intel and AMD GPUs will be included in the future
+    GPU="-"
 fi
 
-DISK=$(df / | awk 'NR==2 {sub(/%/,"",$5); print $5}')
+sleep 0.4
 
-TOOLTIP=$(printf "CPU: %s%%\nRAM: %s\nGPU: %s%%\nUsed Storage: %s%% " "$CPU" "$RAM" "$GPU" "$DISK")
+read cpu user nice system idle iowait irq softirq steal guest guest_nice < /proc/stat
+
+total2=$((user + nice + system + idle + iowait + irq + softirq + steal))
+idle2=$idle
+
+total_diff=$((total2 - total1))
+idle_diff=$((idle2 - idle1))
+
+CPU=$(awk "BEGIN {print int(100 * ($total_diff - $idle_diff) / $total_diff)}")
+
+TOOLTIP=$(printf " <b>CPU:</b> %s%% \n <b>RAM:</b> %s \n <b>GPU:</b> %s%% \n <b>Used Storage:</b> %s " "$CPU" "$RAM" "$GPU" "$DISK")
 
 jq --compact-output -n --arg text "" --arg tooltip "$TOOLTIP" --arg class "default" '{text: $text, tooltip: $tooltip, class: $class}'
