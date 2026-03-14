@@ -65,10 +65,10 @@
     "custom/sysmonitor": {
         "format": "{}",
         "return-type": "json",
-        "interval": 5,
+        "interval": 3,
         "tooltip": true,
         "exec": "~/dotfiles/system-monitor.sh",
-        "escape": true
+        "escape": false
     },
 
     "custom/notification": {
@@ -90,6 +90,6 @@
         "exec": "swaync-client -swb",
         "on-click": "swaync-client -t -sw",
         "on-click-right": "swaync-client -d -sw",
-        "escape": true
+        "escape": false
     }
 }
