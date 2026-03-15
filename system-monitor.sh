@@ -15,11 +15,11 @@ if [ -n "$NVIDIA_PCI_DIR" ]; then
     GPU_STATUS=$(cat "$NVIDIA_PCI_DIR/power/runtime_status" 2>/dev/null)
     
     if [ "$GPU_STATUS" = "suspended" ]; then
-        GPU="0"
+        GPU="Suspended"
     else
-        GPU=$(nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits 2>/dev/null)
+        GPU="$(nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits 2>/dev/null)%"
         
-        [ -z "$GPU" ] && GPU="0" 
+        [ -z "$GPU" ] && GPU="-" 
     fi
 else
     GPU="-"
@@ -37,6 +37,6 @@ idle_diff=$((idle2 - idle1))
 
 CPU=$(awk "BEGIN {print int(100 * ($total_diff - $idle_diff) / $total_diff)}")
 
-TOOLTIP=$(printf " <b>CPU:</b> %s%% \n <b>RAM:</b> %s \n <b>GPU:</b> %s%% \n <b>Used Storage:</b> %s " "$CPU" "$RAM" "$GPU" "$DISK")
+TOOLTIP=$(printf " <b>CPU:</b> %s%% \n <b>RAM:</b> %s \n <b>GPU:</b> %s \n <b>Used Storage:</b> %s " "$CPU" "$RAM" "$GPU" "$DISK")
 
 jq --compact-output -n --arg text "" --arg tooltip "$TOOLTIP" --arg class "default" '{text: $text, tooltip: $tooltip, class: $class}'
