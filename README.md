@@ -84,7 +84,7 @@ chmod u+x install.sh
 
 - Super + R = app launcher (wofi)
 
-- Super + V = clipboard history (cliphist/wofi)
+- Super + X = clipboard history (cliphist/wofi)
 
 - Super + N = notification center (SwayNC)
 
@@ -92,4 +92,4 @@ chmod u+x install.sh
 
 - Super + Shift + F = fullscreen
 
-Check the ```./hypr/hyprland.conf``` file to see all keybinds.
+Check the ```./hypr/keybinds.conf``` file to see all keybinds.
