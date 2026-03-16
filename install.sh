@@ -8,6 +8,23 @@ run_cmd() {
     fi
 }
 
+detect_gpu() {
+    local gpu_info=$(lspci | grep -iE "VGA|3D")
+    
+    if echo "$gpu_info" | grep -iq "nvidia"; then
+        echo "Nvidia"
+
+    elif echo "$gpu_info" | grep -iq "amd\|radeon"; then
+        echo "Amd"
+
+    elif echo "$gpu_info" | grep -iq "intel"; then
+        echo "Intel"
+
+    else
+        echo "Unknown"
+    fi
+}
+
 echo -e "\e[34m\n---------------------------------------------------------------\e[0m"
 echo -e "\e[34mStarting Arch linux ricing configuration + installation script\e[0m"
 echo -e "\e[34m---------------------------------------------------------------\e[0m\n"
@@ -22,8 +39,9 @@ if [[ "$1" == "--dry-run" || "$1" == "-d" ]]; then
     echo -e "\e[33mCommands will be printed, but not executed.\e[0m\n"
 fi
 
-
-while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+while true; 
+    do sudo -n true; sleep 60; kill -0 "$$" || exit; 
+done 2>/dev/null &
 
 echo -e "Permission conceded. Let's start!\n"
 
@@ -40,20 +58,35 @@ if [[ "$confirm" == "n" || "$confirm" == "no" ]]; then
     exit 1
 fi
 
-echo -e "\n------------------------------------"
+echo -e "\n-----------------------------------"
 echo "Installing the required packages..."
-echo -e "------------------------------------\n"
+echo -e "-----------------------------------\n"
 
-if lspci | grep -iE 'vga|3d' | grep -iq nvidia; then
-    echo "Nvidia graphics card detected."
-    echo "Installing drivers and dependencies..."
+GPU_VENDOR=$(detect_gpu)
 
-    run_cmd sudo pacman -S --needed --noconfirm nvidia-open-dkms nvidia-prime nvidia-settings nvidia-utils opencl-nvidia
+case $GPU_VENDOR in
+    "Nvidia")
+        echo -e "Nvidia GPU detected.\nInstalling Required drivers..."
 
-else
-    echo "No dedicated graphics card detected, proceeding with normal installation."
-fi
+        run_cmd sudo pacman -S --needed --noconfirm nvidia-open-dkms nvidia-prime nvidia-settings nvidia-utils opencl-nvidia
+        ;;
 
+    "Intel")
+        echo -e "Intel GPU detected.\nInstalling Required drivers..."
+
+        run_cmd sudo pacman -S --needed --noconfirm  mesa lib32-mesa vulkan-intel lib32-vulkan-intel intel-media-driver libva-intel-driver intel-gpu-tools
+        ;;
+
+    "Amd")
+        echo -e "AMD GPU detected.\nInstalling Required drivers..."
+
+        run_cmd sudo pacman -S --needed --noconfirm mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver mesa-vdpau
+        ;;
+
+    *)
+        echo "No dedicated GPU detected, proceeding with normal installation."
+        ;;
+esac
 
 UTIL_PACKAGES=(
     # Audio
@@ -221,10 +254,10 @@ for folder in "${CONFIG_FOLDERS[@]}"; do
 
     if [ -d "$SOURCE" ]; then
         run_cmd rm -rf "$TARGET"
-
         run_cmd ln -sf "$SOURCE" "$TARGET"
-        
+
         echo -e " Linked: $SOURCE -> $TARGET"
+
     else
         echo -e "\e[33m Folder $folder not found in $DOTFILE_FOLDER\e[0m"
         echo -e "\e[33mSkipping...\e[0m"
