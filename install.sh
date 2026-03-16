@@ -113,12 +113,13 @@ UTIL_PACKAGES=(
     cliphist
     wl-clip-persist
     udiskie
-    sddm
     mpv
     nautilus
     wofi
     satty
     grim
+    waybar
+    swaync
 
     # Aesthetics
     cmatrix
@@ -157,11 +158,15 @@ HYPRLAND_AND_RELATED_PACKAGES=(
     hyprpicker
     hyprshot
     hyprsunset
-    waybar
+
+    # Config related
     kvantum
-    swaync
     nwg-displays
     nwg-look
+
+    # Login manager
+    greetd
+    greetd-tuigreet
 )
 
 LIBS_AND_PLUGINS=(
@@ -195,11 +200,9 @@ LIBS_AND_PLUGINS=(
 
 AUR_PACKAGES=(
     catppuccin-gtk-theme-mocha
-    catppuccin-sddm-theme-mocha
     papirus-folders-catppuccin-git
     pipes.sh
     wlogout
-    qview
 )
 
 AUR_HELPER=""
