@@ -48,7 +48,8 @@ echo -e "Permission conceded. Let's start!\n"
 CONFIG_FOLDERS=("hypr" "waybar" "wofi" "swaync" "kitty" "Kvantum")
 
 echo -e "\e[33m  WARNING: This script will remove all contents (rm -rf) inside some configuration folders in ~/.config/ to apply the new configurations.\e[0m"
-echo -e "Affected folders: ${CONFIG_FOLDERS[*]}\n"
+echo -e "Affected folders: ${CONFIG_FOLDERS[*]} and greetd\n"
+
 read -p "Proceed? [Y/n] " confirm
 
 confirm=$(echo "$confirm" | tr '[:upper:]' '[:lower:]')
@@ -236,6 +237,8 @@ run_cmd sudo pacman -S --needed --noconfirm "${FONT_PACKAGES[@]}" "${TERMINAL_PA
 
 echo -e "\nAll required packages installed successfully!"
 
+run_cmd rm -rf "/tmp/yay/"
+
 echo "Customizing icons with Catppuccin Mocha Red..."
 
 if command -v papirus-folders &> /dev/null; then
@@ -268,12 +271,50 @@ for folder in "${CONFIG_FOLDERS[@]}"; do
 done
 
 run_cmd ln -sf "$DOTFILE_FOLDER/starship.toml" "$HOME/.config/starship.toml"
-
 echo " Linked file: starship.toml"
 
 echo -e "\nLinks created!\n"
 
-run_cmd rm -rf "/tmp/yay/"
+DM_NAME=""
+if systemctl is-active --quiet display-manager.service; then
+    DM_NAME=$(basename $(readlink /etc/systemd/system/display-manager.service) | sed 's/.service//') 
+fi
+
+if [ -z "$DM_NAME" ]; then
+    echo "No enabled login manager was found."
+
+    run_cmd mkdir -p "/etc/greetd"
+    run_cmd ln -sf "$DOTFILE_FOLDER/greetd/config.toml" "/etc/greetd/config.toml"
+
+    run_cmd sudo systemctl enable greetd.servce
+    echo "The login manager Greetd with Tuigreet was enabled"
+
+elif [ $DM_NAME = "greetd" ]; then
+    echo "Note: the content of /etc/greetd/config.toml file will be deleted and the content of ~/dotfiles/greetd/config.toml will be used to apply the login manager configuration"
+
+    echo "Aplying new configurations to Greetd"
+
+    run_cmd rm /etc/greetd/config.toml
+    run_cmd mkdir -p "/etc/greetd"
+
+    run_cmd ln -sf "$DOTFILE_FOLDER/greetd/config.toml" "/etc/greetd/config.toml"
+
+else
+    echo "An enable login manager was founded: $DM_NAME"
+    read -p "Would you like to disable it to enable Greetd? [Y/n] " enable
+
+    enable=$(echo "$enable" | tr '[:upper:]' '[:lower:]')
+
+    if [[ "$enable" == "n" || "$enable" == "no" ]]; then
+        echo "Your $DM_NAME will be mantained."
+    
+    else
+        run_cmd sudo systemctl disable "$DM_NAME"
+        run_cmd sudo systemctl enable greetd.service
+
+        echo "$DM_NAME disabled and Greetd enabled!"
+    fi
+fi
 
 echo -e "\e[32m------------------------------------------------------\e[0m"
 echo -e "\e[32mScript executed successfully!\e[0m"

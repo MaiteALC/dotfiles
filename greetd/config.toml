@@ -1,0 +1,7 @@
+[terminal]
+vt = 1
+
+[default_session]
+command = "tuigreet --time --greeting 'Welcome back, developer! Keep coding.' --greet-align left --power-shutdown 'systemctl poweroff' --power-reboot 'systemctl reboot'  --sessions /usr/share/wayland-sessions --cmd Hyprland"
+
+user = "greeter"
