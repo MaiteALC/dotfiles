@@ -46,9 +46,12 @@ done 2>/dev/null &
 echo -e "Permission conceded. Let's start!\n"
 
 CONFIG_FOLDERS=("hypr" "waybar" "wofi" "swaync" "kitty" "Kvantum")
+TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
+BACKUP_DIR="$HOME/.rice_backup_$TIMESTAMP"
 
-echo -e "\e[33m  WARNING: This script will remove all contents (rm -rf) inside some configuration folders in ~/.config/ to apply the new configurations.\e[0m"
-echo -e "Affected folders: ${CONFIG_FOLDERS[*]} and greetd\n"
+echo -e "\e[33m  NOTE: This script will create a backup of some configuration directories (if they exist)\e[0m"
+echo -e "\e[33mDirectories to backup (all of them inside ~/.config): ${CONFIG_FOLDERS[*]} and greetd\n\e[0m"
+echo -e "\e[33mBackup directory path: $BACKUP_DIR \e[0m"
 
 read -p "Proceed? [Y/n] " confirm
 
@@ -259,9 +262,11 @@ for folder in "${CONFIG_FOLDERS[@]}"; do
     TARGET="$HOME/.config/$folder"
 
     if [ -d "$SOURCE" ]; then
-        run_cmd rm -rf "$TARGET"
-        run_cmd ln -sf "$SOURCE" "$TARGET"
+        if [ -d "$TARGET" ] || [ -L "$TARGET" ]; then
+            run_cmd mv "$TARGET" "$BACKUP_DIR/"
+        fi
 
+        run_cmd ln -s "$SOURCE" "$TARGET"
         echo -e " Linked: $SOURCE -> $TARGET"
 
     else
@@ -270,10 +275,9 @@ for folder in "${CONFIG_FOLDERS[@]}"; do
     fi
 done
 
-run_cmd ln -sf "$DOTFILE_FOLDER/starship.toml" "$HOME/.config/starship.toml"
+run_cmd mv "$HOME/.config/starship.toml" "$BACKUP_DIR/starship.toml" 2>/dev/null
+run_cmd ln -s "$DOTFILE_FOLDER/starship.toml" "$HOME/.config/starship.toml"
 echo " Linked file: starship.toml"
-
-echo -e "\nLinks created!\n"
 
 DM_NAME=""
 if systemctl is-active --quiet display-manager.service; then
@@ -283,21 +287,23 @@ fi
 if [ -z "$DM_NAME" ]; then
     echo "No enabled login manager was found."
 
-    run_cmd mkdir -p "/etc/greetd"
-    run_cmd ln -sf "$DOTFILE_FOLDER/greetd/config.toml" "/etc/greetd/config.toml"
+    if [ -d "/etc/greetd" ] || [ -L "/etc/greetd" ]; then
+        run_cmd mv /etc/greetd "$BACKUP_DIR/"
+    fi
+
+    run_cmd ln -s "$DOTFILE_FOLDER/greetd" "/etc/greetd"
 
     run_cmd sudo systemctl enable greetd.servce
     echo "The login manager Greetd with Tuigreet was enabled"
 
 elif [ $DM_NAME = "greetd" ]; then
-    echo "Note: the content of /etc/greetd/config.toml file will be deleted and the content of ~/dotfiles/greetd/config.toml will be used to apply the login manager configuration"
-
     echo "Aplying new configurations to Greetd"
 
-    run_cmd rm /etc/greetd/config.toml
-    run_cmd mkdir -p "/etc/greetd"
+    if [ -d "/etc/greetd" ] || [ -L "/etc/greetd" ]; then
+        run_cmd mv /etc/greetd "$BACKUP_DIR/"
+    fi
 
-    run_cmd ln -sf "$DOTFILE_FOLDER/greetd/config.toml" "/etc/greetd/config.toml"
+    run_cmd ln -s "$DOTFILE_FOLDER/greetd" "/etc/greetd"
 
 else
     echo "An enable login manager was founded: $DM_NAME"
@@ -309,6 +315,8 @@ else
         echo "Your $DM_NAME will be mantained."
     
     else
+        run_cmd ln -s "$DOTFILE_FOLDER/greetd" "/etc/greetd"
+
         run_cmd sudo systemctl disable "$DM_NAME"
         run_cmd sudo systemctl enable greetd.service
 
