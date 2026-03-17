@@ -45,7 +45,7 @@ done 2>/dev/null &
 
 echo -e "Permission conceded. Let's start!\n"
 
-CONFIG_FOLDERS=("hypr" "waybar" "wofi" "swaync" "kitty" "Kvantum")
+CONFIG_FOLDERS=("hypr" "waybar" "wofi" "swaync" "kitty" "Kvantum" "fastfetch")
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 BACKUP_DIR="$HOME/.rice_backup_$TIMESTAMP"
 
