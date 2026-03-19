@@ -29,15 +29,15 @@ echo -e "\e[34m\n---------------------------------------------------------------
 echo -e "\e[34mStarting Arch linux ricing configuration + installation script\e[0m"
 echo -e "\e[34m---------------------------------------------------------------\e[0m\n"
 
-echo "Please enter your password to allow package downloads"
-sudo -v
-
 DRY_RUN=false
 if [[ "$1" == "--dry-run" || "$1" == "-d" ]]; then
     DRY_RUN=true
     echo -e "\n\e[33m--- DRY RUN MODE ACTIVATED ---\e[0m"
     echo -e "\e[33mCommands will be printed, but not executed.\e[0m\n"
 fi
+
+echo "Please enter your password to allow package downloads"
+sudo -v
 
 while true; 
     do sudo -n true; sleep 60; kill -0 "$$" || exit; 
