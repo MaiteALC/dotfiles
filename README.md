@@ -16,17 +16,19 @@ The distinguishing feature of this repository is its self-sufficient post instal
 
 *Script features:*
 
-- Hardware Detection: automatic Nvidia GPUs detection to install the appropriated drivers (like nvidia-open-dkms and others).
+- Hardware Detection: automatic GPUs detection to install the appropriated drivers (like nvidia-prime for Nvidia, vulkan-radeon for Amd, vulkan-intel for Intel).
 
 - Intelligent AUR Helper: Detects yay or paru. If none was found, installs yay automatically.
 
 - Dry-Run Mode: Allows test all the script without alter a single file in your system.
 
-- Symlink Management: make symlinks between the repository and your ~/.config/ folder in a clean way.
+- Symlink Management: Make symlinks between the repository and your ~/.config/ directory in a clean way.
+
+- Backup: Automatically creates a backup directory (~/.rice_backup) and put all your previous configuration to avoid losing files.
 
 - Color Consistency: Applies the Catppuccin Mocha Red in the Papirus Dark icon theme via CLI.
 
-- Wallpaper folder: Provides a set of wallpapers to match the Hyprland style.
+- Wallpapers: Provides a set of wallpapers to match the Hyprland style.
 
 ---
 
@@ -64,7 +66,7 @@ cd ~/dotfiles
 chmod u+x install.sh
 ```
 
-*3. Execute the Test (Dru-Run):*
+*3. Execute the Test (Dry-Run):*
 
 ```bash
 ./install.sh --dry-run
@@ -80,7 +82,7 @@ chmod u+x install.sh
 
 # Main Keybinds:
 
-- Super + Enter = terminal (kitty)
+- Super + Return (Enter) = terminal (kitty)
 
 - Super + R = app launcher (wofi)
 
