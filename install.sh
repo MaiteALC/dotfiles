@@ -8,7 +8,7 @@ run_cmd() {
     fi
 }
 
-detect_gpu() {
+detect_gpu_vendor() {
     local gpu_info=$(lspci | grep -iE "VGA|3D")
     
     if echo "$gpu_info" | grep -iq "nvidia"; then
@@ -23,6 +23,120 @@ detect_gpu() {
     else
         echo "Unknown"
     fi
+}
+
+#######
+# Resolve the path to the card file in /dev/dri/ belonging to a given GPU based on its provided pci address
+#
+# Arguments:
+#   $1 - The pci address of the GPU you want the path to
+#
+# Outputs:
+#   The path to the card file in /dev/dri/
+#######
+get_gpu_card_path() {
+    card_number=$(basename "$(readlink "/dev/dri/by-path/pci-$1-card")")
+    echo "/dev/dri/$card_number"
+}
+
+#######
+# Search trough the /sys/class/drm/ directory to find the available GPUs and obtain their respective pci addresses.
+#
+# Outputs:
+#   An array containing the respective pci addresses to all found (and valid) GPUs.
+#######
+get_gpu_pci_addresses() {
+    local addresses=()
+
+    for card in /sys/class/drm/card?; do
+        if [ -e "$card/device/vendor" ]; then
+            addresses+=("$(basename "$(readlink -f "$card/device")")")
+        fi
+    done
+
+    echo "${addresses[@]}"
+}
+
+#######
+# Resolve a pci address into the respective user-friendly GPU name. 
+#
+# Arguments:
+#   $1 - A pci address. It must contain the original colons and periods, for example: 0000:01:00.0. 
+#
+# Outputs:
+#   The formatted name of the GPU 
+#######
+get_gpu_name() {
+    echo $(lspci -s "$1" | cut -d ':' -f3- | sed 's/^ *//')
+}
+
+#######
+# Appends environment variables required by Hyprland in './hypr/env_hardware.conf' based on the detected GPU(s).
+# The function creates the file if it doesn't exists.
+#
+# Arguments:
+#   $1 - The GPU vendor. Used to determine which variables (and their values) include in env_hardware.conf file
+#######
+add_env_variables() {
+    local pci_addresses=($(get_gpu_pci_addresses))
+    local CARD_PATH=""
+
+    if [ "${#pci_addresses[@]}" -eq 1 ]; then
+        echo "A single GPU was detected. Automatic configuring the environment variables..."
+        CARD_PATH=$(get_gpu_card_path "${pci_addresses[0]}")
+    
+    else
+        echo "More than one GPU detected. Which would you like to use to render Hyprland?"
+
+        while true; do
+            local i=0
+            for address in "${pci_addresses[@]}"; do
+                name=$(get_gpu_name "$address")
+                echo "GPU $i - $name"
+                ((i++))
+            done
+
+            read -p "Select by typing the number of the GPU you want to use: " choice
+
+            chosen_address="${pci_addresses[$choice]}"
+            if [[ ! "$choice" =~ ^[0-9]+$ ]] || [ -z "$chosen_address" ]; then
+                echo "Invalid option. Try again."
+                continue
+            else
+                CARD_PATH=$(get_gpu_card_path "$chosen_address")
+                break
+            fi
+        done
+    fi
+
+    local ENV_FILE="$HOME/dotfiles/hypr/env_hardware.conf"
+
+    if [ ! -d "$(dirname "$ENV_FILE")" ]; then
+        echo "\e[31m The ~/dotfiles/hypr directory does not exists! Unable to proceed with the script.\e[0m"
+        exit 1
+    fi
+
+    run_cmd touch "$ENV_FILE"
+
+    echo "# Hyprland environment variables related to GPU and rendering configurations" > "$ENV_FILE"
+    echo "env = XDG_SESSION_TYPE,wayland" >> "$ENV_FILE"
+
+    if [ "$1" = "Nvidia" ]; then
+        echo "env = LIBVA_DRIVER_NAME,nvidia" >> "$ENV_FILE"
+        echo "env = GBM_BACKEND,nvidia-drm" >> "$ENV_FILE"
+        echo "env = __GLX_VENDOR_LIBRARY_NAME,nvidia" >> "$ENV_FILE"
+        echo "env = WLR_NO_HARDWARE_CURSORS,1" >> "$ENV_FILE"
+
+    elif [ "$1" = "Amd" ] || [ "$1" = "Intel" ]; then
+        echo "# Using Mesa native configurations. Intel and Amd GPUs works without complex confifgurations." >> "$ENV_FILE"
+
+    else
+        echo -e "\e[33mWarning: Unrecognized GPU vendor ($1). Proceeding with default settings.\e[0m"
+        echo "# Unknown GPU vendor: $1" >> "$ENV_FILE"
+    fi
+
+    echo "# GPU used to render hyprland: " >> "$ENV_FILE"
+    echo "env = AQ_DRM_DEVICES,$CARD_PATH" >> "$ENV_FILE"
 }
 
 echo -e "\e[34m\n---------------------------------------------------------------\e[0m"
@@ -62,11 +176,13 @@ if [[ "$confirm" == "n" || "$confirm" == "no" ]]; then
     exit 1
 fi
 
+GPU_VENDOR=$(detect_gpu_vendor)
+
+run_cmd add_env_variables "$GPU_VENDOR"
+
 echo -e "\n-----------------------------------"
 echo "Installing the required packages..."
 echo -e "-----------------------------------\n"
-
-GPU_VENDOR=$(detect_gpu)
 
 case $GPU_VENDOR in
     "Nvidia")

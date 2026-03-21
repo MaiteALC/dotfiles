@@ -17,3 +17,5 @@ icon-theme.cache
 
 .DS_Store
 .directory
+
+/hypr/env_hardware.conf
