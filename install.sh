@@ -254,6 +254,7 @@ fi
 echo -e "Creating symlinks...\n"
 
 run_cmd mkdir -p "$HOME/.config/"
+run_cmd mkdir -p "$BACKUP_DIR"
 
 DOTFILE_FOLDER="$HOME/dotfiles"
 
@@ -266,7 +267,7 @@ for folder in "${CONFIG_FOLDERS[@]}"; do
             run_cmd mv "$TARGET" "$BACKUP_DIR/"
         fi
 
-        run_cmd ln -s "$SOURCE" "$TARGET"
+        run_cmd ln -snf "$SOURCE" "$TARGET"
         echo -e " Linked: $SOURCE -> $TARGET"
 
     else
@@ -275,8 +276,8 @@ for folder in "${CONFIG_FOLDERS[@]}"; do
     fi
 done
 
-run_cmd mv "$HOME/.config/starship.toml" "$BACKUP_DIR/starship.toml" 2>/dev/null
-run_cmd ln -s "$DOTFILE_FOLDER/starship.toml" "$HOME/.config/starship.toml"
+run_cmd mv "$HOME/.config/starship.toml" "$BACKUP_DIR/starship.toml"
+run_cmd ln -snf "$DOTFILE_FOLDER/starship.toml" "$HOME/.config/starship.toml"
 echo " Linked file: starship.toml"
 
 DM_NAME=""
@@ -288,10 +289,10 @@ if [ -z "$DM_NAME" ]; then
     echo "No enabled login manager was found."
 
     if [ -d "/etc/greetd" ] || [ -L "/etc/greetd" ]; then
-        run_cmd mv /etc/greetd "$BACKUP_DIR/"
+        run_cmd sudo mv /etc/greetd "$BACKUP_DIR/"
     fi
 
-    run_cmd ln -s "$DOTFILE_FOLDER/greetd" "/etc/greetd"
+    run_cmd sudo ln -snf "$DOTFILE_FOLDER/greetd" "/etc/greetd"
 
     run_cmd sudo systemctl enable greetd.servce
     echo "The login manager Greetd with Tuigreet was enabled"
@@ -300,10 +301,10 @@ elif [ $DM_NAME = "greetd" ]; then
     echo "Aplying new configurations to Greetd"
 
     if [ -d "/etc/greetd" ] || [ -L "/etc/greetd" ]; then
-        run_cmd mv /etc/greetd "$BACKUP_DIR/"
+        run_cmd sudo mv /etc/greetd "$BACKUP_DIR/"
     fi
 
-    run_cmd ln -s "$DOTFILE_FOLDER/greetd" "/etc/greetd"
+    run_cmd sudo ln -snf "$DOTFILE_FOLDER/greetd" "/etc/greetd"
 
 else
     echo "An enable login manager was founded: $DM_NAME"
@@ -315,7 +316,7 @@ else
         echo "Your $DM_NAME will be mantained."
     
     else
-        run_cmd ln -s "$DOTFILE_FOLDER/greetd" "/etc/greetd"
+        run_cmd sudo ln -snf "$DOTFILE_FOLDER/greetd" "/etc/greetd"
 
         run_cmd sudo systemctl disable "$DM_NAME"
         run_cmd sudo systemctl enable greetd.service
