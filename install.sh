@@ -174,6 +174,19 @@ else
         sleep 60 
         kill -0 "$$" || exit
     done 2>/dev/null &
+
+    echo "Optmizing pacman.conf..."
+    # Adds the ILoveCandy easter egg (ASCII Pacman)
+    if ! grep -q "ILoveCandy" /etc/pacman.conf; then
+        sudo sed -i '/^Color/a ILoveCandy' /etc/pacman.conf
+    fi
+
+    sudo sed -i 's/^#Color/Color/' /etc/pacman.conf
+    sudo sed -i 's/^#ParallelDownloads = 5/ParallelDownloads = 10/' /etc/pacman.conf
+    # Multilib repository is required for 32-bit packages
+    sudo sed -i '/^#\[multilib\]/,/^#Include = \/etc\/pacman.d\/mirrorlist/ s/^#//' /etc/pacman.conf
+
+    sudo pacman -Sy
 fi
 
 GPU_VENDOR=$(detect_gpu_vendor)
