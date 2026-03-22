@@ -19,3 +19,4 @@ icon-theme.cache
 .directory
 
 /hypr/env_hardware.conf
+/hypr/devices.conf

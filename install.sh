@@ -383,10 +383,13 @@ fi
 
 echo -e "Creating symlinks...\n"
 
+DOTFILE_FOLDER="$HOME/dotfiles"
+
 run_cmd mkdir -p "$HOME/.config/"
 run_cmd mkdir -p "$BACKUP_DIR"
 
-DOTFILE_FOLDER="$HOME/dotfiles"
+touch "$DOTFILE_FOLDER/devices.conf" # Ensuring that the file exists (even if empty) to avoid Hyprland issues by sourcing an inexistent file.
+# Note: this file is dedicated for personal per-device config. Modify if you want, or keep it empty.
 
 for folder in "${CONFIG_FOLDERS[@]}"; do
     SOURCE="$DOTFILE_FOLDER/$folder"
