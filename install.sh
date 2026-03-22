@@ -323,6 +323,7 @@ AUR_PACKAGES=(
     papirus-folders-catppuccin-git
     pipes.sh
     wlogout
+    bibata-cursor-theme-bin
 )
 
 AUR_HELPER=""
