@@ -446,7 +446,7 @@ touch ~/.zshrc
 CUSTOM_ZSH="$DOTFILE_FOLDER/zsh_custom.zsh"
 
 if ! grep -q "source $CUSTOM_ZSH" ~/.zshrc; then
-    echo -e "\n# Injected configurations by ricing script"
+    echo -e "\n# Injected configurations by ricing script" >> ~/.zshrc
     echo "source $CUSTOM_ZSH" >> ~/.zshrc
 
     echo "Sourced custom Zsh configurations in your ~/.zshrc file"
