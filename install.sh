@@ -410,7 +410,7 @@ if [ -z "$DM_NAME" ]; then
 
     run_cmd sudo ln -snf "$DOTFILE_FOLDER/greetd" "/etc/greetd"
 
-    run_cmd sudo systemctl enable greetd.servce
+    run_cmd sudo systemctl enable greetd.service
     echo "The login manager Greetd with Tuigreet was enabled"
 
 elif [ $DM_NAME = "greetd" ]; then
