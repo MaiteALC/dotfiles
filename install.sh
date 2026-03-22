@@ -143,6 +143,10 @@ echo -e "\e[34m\n---------------------------------------------------------------
 echo -e "\e[34mStarting Arch linux ricing configuration + installation script\e[0m"
 echo -e "\e[34m---------------------------------------------------------------\e[0m\n"
 
+CONFIG_FOLDERS=("hypr" "waybar" "wofi" "swaync" "kitty" "Kvantum" "fastfetch")
+TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
+BACKUP_DIR="$HOME/.rice_backup_$TIMESTAMP"
+
 DRY_RUN=false
 if [[ "$1" == "--dry-run" || "$1" == "-d" ]]; then
     DRY_RUN=true
@@ -150,6 +154,18 @@ if [[ "$1" == "--dry-run" || "$1" == "-d" ]]; then
     echo -e "\e[33mCommands will be printed, but not executed.\e[0m\n"
 
 else
+    echo -e "\e[33m  NOTE: This script will create a backup of some configuration directories (if they exist)\e[0m"
+    echo -e "\e[33mDirectories to backup: ${CONFIG_FOLDERS[*]} and greetd\n\e[0m"
+    echo -e "\e[33mBackup directory path: $BACKUP_DIR \e[0m"
+
+    read -p "Proceed? [Y/n] " confirm
+    confirm=$(echo "$confirm" | tr '[:upper:]' '[:lower:]')
+
+    if [[ "$confirm" == "n" || "$confirm" == "no" ]]; then
+        echo "\e[31m Script interrupted by the user\e[0m."
+        exit 1
+    fi
+
     echo "Please enter your password to allow package downloads"
     sudo -v
 
@@ -158,25 +174,6 @@ else
         sleep 60 
         kill -0 "$$" || exit
     done 2>/dev/null &
-fi
-
-echo -e "Permission conceded. Let's start!\n"
-
-CONFIG_FOLDERS=("hypr" "waybar" "wofi" "swaync" "kitty" "Kvantum" "fastfetch")
-TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
-BACKUP_DIR="$HOME/.rice_backup_$TIMESTAMP"
-
-echo -e "\e[33m  NOTE: This script will create a backup of some configuration directories (if they exist)\e[0m"
-echo -e "\e[33mDirectories to backup (all of them inside ~/.config): ${CONFIG_FOLDERS[*]} and greetd\n\e[0m"
-echo -e "\e[33mBackup directory path: $BACKUP_DIR \e[0m"
-
-read -p "Proceed? [Y/n] " confirm
-
-confirm=$(echo "$confirm" | tr '[:upper:]' '[:lower:]')
-
-if [[ "$confirm" == "n" || "$confirm" == "no" ]]; then
-    echo "\e[31m Script interrupted by the user\e[0m."
-    exit 1
 fi
 
 GPU_VENDOR=$(detect_gpu_vendor)
