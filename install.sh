@@ -445,6 +445,19 @@ else
     fi
 fi
 
+touch ~/.zshrc
+CUSTOM_ZSH="$DOTFILE_FOLDER/zsh_custom.zsh"
+
+if ! grep -q "source $CUSTOM_ZSH" ~/.zshrc; then
+    echo -e "\n# Injected configurations by ricing script"
+    echo "source $CUSTOM_ZSH" >> ~/.zshrc
+
+    echo "Sourced custom Zsh configurations in your ~/.zshrc file"
+
+else
+    echo "The zsh_custom.zsh is already sourced in your .zshrc file. Nothing has been chaged."
+fi
+
 echo -e "\e[32m------------------------------------------------------\e[0m"
 echo -e "\e[32mScript executed successfully!\e[0m"
 echo -e "\e[32mReboot your PC and enjoy your Arch Linux with Hyprland\e[0m"
