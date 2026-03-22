@@ -148,14 +148,17 @@ if [[ "$1" == "--dry-run" || "$1" == "-d" ]]; then
     DRY_RUN=true
     echo -e "\n\e[33m--- DRY RUN MODE ACTIVATED ---\e[0m"
     echo -e "\e[33mCommands will be printed, but not executed.\e[0m\n"
+
+else
+    echo "Please enter your password to allow package downloads"
+    sudo -v
+
+    while true; do
+        sudo -n -v 
+        sleep 60 
+        kill -0 "$$" || exit
+    done 2>/dev/null &
 fi
-
-echo "Please enter your password to allow package downloads"
-sudo -v
-
-while true; 
-    do sudo -n true; sleep 60; kill -0 "$$" || exit; 
-done 2>/dev/null &
 
 echo -e "Permission conceded. Let's start!\n"
 
