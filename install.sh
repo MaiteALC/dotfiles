@@ -109,34 +109,33 @@ add_env_variables() {
         done
     fi
 
-    local ENV_FILE="$HOME/dotfiles/hypr/env_hardware.conf"
+    local GPU_ENV_FILE="$HOME/dotfiles/scripts/env_hardware.sh"
 
-    if [ ! -d "$(dirname "$ENV_FILE")" ]; then
-        echo "\e[31m The ~/dotfiles/hypr directory does not exists! Unable to proceed with the script.\e[0m"
+    if [ ! -d "$(dirname "$GPU_ENV_FILE")" ]; then
+        echo "\e[31m The ~/dotfiles/scripts directory does not exists! Unable to proceed with the installation script.\e[0m"
         exit 1
     fi
 
-    run_cmd touch "$ENV_FILE"
+    run_cmd touch "$GPU_ENV_FILE"
 
-    echo "# Hyprland environment variables related to GPU and rendering configurations" > "$ENV_FILE"
-    echo "env = XDG_SESSION_TYPE,wayland" >> "$ENV_FILE"
+    echo "# Hyprland environment variables related to GPU and rendering configurations" > "$GPU_ENV_FILE"
 
     if [ "$1" = "Nvidia" ]; then
-        echo "env = LIBVA_DRIVER_NAME,nvidia" >> "$ENV_FILE"
-        echo "env = GBM_BACKEND,nvidia-drm" >> "$ENV_FILE"
-        echo "env = __GLX_VENDOR_LIBRARY_NAME,nvidia" >> "$ENV_FILE"
-        echo "env = WLR_NO_HARDWARE_CURSORS,1" >> "$ENV_FILE"
+        echo "export LIBVA_DRIVER_NAME=nvidia" >> "$GPU_ENV_FILE"
+        echo "export GBM_BACKEND=nvidia-drm" >> "$GPU_ENV_FILE"
+        echo "export __GLX_VENDOR_LIBRARY_NAME=nvidia" >> "$GPU_ENV_FILE"
+        echo "export WLR_NO_HARDWARE_CURSORS=1" >> "$GPU_ENV_FILE"
 
     elif [ "$1" = "Amd" ] || [ "$1" = "Intel" ]; then
-        echo "# Using Mesa native configurations. Intel and Amd GPUs works without complex confifgurations." >> "$ENV_FILE"
+        echo "# Using Mesa native configurations. Intel and Amd GPUs works without complex confifgurations." >> "$GPU_ENV_FILE"
 
     else
         echo -e "\e[33mWarning: Unrecognized GPU vendor ($1). Proceeding with default settings.\e[0m"
-        echo "# Unknown GPU vendor: $1" >> "$ENV_FILE"
+        echo "# Unknown GPU vendor: $1" >> "$GPU_ENV_FILE"
     fi
 
-    echo "# GPU used to render hyprland: " >> "$ENV_FILE"
-    echo "env = AQ_DRM_DEVICES,$CARD_PATH" >> "$ENV_FILE"
+    echo -e "\n# GPU used to render hyprland: " >> "$GPU_ENV_FILE"
+    echo "export AQ_DRM_DEVICES=$CARD_PATH" >> "$GPU_ENV_FILE"
 }
 
 echo -e "\e[34m\n---------------------------------------------------------------\e[0m"
@@ -469,6 +468,22 @@ if ! grep -q "source $CUSTOM_ZSH" ~/.zshrc; then
 
 else
     echo "The zsh_custom.zsh is already sourced in your .zshrc file. Nothing has been chaged."
+fi
+
+START_HYPRLAND_DIR="/usr/local/bin"
+if [ -e "$START_HYPRLAND_DIR/start-hyprland" ]; then
+    echo "A previous start-hyprland script was found in $START_HYPRLAND_DIR"
+    echo "It will be moved to the backup directory to avoid conflicts with the start-hyprland script of this rice."
+    
+    run_cmd mv "$START_HYPRLAND_DIR/start-hyprland" "$BACKUP_DIR/"
+    run_cmd cp "$DOTFILE_FOLDER/scripts/start-hyprland" "$START_HYPRLAND_DIR/"
+    run_cmd chmod +x "$START_HYPRLAND_DIR/start-hyprland"
+
+else
+    echo "Copying the start-hyprland script to $START_HYPRLAND_DIR to ensure that your Hyprland will be properly started..."
+    
+    run_cmd cp "$DOTFILE_FOLDER/scripts/start-hyprland" "$START_HYPRLAND_DIR/"
+    run_cmd chmod +x "$START_HYPRLAND_DIR/start-hyprland"
 fi
 
 echo -e "\e[32m------------------------------------------------------\e[0m"
