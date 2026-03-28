@@ -475,15 +475,15 @@ if [ -e "$START_HYPRLAND_DIR/start-hyprland" ]; then
     echo "A previous start-hyprland script was found in $START_HYPRLAND_DIR"
     echo "It will be moved to the backup directory to avoid conflicts with the start-hyprland script of this rice."
     
-    run_cmd mv "$START_HYPRLAND_DIR/start-hyprland" "$BACKUP_DIR/"
-    run_cmd cp "$DOTFILE_FOLDER/scripts/start-hyprland" "$START_HYPRLAND_DIR/"
-    run_cmd chmod +x "$START_HYPRLAND_DIR/start-hyprland"
+    run_cmd sudo mv "$START_HYPRLAND_DIR/start-hyprland" "$BACKUP_DIR/"
+    run_cmd sudo cp "$DOTFILE_FOLDER/scripts/start-hyprland" "$START_HYPRLAND_DIR/"
+    run_cmd sudo chmod +x "$START_HYPRLAND_DIR/start-hyprland"
 
 else
     echo "Copying the start-hyprland script to $START_HYPRLAND_DIR to ensure that your Hyprland will be properly started..."
     
-    run_cmd cp "$DOTFILE_FOLDER/scripts/start-hyprland" "$START_HYPRLAND_DIR/"
-    run_cmd chmod +x "$START_HYPRLAND_DIR/start-hyprland"
+    run_cmd sudo cp "$DOTFILE_FOLDER/scripts/start-hyprland" "$START_HYPRLAND_DIR/"
+    run_cmd sudo chmod +x "$START_HYPRLAND_DIR/start-hyprland"
 fi
 
 echo -e "\e[32m------------------------------------------------------\e[0m"
