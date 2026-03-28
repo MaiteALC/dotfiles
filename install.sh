@@ -459,7 +459,7 @@ else
 fi
 
 touch ~/.zshrc
-CUSTOM_ZSH="$DOTFILE_FOLDER/zsh_custom.zsh"
+CUSTOM_ZSH="$DOTFILE_FOLDER/scripts/zsh_custom.zsh"
 
 if ! grep -q "source $CUSTOM_ZSH" ~/.zshrc; then
     echo -e "\n# Injected configurations by ricing script" >> ~/.zshrc

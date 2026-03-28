@@ -67,7 +67,7 @@
         "return-type": "json",
         "interval": 3,
         "tooltip": true,
-        "exec": "~/dotfiles/system-monitor.sh",
+        "exec": "~/dotfiles/scripts/system-monitor.sh",
         "escape": false
     },
 
