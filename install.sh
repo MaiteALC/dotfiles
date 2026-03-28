@@ -387,7 +387,7 @@ DOTFILE_FOLDER="$HOME/dotfiles"
 run_cmd mkdir -p "$HOME/.config/"
 run_cmd mkdir -p "$BACKUP_DIR"
 
-touch "$DOTFILE_FOLDER/devices.conf" # Ensuring that the file exists (even if empty) to avoid Hyprland issues by sourcing an inexistent file.
+touch "$DOTFILE_FOLDER/hypr/devices.conf" # Ensuring that the file exists (even if empty) to avoid Hyprland issues by sourcing an inexistent file.
 # Note: this file is dedicated for personal per-device config. Modify if you want, or keep it empty.
 
 for folder in "${CONFIG_FOLDERS[@]}"; do
