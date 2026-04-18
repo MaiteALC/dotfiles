@@ -34,5 +34,20 @@
     "dnd",
     "notifications",
     "mpris"
-  ]
+  ],
+
+  "widget-config": {
+    "title": {
+      "text": "Notifications",
+      "clear-all-button": true,
+      "button-text": "Clear all"
+    },
+    "dnd": {
+      "text": "Do not disturb"
+    },
+    "mpris": {
+      "image-size": 68,
+      "image-radius": 16
+    }
+  }
 }
