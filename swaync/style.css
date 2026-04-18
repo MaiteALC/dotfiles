@@ -38,7 +38,16 @@
     color: #cdd6f4;
 }
 
-/* Clean all button style */
+.widget-mpris-title {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.widget-mpris-subtitle {
+    font-size: 0.8rem;
+    color: #a6adc8;
+}
+
 .widget-title > button {
     background: #bd93f9;
     color: #1e1e2e;
