@@ -28,6 +28,7 @@ hl.bind(mainMod .. " + M", hl.dsp.exec_cmd(
 )
 hl.bind(mainMod .. " + RETURN", hl.dsp.exec_cmd(terminal))
 hl.bind(mainMod .. " + R", hl.dsp.exec_cmd(menu))
+hl.bind(mainMod .. " + L", hl.dsp.exec_cmd("pidof hyprlock || hyprlock"))
 
 
 -- SCREENSHOTS (requires grim and slurp)
