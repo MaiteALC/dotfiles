@@ -22,6 +22,8 @@ hl.window_rule({
     match = { class = "blueman-manager" },
 
     float = true,
+    center = true,
+    size = {"monitor_w*0.4", "monitor_h*0.5"}
 })
 
 hl.window_rule({
