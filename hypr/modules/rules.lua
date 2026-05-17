@@ -1,12 +1,10 @@
 ------------------------------------------
---- WINDOW, WORKSPACE, AND LAYER RULES ---
+--- WINDOW, LAYER, AND WORKSPACE RULES ---
 ------------------------------------------
 
 hl.layer_rule({
-    blur = false,
-    match = {
-        namespace = "^(waybar|swaync-control-center)$",
-    }
+    match = { namespace = "^(waybar|swaync-control-center)$" },
+    blur = false
 })
 
 hl.layer_rule({
