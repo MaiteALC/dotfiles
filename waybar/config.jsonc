@@ -63,11 +63,9 @@
     },
 
     "custom/sysmonitor": {
-        "format": "{}",
         "return-type": "json",
-        "interval": 3,
         "tooltip": true,
-        "exec": "~/dotfiles/scripts/system-monitor.sh",
+        "exec": "lua ~/dotfiles/scripts/sys-monitor.lua",
         "escape": false
     },
 
