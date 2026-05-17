@@ -9,6 +9,11 @@ hl.layer_rule({
     }
 })
 
+hl.layer_rule({
+    match = { namespace = "swaync-control-center" },
+    animation = "slide right"
+})
+
 hl.window_rule({
     match = {
         class = "xwayland:1",
