@@ -42,7 +42,6 @@ window#waybar {
 
 @keyframes blink-red {
     to {
-        border-color: #f68080;
         color: #f68080;
     }
 }
