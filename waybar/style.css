@@ -27,25 +27,17 @@ window#waybar {
     margin-right: 3px;
 
     color: #6e6f70;
-    border: 1px solid #6e6f70;
-    background-color:  rgba(30, 30, 46, 0.9);
 
     transition: all 300ms ease;
 }
 
 #workspaces button.active {
     min-width: 55px;
-
-    color: #f38ba8;
-
     border-radius: 100px;
-    border-color: #f38ba8;
-
     background-color:  #1e1e2e;
 }
 
 #workspaces button.urgent {
-    border-color: #db2e2e;
     color: #db2e2e;
 
     animation-name: blink-red;
@@ -63,7 +55,6 @@ window#waybar {
 }
 
 #workspaces button:hover {
-    border-color: #89b4fa;
     color: #89b4fa;
 }
 
@@ -77,15 +68,11 @@ window#waybar {
     padding-right: 10px;
 
     border-radius: 40px;
-    border: 2px solid #b9c1dd;
-    background-color: #1e1e2e;
+    background-color: transparent;
 }
 
 #clock {
     font-weight: 700;
-    
-    border-color: #f38ba8;
-
     font-size: 18px;
 
     padding-left: 12px;
@@ -93,35 +80,10 @@ window#waybar {
 }
 
 #custom-notification {
-    border: 1px solid #bd93f9;
     border-radius: 80px;
 
     min-height: 42px;
     min-width: 42px;
 
     margin-left: 4px;
-}
-
-#tray {
-    border-radius: 15px;
-}
-
-#backlight {
-    border-color: #f9e1ae;
-}
-
-#network {
-    border-color: #93e1d4;
-}
-
-#pulseaudio {
-    border-color: #88b3fa;
-}
-
-#battery {
-    border-color: #a5e2a0;
-}
-
-#battery.critical {
-    border-color: #db2e2e;
 }
