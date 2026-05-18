@@ -71,20 +71,29 @@ get_gpu_name() {
 }
 
 #######
-# Appends environment variables required by Hyprland in './hypr/env_hardware.conf' based on the detected GPU(s).
-# The function creates the file if it doesn't exists.
-#
-# Arguments:
-#   $1 - The GPU vendor. Used to determine which variables (and their values) include in env_hardware.conf file
-#######
-add_env_variables() {
+# Search for the available GPU(s) and prompt the user to select which one should be used to render Hyprland.
+# After the user's choice, it saves GPU data in a state file at '/tmp/hyprland-rice/gpu-info'.
+# The file and the directory are created if necessary.
+########
+get_main_render_gpu() {
     local pci_addresses=($(get_gpu_pci_addresses))
     local CARD_PATH=""
+    local GPU_FILE="/tmp/hyprland-rice/gpu-info"
+
+    if [ ! -d "$(dirname "$GPU_FILE")" ]; then
+        mkdir /tmp/hyprland-rice
+    fi
+
+    touch "$GPU_FILE"
 
     if [ "${#pci_addresses[@]}" -eq 1 ]; then
         echo "A single GPU was detected. Automatic configuring the environment variables..."
-        CARD_PATH=$(get_gpu_card_path "${pci_addresses[0]}")
-    
+        
+        local address="${pci_addresses[0]}"
+        local name=$(get_gpu_name "$address")
+        CARD_PATH=$(get_gpu_card_path "$address")
+
+        echo "name=$name card_path=$CARD_PATH pci_address=${pci_addresses[0]}" > "$GPU_FILE"
     else
         echo "More than one GPU detected. Which would you like to use to render Hyprland?"
 
@@ -99,43 +108,20 @@ add_env_variables() {
             read -p "Select by typing the number of the GPU you want to use: " choice
 
             chosen_address="${pci_addresses[$choice]}"
+
             if [[ ! "$choice" =~ ^[0-9]+$ ]] || [ -z "$chosen_address" ]; then
                 echo "Invalid option. Try again."
                 continue
             else
                 CARD_PATH=$(get_gpu_card_path "$chosen_address")
+                local name=$(get_gpu_name "$chosen_address")
+
+                echo "name=$name card_path=$CARD_PATH pci_address=$chosen_address" > "$GPU_FILE"
+
                 break
             fi
         done
     fi
-
-    local GPU_ENV_FILE="$HOME/dotfiles/scripts/env_hardware.sh"
-
-    if [ ! -d "$(dirname "$GPU_ENV_FILE")" ]; then
-        echo "\e[31m The ~/dotfiles/scripts directory does not exists! Unable to proceed with the installation script.\e[0m"
-        exit 1
-    fi
-
-    run_cmd touch "$GPU_ENV_FILE"
-
-    echo "# Hyprland environment variables related to GPU and rendering configurations" > "$GPU_ENV_FILE"
-
-    if [ "$1" = "Nvidia" ]; then
-        echo "export LIBVA_DRIVER_NAME=nvidia" >> "$GPU_ENV_FILE"
-        echo "export GBM_BACKEND=nvidia-drm" >> "$GPU_ENV_FILE"
-        echo "export __GLX_VENDOR_LIBRARY_NAME=nvidia" >> "$GPU_ENV_FILE"
-        echo "export WLR_NO_HARDWARE_CURSORS=1" >> "$GPU_ENV_FILE"
-
-    elif [ "$1" = "Amd" ] || [ "$1" = "Intel" ]; then
-        echo "# Using Mesa native configurations. Intel and Amd GPUs works without complex confifgurations." >> "$GPU_ENV_FILE"
-
-    else
-        echo -e "\e[33mWarning: Unrecognized GPU vendor ($1). Proceeding with default settings.\e[0m"
-        echo "# Unknown GPU vendor: $1" >> "$GPU_ENV_FILE"
-    fi
-
-    echo -e "\n# GPU used to render hyprland: " >> "$GPU_ENV_FILE"
-    echo "export AQ_DRM_DEVICES=$CARD_PATH" >> "$GPU_ENV_FILE"
 }
 
 echo -e "\e[34m\n---------------------------------------------------------------\e[0m"
@@ -190,7 +176,7 @@ fi
 
 GPU_VENDOR=$(detect_gpu_vendor)
 
-run_cmd add_env_variables "$GPU_VENDOR"
+run_cmd get_main_render_gpu
 
 echo -e "\n-----------------------------------"
 echo "Installing the required packages..."
