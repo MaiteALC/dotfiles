@@ -14,8 +14,7 @@
             "urgent": "",
             "active": "",
             "default": ""
-        },
-        "on-click": "activate"
+        }
     },
 
     "battery": {
