@@ -8,8 +8,10 @@
 }
 
 window#waybar {
-    background-color: transparent;
+    background-color: #1e1e2e;
     color: #f1f5ff;
+    border: 1px solid #eceff4;
+    border-radius: 20px;
 }
 
 #workspaces {
