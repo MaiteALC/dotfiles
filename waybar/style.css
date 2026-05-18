@@ -18,8 +18,6 @@ window#waybar {
 
 #workspaces button { 
     min-width: 40px;
-    min-height: 35px;
-
     border-radius: 100%;
     padding-bottom: 3px;
 
@@ -61,13 +59,9 @@ window#waybar {
 #battery, #network, #pulseaudio, #backlight, #clock, #tray, #custom-notifcation, #custom-sysmonitor {
     min-width: 20px;
 
-    margin-left: 4px;
-    margin-right: 4px;
-
     padding-left: 10px;
     padding-right: 10px;
 
-    border-radius: 40px;
     background-color: transparent;
 }
 
