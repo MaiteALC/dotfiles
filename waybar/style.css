@@ -17,7 +17,7 @@ window#waybar {
 }
 
 #workspaces button { 
-    min-width: 40px;
+    min-width: 20px;
 
     color: #6e6f70;
 
@@ -25,7 +25,7 @@ window#waybar {
 }
 
 #workspaces button.active {
-    min-width: 55px;
+    min-width: 32px;
     color: #f1f5ff;
     background-color:  transparent;
 }
