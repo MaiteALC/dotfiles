@@ -114,7 +114,7 @@ get_main_render_gpu() {
                 continue
             else
                 CARD_PATH=$(get_gpu_card_path "$chosen_address")
-                local name = $(get_gpu_name "$chosen_address")
+                local name=$(get_gpu_name "$chosen_address")
 
                 echo "name=$name card_path=$CARD_PATH pci_address=$chosen_address" > "$GPU_FILE"
 
