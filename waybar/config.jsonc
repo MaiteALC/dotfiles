@@ -27,9 +27,9 @@
         "format-wifi": " ({signalStrength}%)",
         "format-ethernet": "󰈀",
         "format-disconnected": "󰤮",
-        "tooltip-format": "{ifname} via {gwaddr} 󰊗 ",
-        "tooltip-format-wifi": " {essid}",
-        "tooltip-format-ethernet": "{ifname}",
+        "tooltip-format": " {ifname} via {gwaddr} \n Total bandwidth: {bandwidthTotalBytes} ",
+        "tooltip-format-wifi": " SSID: {essid} \n Interface: {ifname} \n Up Speed: {bandwidthUpBytes} \n Down Speed: {bandwidthDownBytes} ",
+        "tooltip-format-ethernet": " Interface: {ifname} \n Up Speed: {bandwidthUpBytes} \n Down Speed: {bandwidthDownBytes} ",
         "tooltip-format-disconnected": "Disconnected",
         "max-length": 50
     },
