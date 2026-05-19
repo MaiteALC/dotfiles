@@ -147,7 +147,7 @@ else
     confirm=$(echo "$confirm" | tr '[:upper:]' '[:lower:]')
 
     if [[ "$confirm" == "n" || "$confirm" == "no" ]]; then
-        echo "\e[31m Script interrupted by the user\e[0m."
+        echo -e "\e[31m Script interrupted by the user\e[0m."
         exit 1
     fi
 
