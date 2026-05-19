@@ -67,7 +67,7 @@ get_gpu_pci_addresses() {
 #   The formatted name of the GPU 
 #######
 get_gpu_name() {
-    echo $(lspci -s "$1" | cut -d ':' -f3- | sed 's/^ *//')
+    lspci -s "$1" | cut -d ':' -f3- | sed 's/^ *//'
 }
 
 #######
