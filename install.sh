@@ -317,7 +317,6 @@ LIBS_AND_PLUGINS=(
 )
 
 AUR_PACKAGES=(
-    catppuccin-gtk-theme-mocha
     papirus-folders-catppuccin-git
     pipes.sh
     wlogout
