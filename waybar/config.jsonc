@@ -58,7 +58,7 @@
     },
 
     "clock": {
-        "format": "{:%H:%M - %Y/%m/%d}"
+        "format": "{:%A, %H:%M - %Y/%m/%d}"
     },
 
     "tray": {
