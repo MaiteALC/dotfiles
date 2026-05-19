@@ -399,7 +399,7 @@ echo " Linked file: starship.toml"
 
 DM_NAME=""
 if systemctl is-active --quiet display-manager.service; then
-    DM_NAME=$(basename $(readlink /etc/systemd/system/display-manager.service) | sed 's/.service//') 
+    DM_NAME=$(basename "$(readlink /etc/systemd/system/display-manager.service)" | sed 's/.service//') 
 fi
 
 if [ -z "$DM_NAME" ]; then
@@ -414,7 +414,7 @@ if [ -z "$DM_NAME" ]; then
     run_cmd sudo systemctl enable greetd.service
     echo "The login manager Greetd with Tuigreet was enabled"
 
-elif [ $DM_NAME = "greetd" ]; then
+elif [ "$DM_NAME" = "greetd" ]; then
     echo "Aplying new configurations to Greetd"
 
     if [ -d "/etc/greetd" ] || [ -L "/etc/greetd" ]; then
