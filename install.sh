@@ -336,41 +336,41 @@ elif command -v paru &> /dev/null; then
     AUR_HELPER="paru"
 
 else
-    echo " Warning: None AUR helper (yay or paru) was found."
-    echo "Installing yay automatically..."
+    dry_run echo " Warning: None AUR helper (yay or paru) was found."
+    dry_run echo "Installing yay automatically..."
 
     dry_run sudo pacman -S --needed --noconfirm git base-devel
 
-    git clone https://aur.archlinux.org/yay.git /tmp/yay
+    dry_run git clone https://aur.archlinux.org/yay.git /tmp/yay
     
-    cd /tmp/yay && makepkg -si --noconfirm
+    dry_run cd /tmp/yay && makepkg -si --noconfirm
     AUR_HELPER="yay"
 
-    cd - > /dev/null
+    dry_run cd - > /dev/null
 fi
 
-echo "Installing AUR packages with $AUR_HELPER..."
-$AUR_HELPER -S --needed --noconfirm "${AUR_PACKAGES[@]}"
+dry_run echo "Installing AUR packages with $AUR_HELPER..."
+dry_run $AUR_HELPER -S --needed --noconfirm "${AUR_PACKAGES[@]}"
 
-echo "AUR packages installed."
-echo "Installing pacman packages..."
+dry_run echo "AUR packages installed."
+dry_run echo "Installing pacman packages..."
 
 dry_run sudo pacman -S --needed --noconfirm "${FONT_PACKAGES[@]}" "${TERMINAL_PACKAGES[@]}" "${HYPRLAND_AND_RELATED_PACKAGES[@]}" "${LIBS_AND_PLUGINS[@]}" "${UTIL_PACKAGES[@]}"
 
-echo -e "\nAll required packages installed successfully!"
+dry_run echo -e "\nAll required packages installed successfully!"
 
 dry_run rm -rf "/tmp/yay/"
 
-echo "Customizing icons with Catppuccin Mocha Flamingo..."
+dry_run echo "Customizing icons with Catppuccin Mocha Flamingo..."
 
 if command -v papirus-folders &> /dev/null; then
     dry_run papirus-folders -C cat-mocha-flamingo --theme Papirus-Dark
 
 else
-    echo -e "\e[31mPackage papirus-folders not founded. Verify the installation.\e[0m"
+    dry_run echo -e "\e[31mPackage papirus-folders not founded. Verify the installation.\e[0m"
 fi
 
-echo -e "Creating symlinks...\n"
+dry_run echo -e "Creating symlinks...\n"
 
 DOTFILE_FOLDER="$HOME/dotfiles"
 
@@ -387,17 +387,17 @@ for folder in "${CONFIG_FOLDERS[@]}"; do
         fi
 
         dry_run ln -snf "$SOURCE" "$TARGET"
-        echo -e " Linked: $SOURCE -> $TARGET"
+        dry_run echo -e " Linked: $SOURCE -> $TARGET"
 
     else
-        echo -e "\e[33m Folder $folder not found in $DOTFILE_FOLDER\e[0m"
-        echo -e "\e[33mSkipping...\e[0m"
+        dry_run echo -e "\e[33m Folder $folder not found in $DOTFILE_FOLDER\e[0m"
+        dry_run echo -e "\e[33mSkipping...\e[0m"
     fi
 done
 
 dry_run mv "$HOME/.config/starship.toml" "$BACKUP_DIR/starship.toml"
 dry_run ln -snf "$DOTFILE_FOLDER/starship.toml" "$HOME/.config/starship.toml"
-echo " Linked file: starship.toml"
+dry_run echo " Linked file: starship.toml"
 
 DM_NAME=""
 if systemctl is-active --quiet display-manager.service; then
@@ -405,7 +405,7 @@ if systemctl is-active --quiet display-manager.service; then
 fi
 
 if [ -z "$DM_NAME" ]; then
-    echo "No enabled login manager was found."
+    dry_run echo "No enabled login manager was found."
 
     if [ -d "/etc/greetd" ] || [ -L "/etc/greetd" ]; then
         dry_run sudo mv /etc/greetd "$BACKUP_DIR/"
@@ -414,10 +414,10 @@ if [ -z "$DM_NAME" ]; then
     dry_run sudo ln -snf "$DOTFILE_FOLDER/greetd" "/etc/greetd"
 
     dry_run sudo systemctl enable greetd.service
-    echo "The login manager Greetd with Tuigreet was enabled"
+    dry_run echo "The login manager Greetd with Tuigreet was enabled"
 
 elif [ "$DM_NAME" = "greetd" ]; then
-    echo "Aplying new configurations to Greetd"
+    dry_run echo "Aplying new configurations to Greetd"
 
     if [ -d "/etc/greetd" ] || [ -L "/etc/greetd" ]; then
         dry_run sudo mv /etc/greetd "$BACKUP_DIR/"
@@ -426,13 +426,13 @@ elif [ "$DM_NAME" = "greetd" ]; then
     dry_run sudo ln -snf "$DOTFILE_FOLDER/greetd" "/etc/greetd"
 
 else
-    echo "An enable login manager was founded: $DM_NAME"
-    read -pr "Would you like to disable it to enable Greetd? [Y/n] " enable
+    dry_run echo "An enable login manager was founded: $DM_NAME"
+    dry_run read -pr "Would you like to disable it to enable Greetd? [Y/n] " enable
 
     enable=$(echo "$enable" | tr '[:upper:]' '[:lower:]')
 
     if [[ "$enable" == "n" || "$enable" == "no" ]]; then
-        echo "Your $DM_NAME will be mantained."
+        dry_run echo "Your $DM_NAME will be mantained."
     
     else
         dry_run sudo ln -snf "$DOTFILE_FOLDER/greetd" "/etc/greetd"
@@ -440,34 +440,34 @@ else
         dry_run sudo systemctl disable "$DM_NAME"
         dry_run sudo systemctl enable greetd.service
 
-        echo "$DM_NAME disabled and Greetd enabled!"
+        dry_run echo "$DM_NAME disabled and Greetd enabled!"
     fi
 fi
 
-touch ~/.zshrc
+dry_run touch ~/.zshrc
 CUSTOM_ZSH="$DOTFILE_FOLDER/scripts/zsh_custom.zsh"
 
 if ! grep -q "source $CUSTOM_ZSH" ~/.zshrc; then
-    echo -e "\n# Injected configurations by ricing script" >> ~/.zshrc
-    echo "source $CUSTOM_ZSH" >> ~/.zshrc
+    dry_run echo -e "\n# Injected configurations by ricing script" >> ~/.zshrc
+    dry_run echo "source $CUSTOM_ZSH" >> ~/.zshrc
 
-    echo "Sourced custom Zsh configurations in your ~/.zshrc file"
+    dry_run echo "Sourced custom Zsh configurations in your ~/.zshrc file"
 
 else
-    echo "The zsh_custom.zsh is already sourced in your .zshrc file. Nothing has been chaged."
+    dry_run echo "The zsh_custom.zsh is already sourced in your .zshrc file. Nothing has been chaged."
 fi
 
 START_HYPRLAND_DIR="/usr/local/bin"
 if [ -e "$START_HYPRLAND_DIR/start-hyprland" ]; then
-    echo "A previous start-hyprland script was found in $START_HYPRLAND_DIR"
-    echo "It will be moved to the backup directory to avoid conflicts with the start-hyprland script of this rice."
+    dry_run echo "A previous start-hyprland script was found in $START_HYPRLAND_DIR"
+    dry_run echo "It will be moved to the backup directory to avoid conflicts with the start-hyprland script of this rice."
     
     dry_run sudo mv "$START_HYPRLAND_DIR/start-hyprland" "$BACKUP_DIR/"
     dry_run sudo cp "$DOTFILE_FOLDER/scripts/start-hyprland" "$START_HYPRLAND_DIR/"
     dry_run sudo chmod +x "$START_HYPRLAND_DIR/start-hyprland"
 
 else
-    echo "Copying the start-hyprland script to $START_HYPRLAND_DIR to ensure that your Hyprland will be properly started..."
+    dry_run echo "Copying the start-hyprland script to $START_HYPRLAND_DIR to ensure that your Hyprland will be properly started..."
     
     dry_run sudo cp "$DOTFILE_FOLDER/scripts/start-hyprland" "$START_HYPRLAND_DIR/"
     dry_run sudo chmod +x "$START_HYPRLAND_DIR/start-hyprland"
