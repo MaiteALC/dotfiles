@@ -1,6 +1,6 @@
 #!/bin/bash
 
-run_cmd() {
+dry_run() {
     if [ "$DRY_RUN" = true ]; then
         echo -e " \e[33m[DRY-RUN]\e[0m Would execute: $*"
     else
@@ -186,19 +186,19 @@ else
         "Nvidia")
             echo -e "Nvidia GPU detected.\nInstalling Required drivers..."
 
-            run_cmd sudo pacman -S --needed --noconfirm nvidia-open-dkms nvidia-prime nvidia-settings nvidia-utils opencl-nvidia
+            dry_run sudo pacman -S --needed --noconfirm nvidia-open-dkms nvidia-prime nvidia-settings nvidia-utils opencl-nvidia
             ;;
 
         "Intel")
             echo -e "Intel GPU detected.\nInstalling Required drivers..."
 
-            run_cmd sudo pacman -S --needed --noconfirm  mesa lib32-mesa vulkan-intel lib32-vulkan-intel intel-media-driver libva-intel-driver intel-gpu-tools
+            dry_run sudo pacman -S --needed --noconfirm  mesa lib32-mesa vulkan-intel lib32-vulkan-intel intel-media-driver libva-intel-driver intel-gpu-tools
             ;;
 
         "Amd")
             echo -e "AMD GPU detected.\nInstalling Required drivers..."
 
-            run_cmd sudo pacman -S --needed --noconfirm mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver mesa-vdpau
+            dry_run sudo pacman -S --needed --noconfirm mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver mesa-vdpau
             ;;
 
         *)
@@ -339,7 +339,7 @@ else
     echo " Warning: None AUR helper (yay or paru) was found."
     echo "Installing yay automatically..."
 
-    run_cmd sudo pacman -S --needed --noconfirm git base-devel
+    dry_run sudo pacman -S --needed --noconfirm git base-devel
 
     git clone https://aur.archlinux.org/yay.git /tmp/yay
     
@@ -355,16 +355,16 @@ $AUR_HELPER -S --needed --noconfirm "${AUR_PACKAGES[@]}"
 echo "AUR packages installed."
 echo "Installing pacman packages..."
 
-run_cmd sudo pacman -S --needed --noconfirm "${FONT_PACKAGES[@]}" "${TERMINAL_PACKAGES[@]}" "${HYPRLAND_AND_RELATED_PACKAGES[@]}" "${LIBS_AND_PLUGINS[@]}" "${UTIL_PACKAGES[@]}"
+dry_run sudo pacman -S --needed --noconfirm "${FONT_PACKAGES[@]}" "${TERMINAL_PACKAGES[@]}" "${HYPRLAND_AND_RELATED_PACKAGES[@]}" "${LIBS_AND_PLUGINS[@]}" "${UTIL_PACKAGES[@]}"
 
 echo -e "\nAll required packages installed successfully!"
 
-run_cmd rm -rf "/tmp/yay/"
+dry_run rm -rf "/tmp/yay/"
 
 echo "Customizing icons with Catppuccin Mocha Flamingo..."
 
 if command -v papirus-folders &> /dev/null; then
-    run_cmd papirus-folders -C cat-mocha-flamingo --theme Papirus-Dark
+    dry_run papirus-folders -C cat-mocha-flamingo --theme Papirus-Dark
 
 else
     echo -e "\e[31mPackage papirus-folders not founded. Verify the installation.\e[0m"
@@ -374,8 +374,8 @@ echo -e "Creating symlinks...\n"
 
 DOTFILE_FOLDER="$HOME/dotfiles"
 
-run_cmd mkdir -p "$HOME/.config/"
-run_cmd mkdir -p "$BACKUP_DIR"
+dry_run mkdir -p "$HOME/.config/"
+dry_run mkdir -p "$BACKUP_DIR"
 
 for folder in "${CONFIG_FOLDERS[@]}"; do
     SOURCE="$DOTFILE_FOLDER/$folder"
@@ -383,10 +383,10 @@ for folder in "${CONFIG_FOLDERS[@]}"; do
 
     if [ -d "$SOURCE" ]; then
         if [ -d "$TARGET" ] || [ -L "$TARGET" ]; then
-            run_cmd mv "$TARGET" "$BACKUP_DIR/"
+            dry_run mv "$TARGET" "$BACKUP_DIR/"
         fi
 
-        run_cmd ln -snf "$SOURCE" "$TARGET"
+        dry_run ln -snf "$SOURCE" "$TARGET"
         echo -e " Linked: $SOURCE -> $TARGET"
 
     else
@@ -395,8 +395,8 @@ for folder in "${CONFIG_FOLDERS[@]}"; do
     fi
 done
 
-run_cmd mv "$HOME/.config/starship.toml" "$BACKUP_DIR/starship.toml"
-run_cmd ln -snf "$DOTFILE_FOLDER/starship.toml" "$HOME/.config/starship.toml"
+dry_run mv "$HOME/.config/starship.toml" "$BACKUP_DIR/starship.toml"
+dry_run ln -snf "$DOTFILE_FOLDER/starship.toml" "$HOME/.config/starship.toml"
 echo " Linked file: starship.toml"
 
 DM_NAME=""
@@ -408,22 +408,22 @@ if [ -z "$DM_NAME" ]; then
     echo "No enabled login manager was found."
 
     if [ -d "/etc/greetd" ] || [ -L "/etc/greetd" ]; then
-        run_cmd sudo mv /etc/greetd "$BACKUP_DIR/"
+        dry_run sudo mv /etc/greetd "$BACKUP_DIR/"
     fi
 
-    run_cmd sudo ln -snf "$DOTFILE_FOLDER/greetd" "/etc/greetd"
+    dry_run sudo ln -snf "$DOTFILE_FOLDER/greetd" "/etc/greetd"
 
-    run_cmd sudo systemctl enable greetd.service
+    dry_run sudo systemctl enable greetd.service
     echo "The login manager Greetd with Tuigreet was enabled"
 
 elif [ "$DM_NAME" = "greetd" ]; then
     echo "Aplying new configurations to Greetd"
 
     if [ -d "/etc/greetd" ] || [ -L "/etc/greetd" ]; then
-        run_cmd sudo mv /etc/greetd "$BACKUP_DIR/"
+        dry_run sudo mv /etc/greetd "$BACKUP_DIR/"
     fi
 
-    run_cmd sudo ln -snf "$DOTFILE_FOLDER/greetd" "/etc/greetd"
+    dry_run sudo ln -snf "$DOTFILE_FOLDER/greetd" "/etc/greetd"
 
 else
     echo "An enable login manager was founded: $DM_NAME"
@@ -435,10 +435,10 @@ else
         echo "Your $DM_NAME will be mantained."
     
     else
-        run_cmd sudo ln -snf "$DOTFILE_FOLDER/greetd" "/etc/greetd"
+        dry_run sudo ln -snf "$DOTFILE_FOLDER/greetd" "/etc/greetd"
 
-        run_cmd sudo systemctl disable "$DM_NAME"
-        run_cmd sudo systemctl enable greetd.service
+        dry_run sudo systemctl disable "$DM_NAME"
+        dry_run sudo systemctl enable greetd.service
 
         echo "$DM_NAME disabled and Greetd enabled!"
     fi
@@ -462,15 +462,15 @@ if [ -e "$START_HYPRLAND_DIR/start-hyprland" ]; then
     echo "A previous start-hyprland script was found in $START_HYPRLAND_DIR"
     echo "It will be moved to the backup directory to avoid conflicts with the start-hyprland script of this rice."
     
-    run_cmd sudo mv "$START_HYPRLAND_DIR/start-hyprland" "$BACKUP_DIR/"
-    run_cmd sudo cp "$DOTFILE_FOLDER/scripts/start-hyprland" "$START_HYPRLAND_DIR/"
-    run_cmd sudo chmod +x "$START_HYPRLAND_DIR/start-hyprland"
+    dry_run sudo mv "$START_HYPRLAND_DIR/start-hyprland" "$BACKUP_DIR/"
+    dry_run sudo cp "$DOTFILE_FOLDER/scripts/start-hyprland" "$START_HYPRLAND_DIR/"
+    dry_run sudo chmod +x "$START_HYPRLAND_DIR/start-hyprland"
 
 else
     echo "Copying the start-hyprland script to $START_HYPRLAND_DIR to ensure that your Hyprland will be properly started..."
     
-    run_cmd sudo cp "$DOTFILE_FOLDER/scripts/start-hyprland" "$START_HYPRLAND_DIR/"
-    run_cmd sudo chmod +x "$START_HYPRLAND_DIR/start-hyprland"
+    dry_run sudo cp "$DOTFILE_FOLDER/scripts/start-hyprland" "$START_HYPRLAND_DIR/"
+    dry_run sudo chmod +x "$START_HYPRLAND_DIR/start-hyprland"
 fi
 
 echo -e "\e[32m------------------------------------------------------\e[0m"
