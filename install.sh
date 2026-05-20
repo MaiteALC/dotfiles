@@ -177,39 +177,39 @@ else
     sudo sed -i '/^#\[multilib\]/,/^#Include = \/etc\/pacman.d\/mirrorlist/ s/^#//' /etc/pacman.conf
 
     sudo pacman -Sy
+    
+    get_main_render_gpu
+    
+    GPU_VENDOR=$(detect_gpu_vendor)
+
+    case $GPU_VENDOR in
+        "Nvidia")
+            echo -e "Nvidia GPU detected.\nInstalling Required drivers..."
+
+            run_cmd sudo pacman -S --needed --noconfirm nvidia-open-dkms nvidia-prime nvidia-settings nvidia-utils opencl-nvidia
+            ;;
+
+        "Intel")
+            echo -e "Intel GPU detected.\nInstalling Required drivers..."
+
+            run_cmd sudo pacman -S --needed --noconfirm  mesa lib32-mesa vulkan-intel lib32-vulkan-intel intel-media-driver libva-intel-driver intel-gpu-tools
+            ;;
+
+        "Amd")
+            echo -e "AMD GPU detected.\nInstalling Required drivers..."
+
+            run_cmd sudo pacman -S --needed --noconfirm mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver mesa-vdpau
+            ;;
+
+        *)
+            echo "No dedicated GPU detected, proceeding with normal installation."
+            ;;
+    esac
 fi
-
-GPU_VENDOR=$(detect_gpu_vendor)
-
-run_cmd get_main_render_gpu
 
 echo -e "\n-----------------------------------"
 echo "Installing the required packages..."
 echo -e "-----------------------------------\n"
-
-case $GPU_VENDOR in
-    "Nvidia")
-        echo -e "Nvidia GPU detected.\nInstalling Required drivers..."
-
-        run_cmd sudo pacman -S --needed --noconfirm nvidia-open-dkms nvidia-prime nvidia-settings nvidia-utils opencl-nvidia
-        ;;
-
-    "Intel")
-        echo -e "Intel GPU detected.\nInstalling Required drivers..."
-
-        run_cmd sudo pacman -S --needed --noconfirm  mesa lib32-mesa vulkan-intel lib32-vulkan-intel intel-media-driver libva-intel-driver intel-gpu-tools
-        ;;
-
-    "Amd")
-        echo -e "AMD GPU detected.\nInstalling Required drivers..."
-
-        run_cmd sudo pacman -S --needed --noconfirm mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver mesa-vdpau
-        ;;
-
-    *)
-        echo "No dedicated GPU detected, proceeding with normal installation."
-        ;;
-esac
 
 UTIL_PACKAGES=(
     # Audio
