@@ -9,7 +9,8 @@ run_cmd() {
 }
 
 detect_gpu_vendor() {
-    local gpu_info=$(lspci | grep -iE "VGA|3D")
+    local gpu_info
+    gpu_info=$(lspci | grep -iE "VGA|3D")
     
     if echo "$gpu_info" | grep -iq "nvidia"; then
         echo "Nvidia"
@@ -89,8 +90,11 @@ get_main_render_gpu() {
     if [ "${#pci_addresses[@]}" -eq 1 ]; then
         echo "A single GPU was detected. Automatic configuring the environment variables..."
         
-        local address="${pci_addresses[0]}"
-        local name=$(get_gpu_name "$address")
+        local address
+        local name
+
+        address="${pci_addresses[0]}"
+        name=$(get_gpu_name "$address")
         CARD_PATH=$(get_gpu_card_path "$address")
 
         echo "name=$name card_path=$CARD_PATH pci_address=${pci_addresses[0]}" > "$GPU_FILE"
@@ -114,7 +118,8 @@ get_main_render_gpu() {
                 continue
             else
                 CARD_PATH=$(get_gpu_card_path "$chosen_address")
-                local name=$(get_gpu_name "$chosen_address")
+                local name
+                name=$(get_gpu_name "$chosen_address")
 
                 echo "name=$name card_path=$CARD_PATH pci_address=$chosen_address" > "$GPU_FILE"
 
