@@ -361,10 +361,10 @@ echo -e "\nAll required packages installed successfully!"
 
 run_cmd rm -rf "/tmp/yay/"
 
-echo "Customizing icons with Catppuccin Mocha Red..."
+echo "Customizing icons with Catppuccin Mocha Flamingo..."
 
 if command -v papirus-folders &> /dev/null; then
-    run_cmd papirus-folders -C cat-mocha-red --theme Papirus-Dark
+    run_cmd papirus-folders -C cat-mocha-flamingo --theme Papirus-Dark
 
 else
     echo -e "\e[31mPackage papirus-folders not founded. Verify the installation.\e[0m"
