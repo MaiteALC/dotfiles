@@ -2,9 +2,9 @@
 
 run_cmd() {
     if [ "$DRY_RUN" = true ]; then
-        echo -e " \e[33m[DRY-RUN]\e[0m Would execute: $@"
+        echo -e " \e[33m[DRY-RUN]\e[0m Would execute: $*"
     else
-        "$@"
+        "$*"
     fi
 }
 
