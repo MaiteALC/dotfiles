@@ -194,19 +194,19 @@ else
     case $GPU_VENDOR in
         "Nvidia")
             printf "%s\n" "Nvidia GPU detected. Installing required drivers..."
-            dry_run sudo pacman -S --needed --noconfirm nvidia-open-dkms nvidia-prime nvidia-settings nvidia-utils opencl-nvidia
+            sudo pacman -S --needed --noconfirm nvidia-open-dkms nvidia-prime nvidia-settings nvidia-utils opencl-nvidia
             ;;
 
         "Intel")
             printf "%s\n" "Intel GPU detected. Installing Required drivers..."
 
-            dry_run sudo pacman -S --needed --noconfirm  mesa lib32-mesa vulkan-intel lib32-vulkan-intel intel-media-driver libva-intel-driver intel-gpu-tools
+            sudo pacman -S --needed --noconfirm  mesa lib32-mesa vulkan-intel lib32-vulkan-intel intel-media-driver libva-intel-driver intel-gpu-tools
             ;;
 
         "Amd")
             printf "%s\n" "AMD GPU detected. Installing Required drivers..."
 
-            dry_run sudo pacman -S --needed --noconfirm mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver mesa-vdpau
+            sudo pacman -S --needed --noconfirm mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver mesa-vdpau
             ;;
 
         *)
@@ -215,9 +215,9 @@ else
     esac
 fi
 
-printf "\n%s\n" "-----------------------------------"
-printf "%s\n" "Installing the required packages..."
-printf "%s\n" "-----------------------------------"
+dry_run printf "\n%s\n" "-----------------------------------"
+dry_run printf "%s\n" "Installing the required packages..."
+dry_run printf "%s\n" "-----------------------------------"
 
 UTIL_PACKAGES=(
     # Audio
