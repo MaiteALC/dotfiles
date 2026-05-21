@@ -1,27 +1,34 @@
 #!/bin/bash
 
-run_cmd() {
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+YELLOW='\033[0;33m'
+NO_COLOR='\033[0m'
+
+dry_run() {
     if [ "$DRY_RUN" = true ]; then
-        echo -e " \e[33m[DRY-RUN]\e[0m Would execute: $@"
+        printf "%b[DRY-RUN]%b %s\n" "$YELLOW" "$NO_COLOR" "Would execute: $*"
     else
         "$@"
     fi
 }
 
 detect_gpu_vendor() {
-    local gpu_info=$(lspci | grep -iE "VGA|3D")
+    local gpu_info
+    gpu_info=$(lspci | grep -iE "VGA|3D")
     
-    if echo "$gpu_info" | grep -iq "nvidia"; then
-        echo "Nvidia"
+    if printf "%s" "$gpu_info" | grep -iq "nvidia"; then
+        printf "Nvidia"
 
-    elif echo "$gpu_info" | grep -iq "amd\|radeon"; then
-        echo "Amd"
+    elif printf "%s" "$gpu_info" | grep -iq "amd\|radeon"; then
+        printf "Amd"
 
-    elif echo "$gpu_info" | grep -iq "intel"; then
-        echo "Intel"
+    elif printf "%s" "$gpu_info" | grep -iq "intel"; then
+        printf "Intel"
 
     else
-        echo "Unknown"
+        printf "Unknown"
     fi
 }
 
@@ -36,7 +43,7 @@ detect_gpu_vendor() {
 #######
 get_gpu_card_path() {
     card_number=$(basename "$(readlink "/dev/dri/by-path/pci-$1-card")")
-    echo "/dev/dri/$card_number"
+    printf "/dev/dri/%s" "$card_number"
 }
 
 #######
@@ -54,7 +61,7 @@ get_gpu_pci_addresses() {
         fi
     done
 
-    echo "${addresses[@]}"
+    printf "%s\n" "${addresses[@]}"
 }
 
 #######
@@ -67,7 +74,7 @@ get_gpu_pci_addresses() {
 #   The formatted name of the GPU 
 #######
 get_gpu_name() {
-    echo $(lspci -s "$1" | cut -d ':' -f3- | sed 's/^ *//')
+    lspci -s "$1" | cut -d ':' -f3- | sed 's/^ *//'
 }
 
 #######
@@ -87,36 +94,41 @@ get_main_render_gpu() {
     touch "$GPU_FILE"
 
     if [ "${#pci_addresses[@]}" -eq 1 ]; then
-        echo "A single GPU was detected. Automatic configuring the environment variables..."
+        printf "A single GPU was detected. Automatic configuring the environment variables...\n"
         
-        local address="${pci_addresses[0]}"
-        local name=$(get_gpu_name "$address")
+        local address
+        local name
+
+        address="${pci_addresses[0]}"
+        name=$(get_gpu_name "$address")
         CARD_PATH=$(get_gpu_card_path "$address")
 
-        echo "name=$name card_path=$CARD_PATH pci_address=${pci_addresses[0]}" > "$GPU_FILE"
+        printf "name=%s card_path=%s pci_address=%s" "$name" "$CARD_PATH" "${pci_addresses[0]}" > "$GPU_FILE"
     else
-        echo "More than one GPU detected. Which would you like to use to render Hyprland?"
+        printf "%s\n" "More than one GPU detected. Which would you like to use to render Hyprland?"
 
         while true; do
             local i=0
             for address in "${pci_addresses[@]}"; do
                 name=$(get_gpu_name "$address")
-                echo "GPU $i - $name"
+                printf "%s\n" "GPU $i - $name"
                 ((i++))
             done
 
-            read -p "Select by typing the number of the GPU you want to use: " choice
+            printf "%s" "Select by typing the number of the GPU you want to use: "
+            read -r choice
 
             chosen_address="${pci_addresses[$choice]}"
 
             if [[ ! "$choice" =~ ^[0-9]+$ ]] || [ -z "$chosen_address" ]; then
-                echo "Invalid option. Try again."
+                printf "%s\n" "Invalid option. Try again."
                 continue
             else
                 CARD_PATH=$(get_gpu_card_path "$chosen_address")
-                local name=$(get_gpu_name "$chosen_address")
+                local name
+                name=$(get_gpu_name "$chosen_address")
 
-                echo "name=$name card_path=$CARD_PATH pci_address=$chosen_address" > "$GPU_FILE"
+                printf "name=%s card_path=%s pci_address=%s" "$name" "$CARD_PATH" "$chosen_address" > "$GPU_FILE"
 
                 break
             fi
@@ -124,9 +136,9 @@ get_main_render_gpu() {
     fi
 }
 
-echo -e "\e[34m\n---------------------------------------------------------------\e[0m"
-echo -e "\e[34mStarting Arch linux ricing configuration + installation script\e[0m"
-echo -e "\e[34m---------------------------------------------------------------\e[0m\n"
+printf "\n%b%s\n" "$BLUE" "---------------------------------------------------------------"
+printf "%s\n" "Starting Arch linux ricing configuration + installation script"
+printf "%s%b\n" "---------------------------------------------------------------" "$NO_COLOR"
 
 CONFIG_FOLDERS=("hypr" "waybar" "wofi" "swaync" "kitty" "Kvantum" "fastfetch")
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
@@ -135,23 +147,25 @@ BACKUP_DIR="$HOME/.rice_backup_$TIMESTAMP"
 DRY_RUN=false
 if [[ "$1" == "--dry-run" || "$1" == "-d" ]]; then
     DRY_RUN=true
-    echo -e "\n\e[33m--- DRY RUN MODE ACTIVATED ---\e[0m"
-    echo -e "\e[33mCommands will be printed, but not executed.\e[0m\n"
+    printf "\n%b%s\n" "$YELLOW" "--- DRY RUN MODE ACTIVATED ---"
+    printf "%s%b\n" "Commands will be printed, but not executed." "$NO_COLOR"
 
 else
-    echo -e "\e[33m  NOTE: This script will create a backup of some configuration directories (if they exist)\e[0m"
-    echo -e "\e[33mDirectories to backup: ${CONFIG_FOLDERS[*]} and greetd\n\e[0m"
-    echo -e "\e[33mBackup directory path: $BACKUP_DIR \e[0m"
+    printf "\n%b%s\n" "$YELLOW" "  NOTE: This script will create a backup of some configuration directories (if they exist)"
+    printf "%s\n" "Directories to backup: ${CONFIG_FOLDERS[*]} and greetd"
+    printf "%s%b\n" "Backup directory path: $BACKUP_DIR" "$NO_COLOR"
 
-    read -p "Proceed? [Y/n] " confirm
-    confirm=$(echo "$confirm" | tr '[:upper:]' '[:lower:]')
+    printf "%s" "Proceed? [Y/n] "
+    read -r confirm
+    
+    confirm=$(printf "%s" "$confirm" | tr '[:upper:]' '[:lower:]')
 
     if [[ "$confirm" == "n" || "$confirm" == "no" ]]; then
-        echo "\e[31m Script interrupted by the user\e[0m."
+        printf "%b%s%b\n" "$RED" " Script interrupted by the user." "$NO_COLOR"
         exit 1
     fi
 
-    echo "Please enter your password to allow package downloads"
+    printf "%s\n" "Please enter your password to allow package downloads"
     sudo -v
 
     while true; do
@@ -160,7 +174,7 @@ else
         kill -0 "$$" || exit
     done 2>/dev/null &
 
-    echo "Optmizing pacman.conf..."
+    printf "%s\n" "Optmizing pacman.conf..."
     # Adds the ILoveCandy easter egg (ASCII Pacman)
     if ! grep -q "ILoveCandy" /etc/pacman.conf; then
         sudo sed -i '/^Color/a ILoveCandy' /etc/pacman.conf
@@ -172,39 +186,38 @@ else
     sudo sed -i '/^#\[multilib\]/,/^#Include = \/etc\/pacman.d\/mirrorlist/ s/^#//' /etc/pacman.conf
 
     sudo pacman -Sy
+    
+    get_main_render_gpu
+    
+    GPU_VENDOR=$(detect_gpu_vendor)
+
+    case $GPU_VENDOR in
+        "Nvidia")
+            printf "%s\n" "Nvidia GPU detected. Installing required drivers..."
+            sudo pacman -S --needed --noconfirm nvidia-open-dkms nvidia-prime nvidia-settings nvidia-utils opencl-nvidia
+            ;;
+
+        "Intel")
+            printf "%s\n" "Intel GPU detected. Installing Required drivers..."
+
+            sudo pacman -S --needed --noconfirm  mesa lib32-mesa vulkan-intel lib32-vulkan-intel intel-media-driver libva-intel-driver intel-gpu-tools
+            ;;
+
+        "Amd")
+            printf "%s\n" "AMD GPU detected. Installing Required drivers..."
+
+            sudo pacman -S --needed --noconfirm mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver mesa-vdpau
+            ;;
+
+        *)
+            printf "%s\n" "No dedicated GPU detected, proceeding with normal installation."
+            ;;
+    esac
 fi
 
-GPU_VENDOR=$(detect_gpu_vendor)
-
-run_cmd get_main_render_gpu
-
-echo -e "\n-----------------------------------"
-echo "Installing the required packages..."
-echo -e "-----------------------------------\n"
-
-case $GPU_VENDOR in
-    "Nvidia")
-        echo -e "Nvidia GPU detected.\nInstalling Required drivers..."
-
-        run_cmd sudo pacman -S --needed --noconfirm nvidia-open-dkms nvidia-prime nvidia-settings nvidia-utils opencl-nvidia
-        ;;
-
-    "Intel")
-        echo -e "Intel GPU detected.\nInstalling Required drivers..."
-
-        run_cmd sudo pacman -S --needed --noconfirm  mesa lib32-mesa vulkan-intel lib32-vulkan-intel intel-media-driver libva-intel-driver intel-gpu-tools
-        ;;
-
-    "Amd")
-        echo -e "AMD GPU detected.\nInstalling Required drivers..."
-
-        run_cmd sudo pacman -S --needed --noconfirm mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver mesa-vdpau
-        ;;
-
-    *)
-        echo "No dedicated GPU detected, proceeding with normal installation."
-        ;;
-esac
+dry_run printf "\n%s\n" "-----------------------------------"
+dry_run printf "%s\n" "Installing the required packages..."
+dry_run printf "%s\n" "-----------------------------------"
 
 UTIL_PACKAGES=(
     # Audio
@@ -331,49 +344,46 @@ elif command -v paru &> /dev/null; then
     AUR_HELPER="paru"
 
 else
-    echo " Warning: None AUR helper (yay or paru) was found."
-    echo "Installing yay automatically..."
+    dry_run printf "%s\n" " Warning: None AUR helper (yay or paru) was found."
+    dry_run printf "%s\n" "Installing yay automatically..."
 
-    run_cmd sudo pacman -S --needed --noconfirm git base-devel
+    dry_run sudo pacman -S --needed --noconfirm git base-devel
 
-    git clone https://aur.archlinux.org/yay.git /tmp/yay
+    dry_run git clone https://aur.archlinux.org/yay.git /tmp/yay
     
-    cd /tmp/yay && makepkg -si --noconfirm
+    dry_run cd /tmp/yay && makepkg -si --noconfirm
     AUR_HELPER="yay"
 
-    cd - > /dev/null
+    dry_run cd - > /dev/null
 fi
 
-echo "Installing AUR packages with $AUR_HELPER..."
-$AUR_HELPER -S --needed --noconfirm "${AUR_PACKAGES[@]}"
+dry_run printf "%s\n" "Installing AUR packages with $AUR_HELPER..."
+dry_run $AUR_HELPER -S --needed --noconfirm "${AUR_PACKAGES[@]}"
 
-echo "AUR packages installed."
-echo "Installing pacman packages..."
+dry_run printf "%s\n" "AUR packages installed."
+dry_run printf "%s\n" "Installing pacman packages..."
 
-run_cmd sudo pacman -S --needed --noconfirm "${FONT_PACKAGES[@]}" "${TERMINAL_PACKAGES[@]}" "${HYPRLAND_AND_RELATED_PACKAGES[@]}" "${LIBS_AND_PLUGINS[@]}" "${UTIL_PACKAGES[@]}"
+dry_run sudo pacman -S --needed --noconfirm "${FONT_PACKAGES[@]}" "${TERMINAL_PACKAGES[@]}" "${HYPRLAND_AND_RELATED_PACKAGES[@]}" "${LIBS_AND_PLUGINS[@]}" "${UTIL_PACKAGES[@]}"
 
-echo -e "\nAll required packages installed successfully!"
+dry_run printf "\n%s\n" "All required packages installed successfully!"
 
-run_cmd rm -rf "/tmp/yay/"
+dry_run rm -rf "/tmp/yay/"
 
-echo "Customizing icons with Catppuccin Mocha Red..."
+dry_run printf "%s\n" "Customizing icons with Catppuccin Mocha Flamingo..."
 
 if command -v papirus-folders &> /dev/null; then
-    run_cmd papirus-folders -C cat-mocha-red --theme Papirus-Dark
+    dry_run papirus-folders -C cat-mocha-flamingo --theme Papirus-Dark
 
 else
-    echo -e "\e[31mPackage papirus-folders not founded. Verify the installation.\e[0m"
+    dry_run printf "%b%s%b\n" "$YELLOW" "Package papirus-folders not founded. Verify the installation." "$NO_COLOR"
 fi
 
-echo -e "Creating symlinks...\n"
+dry_run printf "%s\n" "Creating symlinks..."
 
 DOTFILE_FOLDER="$HOME/dotfiles"
 
-run_cmd mkdir -p "$HOME/.config/"
-run_cmd mkdir -p "$BACKUP_DIR"
-
-touch "$DOTFILE_FOLDER/hypr/devices.conf" # Ensuring that the file exists (even if empty) to avoid Hyprland issues by sourcing an inexistent file.
-# Note: this file is dedicated for personal per-device config. Modify if you want, or keep it empty.
+dry_run mkdir -p "$HOME/.config/"
+dry_run mkdir -p "$BACKUP_DIR"
 
 for folder in "${CONFIG_FOLDERS[@]}"; do
     SOURCE="$DOTFILE_FOLDER/$folder"
@@ -381,97 +391,98 @@ for folder in "${CONFIG_FOLDERS[@]}"; do
 
     if [ -d "$SOURCE" ]; then
         if [ -d "$TARGET" ] || [ -L "$TARGET" ]; then
-            run_cmd mv "$TARGET" "$BACKUP_DIR/"
+            dry_run mv "$TARGET" "$BACKUP_DIR/"
         fi
 
-        run_cmd ln -snf "$SOURCE" "$TARGET"
-        echo -e " Linked: $SOURCE -> $TARGET"
+        dry_run ln -snf "$SOURCE" "$TARGET"
+        dry_run printf "%s\n" " Linked: $SOURCE -> $TARGET"
 
     else
-        echo -e "\e[33m Folder $folder not found in $DOTFILE_FOLDER\e[0m"
-        echo -e "\e[33mSkipping...\e[0m"
+        dry_run printf "%b%s\n" "$RED" " Folder $folder not found in $DOTFILE_FOLDER"
+        dry_run printf "%s%b\n" "Skipping..." "$NO_COLOR"
     fi
 done
 
-run_cmd mv "$HOME/.config/starship.toml" "$BACKUP_DIR/starship.toml"
-run_cmd ln -snf "$DOTFILE_FOLDER/starship.toml" "$HOME/.config/starship.toml"
-echo " Linked file: starship.toml"
+dry_run mv "$HOME/.config/starship.toml" "$BACKUP_DIR/starship.toml"
+dry_run ln -snf "$DOTFILE_FOLDER/starship.toml" "$HOME/.config/starship.toml"
+dry_run printf "%s\n" " Linked file: starship.toml"
 
 DM_NAME=""
 if systemctl is-active --quiet display-manager.service; then
-    DM_NAME=$(basename $(readlink /etc/systemd/system/display-manager.service) | sed 's/.service//') 
+    DM_NAME=$(basename "$(readlink /etc/systemd/system/display-manager.service)" | sed 's/.service//') 
 fi
 
 if [ -z "$DM_NAME" ]; then
-    echo "No enabled login manager was found."
+    dry_run printf "%s\n" "No enabled login manager was found."
 
     if [ -d "/etc/greetd" ] || [ -L "/etc/greetd" ]; then
-        run_cmd sudo mv /etc/greetd "$BACKUP_DIR/"
+        dry_run sudo mv /etc/greetd "$BACKUP_DIR/"
     fi
 
-    run_cmd sudo ln -snf "$DOTFILE_FOLDER/greetd" "/etc/greetd"
+    dry_run sudo ln -snf "$DOTFILE_FOLDER/greetd" "/etc/greetd"
 
-    run_cmd sudo systemctl enable greetd.service
-    echo "The login manager Greetd with Tuigreet was enabled"
+    dry_run sudo systemctl enable greetd.service
+    dry_run printf "%s\n" "The login manager Greetd with Tuigreet was enabled"
 
-elif [ $DM_NAME = "greetd" ]; then
-    echo "Aplying new configurations to Greetd"
+elif [ "$DM_NAME" = "greetd" ]; then
+    dry_run printf "%s\n" "Aplying new configurations to Greetd"
 
     if [ -d "/etc/greetd" ] || [ -L "/etc/greetd" ]; then
-        run_cmd sudo mv /etc/greetd "$BACKUP_DIR/"
+        dry_run sudo mv /etc/greetd "$BACKUP_DIR/"
     fi
 
-    run_cmd sudo ln -snf "$DOTFILE_FOLDER/greetd" "/etc/greetd"
+    dry_run sudo ln -snf "$DOTFILE_FOLDER/greetd" "/etc/greetd"
 
 else
-    echo "An enable login manager was founded: $DM_NAME"
-    read -p "Would you like to disable it to enable Greetd? [Y/n] " enable
+    dry_run printf "%s\n" "An enable login manager was founded: $DM_NAME"
+    dry_run printf "%s" "Would you like to disable it to enable Greetd? [Y/n] "
+    dry_run read -r enable
 
-    enable=$(echo "$enable" | tr '[:upper:]' '[:lower:]')
+    enable=$(printf "%s" "$enable" | tr '[:upper:]' '[:lower:]')
 
     if [[ "$enable" == "n" || "$enable" == "no" ]]; then
-        echo "Your $DM_NAME will be mantained."
+        dry_run printf "%s\n" "Your $DM_NAME will be mantained."
     
     else
-        run_cmd sudo ln -snf "$DOTFILE_FOLDER/greetd" "/etc/greetd"
+        dry_run sudo ln -snf "$DOTFILE_FOLDER/greetd" "/etc/greetd"
 
-        run_cmd sudo systemctl disable "$DM_NAME"
-        run_cmd sudo systemctl enable greetd.service
+        dry_run sudo systemctl disable "$DM_NAME"
+        dry_run sudo systemctl enable greetd.service
 
-        echo "$DM_NAME disabled and Greetd enabled!"
+        dry_run printf "%s\n" "$DM_NAME disabled and Greetd enabled!"
     fi
 fi
 
-touch ~/.zshrc
+dry_run touch ~/.zshrc
 CUSTOM_ZSH="$DOTFILE_FOLDER/scripts/zsh_custom.zsh"
 
 if ! grep -q "source $CUSTOM_ZSH" ~/.zshrc; then
-    echo -e "\n# Injected configurations by ricing script" >> ~/.zshrc
-    echo "source $CUSTOM_ZSH" >> ~/.zshrc
+    dry_run printf "\n%s\n" "# Injected configurations by ricing script" >> ~/.zshrc
+    dry_run printf "%s\n" "source $CUSTOM_ZSH" >> ~/.zshrc
 
-    echo "Sourced custom Zsh configurations in your ~/.zshrc file"
+    dry_run printf "%s\n" "Sourced custom Zsh configurations in your ~/.zshrc file"
 
 else
-    echo "The zsh_custom.zsh is already sourced in your .zshrc file. Nothing has been chaged."
+    dry_run printf "%s\n" "The zsh_custom.zsh is already sourced in your .zshrc file. Nothing has been chaged."
 fi
 
 START_HYPRLAND_DIR="/usr/local/bin"
 if [ -e "$START_HYPRLAND_DIR/start-hyprland" ]; then
-    echo "A previous start-hyprland script was found in $START_HYPRLAND_DIR"
-    echo "It will be moved to the backup directory to avoid conflicts with the start-hyprland script of this rice."
+    dry_run printf "%s\n" "A previous start-hyprland script was found in $START_HYPRLAND_DIR"
+    dry_run printf "%s\n" "It will be moved to the backup directory to avoid conflicts with the start-hyprland script of this rice."
     
-    run_cmd sudo mv "$START_HYPRLAND_DIR/start-hyprland" "$BACKUP_DIR/"
-    run_cmd sudo cp "$DOTFILE_FOLDER/scripts/start-hyprland" "$START_HYPRLAND_DIR/"
-    run_cmd sudo chmod +x "$START_HYPRLAND_DIR/start-hyprland"
+    dry_run sudo mv "$START_HYPRLAND_DIR/start-hyprland" "$BACKUP_DIR/"
+    dry_run sudo cp "$DOTFILE_FOLDER/scripts/start-hyprland" "$START_HYPRLAND_DIR/"
+    dry_run sudo chmod +x "$START_HYPRLAND_DIR/start-hyprland"
 
 else
-    echo "Copying the start-hyprland script to $START_HYPRLAND_DIR to ensure that your Hyprland will be properly started..."
+    dry_run printf "%s\n" "Copying the start-hyprland script to $START_HYPRLAND_DIR to ensure that your Hyprland will be properly started..."
     
-    run_cmd sudo cp "$DOTFILE_FOLDER/scripts/start-hyprland" "$START_HYPRLAND_DIR/"
-    run_cmd sudo chmod +x "$START_HYPRLAND_DIR/start-hyprland"
+    dry_run sudo cp "$DOTFILE_FOLDER/scripts/start-hyprland" "$START_HYPRLAND_DIR/"
+    dry_run sudo chmod +x "$START_HYPRLAND_DIR/start-hyprland"
 fi
 
-echo -e "\e[32m------------------------------------------------------\e[0m"
-echo -e "\e[32mScript executed successfully!\e[0m"
-echo -e "\e[32mReboot your PC and enjoy your Arch Linux with Hyprland\e[0m"
-echo -e "\e[32m------------------------------------------------------\e[0m"
+printf "\n%b%s\n" "$GREEN" "------------------------------------------------------"
+printf "%s\n" "Script executed successfully!"
+printf "%s\n" "Reboot your PC and enjoy your Arch Linux with Hyprland"
+printf "%s%b\n" "------------------------------------------------------" "$NO_COLOR"
