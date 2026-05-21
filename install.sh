@@ -115,7 +115,8 @@ get_main_render_gpu() {
                 ((i++))
             done
 
-            read -pr "Select by typing the number of the GPU you want to use: " choice
+            printf "%s" "Select by typing the number of the GPU you want to use: "
+            read -r choice
 
             chosen_address="${pci_addresses[$choice]}"
 
@@ -154,7 +155,9 @@ else
     printf "%s\n" "Directories to backup: ${CONFIG_FOLDERS[*]} and greetd"
     printf "%s%b\n" "Backup directory path: $BACKUP_DIR" "$NO_COLOR"
 
-    read -pr "Proceed? [Y/n] " confirm
+    printf "%s" "Proceed? [Y/n] "
+    read -r confirm
+    
     confirm=$(printf "%s" "$confirm" | tr '[:upper:]' '[:lower:]')
 
     if [[ "$confirm" == "n" || "$confirm" == "no" ]]; then
@@ -432,7 +435,8 @@ elif [ "$DM_NAME" = "greetd" ]; then
 
 else
     dry_run printf "%s\n" "An enable login manager was founded: $DM_NAME"
-    dry_run read -pr "Would you like to disable it to enable Greetd? [Y/n] " enable
+    dry_run printf "%s" "Would you like to disable it to enable Greetd? [Y/n] "
+    dry_run read -r enable
 
     enable=$(printf "%s" "$enable" | tr '[:upper:]' '[:lower:]')
 
