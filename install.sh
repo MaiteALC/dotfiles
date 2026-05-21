@@ -10,7 +10,7 @@ dry_run() {
     if [ "$DRY_RUN" = true ]; then
         printf "%b[DRY-RUN]%b %s\n" "$YELLOW" "$NO_COLOR" "Would execute: $*"
     else
-        "$*"
+        "$@"
     fi
 }
 
