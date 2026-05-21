@@ -61,7 +61,7 @@ get_gpu_pci_addresses() {
         fi
     done
 
-    printf "%s" "${addresses[@]}"
+    printf "%s\n" "${addresses[@]}"
 }
 
 #######
