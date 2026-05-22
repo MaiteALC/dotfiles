@@ -58,6 +58,11 @@
     color: #a6adc8;
 }
 
+.widget-title {
+    color: var(--theme-color);
+    font-size: 1.2rem;
+}
+
 .widget-title > button {
     background: var(--theme-color);
     color: #1e1e2e;
