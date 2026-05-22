@@ -466,22 +466,6 @@ else
     dry_run printf "%s\n" "The zsh_custom.zsh is already sourced in your .zshrc file. Nothing has been chaged."
 fi
 
-START_HYPRLAND_DIR="/usr/local/bin"
-if [ -e "$START_HYPRLAND_DIR/start-hyprland" ]; then
-    dry_run printf "%s\n" "A previous start-hyprland script was found in $START_HYPRLAND_DIR"
-    dry_run printf "%s\n" "It will be moved to the backup directory to avoid conflicts with the start-hyprland script of this rice."
-    
-    dry_run sudo mv "$START_HYPRLAND_DIR/start-hyprland" "$BACKUP_DIR/"
-    dry_run sudo cp "$DOTFILE_FOLDER/scripts/start-hyprland" "$START_HYPRLAND_DIR/"
-    dry_run sudo chmod +x "$START_HYPRLAND_DIR/start-hyprland"
-
-else
-    dry_run printf "%s\n" "Copying the start-hyprland script to $START_HYPRLAND_DIR to ensure that your Hyprland will be properly started..."
-    
-    dry_run sudo cp "$DOTFILE_FOLDER/scripts/start-hyprland" "$START_HYPRLAND_DIR/"
-    dry_run sudo chmod +x "$START_HYPRLAND_DIR/start-hyprland"
-fi
-
 printf "\n%b%s\n" "$GREEN" "------------------------------------------------------"
 printf "%s\n" "Script executed successfully!"
 printf "%s\n" "Reboot your PC and enjoy your Arch Linux with Hyprland"
