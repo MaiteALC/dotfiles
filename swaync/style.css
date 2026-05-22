@@ -8,9 +8,9 @@
 }
 
 .control-center {
-    background: #1e1e2e;
+    background: #181825;
     border-radius: 20px;
-    color: #cdd6f4;
+    color: var(--default-text-color);
     padding: 2px;
 }
 
@@ -24,7 +24,7 @@
 .notification {
     background: #313244;
     border-radius: 8px;
-    border: 1px solid #bd93f9;
+    border: 1px solid var(--theme-color);
     padding: 6px;
     transition: all 0.3s ease;
 }
@@ -34,18 +34,18 @@
 }
 
 .notification-title {
-    color: #f5c2e7;
+    color: var(--theme-color);
     font-weight: bold;
 }
 
 .summary {
     font-weight: bold;
     font-size: 16px;
-    color: #bd93f9;
+    color: var(--default-text-color);
 }
 
 .body {
-    color: #cdd6f4;
+    color: var(--default-text-color);
 }
 
 .widget-mpris-title {
@@ -59,7 +59,7 @@
 }
 
 .widget-title > button {
-    background: #88b3fa;
+    background: var(--theme-color);
     color: #1e1e2e;
     border-radius: 4px;
     padding: 4px;
