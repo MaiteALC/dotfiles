@@ -2,6 +2,11 @@
     font-family: "JetBrainsMono NF", "Symbols Nerd Font";
 }
 
+:root { 
+    --theme-color: #f2cdcd;
+    --default-text-color: #cdd6f4;
+}
+
 .control-center {
     background: #1e1e2e;
     border-radius: 20px;
