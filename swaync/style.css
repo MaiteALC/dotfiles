@@ -11,13 +11,13 @@
     background: #181825;
     border-radius: 20px;
     color: var(--default-text-color);
-    padding: 2px;
+    padding: 4px;
 }
 
 .notification-row {
     outline: none;
     margin: 6px;
-    padding: 0;
+    padding: 4px;
     background-color: transparent;
 }
 
