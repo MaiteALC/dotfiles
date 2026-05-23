@@ -24,7 +24,7 @@
 .notification {
     background: #1e1e2e;
     border-radius: 8px;
-    border: 1px solid var(--theme-color);
+    border: 2px solid var(--theme-color);
     padding: 6px;
     transition: all 0.3s ease;
 }
