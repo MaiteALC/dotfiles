@@ -26,7 +26,7 @@ The distinguishing feature of this repository is its self-sufficient post instal
 
 - Backup: Automatically creates a backup directory (~/.rice_backup) and put all your previous configuration to avoid losing files.
 
-- Color Consistency: Applies the Catppuccin Mocha Red in the Papirus Dark icon theme via CLI.
+- Color Consistency: Applies the Catppuccin Mocha accents in the Papirus Dark icon theme via CLI.
 
 - Wallpapers: Provides a set of wallpapers to match the Hyprland style.
 
@@ -88,10 +88,8 @@ chmod u+x install.sh
 
 - Super + X = clipboard history (cliphist/wofi)
 
-- Super + N = notification center (SwayNC)
-
 - Super + L = lock the screen (hyprlock)
 
 - Super + Shift + F = fullscreen
 
-Check the ```./hypr/keybinds.conf``` file to see all keybinds.
+Check the ```./hypr/modules/binds.lua``` file to see all keybinds.
