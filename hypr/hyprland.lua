@@ -29,10 +29,10 @@ hl.monitor({
 
 hl.config({
     general = {
-        gaps_in  = 7,
-        gaps_out = 14,
+        gaps_in  = 6,
+        gaps_out = 12,
 
-        border_size = 2,
+        border_size = 1,
 
         col = {
             active_border = { colors = { "rgb(ECEFF4)" }},
