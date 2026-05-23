@@ -12,6 +12,7 @@ window {
     border-radius: 12px;
 }
 
+#inner-box,
 #outer-box {
     margin: 5px;
 }
@@ -20,10 +21,6 @@ window {
     margin: 5px;
     color: @default-text-color;
     background-color: #313244;
-}
-
-#inner-box {
-    margin: 5px;
 }
 
 #entry:selected {
