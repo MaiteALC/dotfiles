@@ -1,13 +1,20 @@
-# Mostra apenas aplicativos instalados (drun)
-show=drun
+show_io=false
+exec_search=false
+
+# mode settings (drun is recommended for application launching)
+mode=drun
+
+# sizing and layout
 width=800
 height=740
 location=center
 always_parse_dot_desktop=true
-show_io=false
-exec_search=false
 hide_scroll=true
-insensitive=true
-prompt=Search...
+
+# image settings
 allow_images=true
 image_size=24
+
+# search behavior
+insensitive=true
+prompt=Search...
