@@ -5,8 +5,8 @@ exec_search=false
 mode=drun
 
 # sizing and layout
-width=800
-height=740
+width=550
+height=600
 location=center
 always_parse_dot_desktop=true
 hide_scroll=true
