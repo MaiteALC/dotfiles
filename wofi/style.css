@@ -1,11 +1,14 @@
+@define-color theme-color #f2cdcd;
+@define-color default-text-color #cdd6f4;
+
 * {
     font-family: "JetBrainsMono Nerd Font", sans-serif;
 }
 
 window {
     margin: 0px;
-    border: 2px solid #bd93f9;
-    background-color: #1e1e2e; /* Base Mocha */
+    border: 2px solid @theme-color;
+    background-color: #1e1e2e;
     border-radius: 12px;
 }
 
@@ -15,8 +18,7 @@ window {
 
 #input {
     margin: 5px;
-    border: none;
-    color: #cdd6f4;
+    color: @default-text-color;
     background-color: #313244;
 }
 
@@ -25,7 +27,8 @@ window {
 }
 
 #entry:selected {
-    background-color: #f38ba8;
+    background-color: @theme-color;
+    color: #1e1e2e;
     border-radius: 5px;
 }
 
@@ -36,5 +39,5 @@ window {
 #text {
     margin: 5px;
     border: none;
-    color: #cdd6f4;
+    color: @default-text-color;
 }
