@@ -4,7 +4,7 @@
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 
-# Catppuccin Mocha - Hyprland Dotfiles
+# ☕ Catppuccin Mocha - Hyprland Dotfiles
 
 This repository contains my personal rice, based on Hyprland, focused on Catppuccin Mocha and automated by an installation script.
 
@@ -12,7 +12,7 @@ The current dotfiles version is based on Hyprland v0.55, with **Lua-based** conf
 
 ---
 
-## The Installation Script (install.sh)
+## ⚙️ The Installation Script (install.sh)
 
 The distinguishing feature of this repository is its self-sufficient post installation script. It was projected to be executed in a clean Arch Linux installation, in other words, without DEs (Desktop Environments) like KDE Plasma or GNOME.
 
@@ -34,7 +34,7 @@ The distinguishing feature of this repository is its self-sufficient post instal
 
 ---
 
-## Rice Components
+## 🍚 Rice Components
 
 | Category | Tool | Description |
 | :--- | :--- | :--- |
@@ -51,7 +51,7 @@ The distinguishing feature of this repository is its self-sufficient post instal
 
 ---
 
-## How to install
+## 🛠️ How to install
 
 *Note:* It's a good practice review scripts downloaded from internet before execute them.
 
@@ -82,7 +82,7 @@ chmod u+x install.sh
 
 ---
 
-## Main Keybinds:
+## ⌨️ Main Keybinds:
 
 - Super + Return (Enter) = terminal (kitty)
 
