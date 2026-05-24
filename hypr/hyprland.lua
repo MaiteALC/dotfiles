@@ -29,10 +29,10 @@ hl.monitor({
 
 hl.config({
     general = {
-        gaps_in  = 7,
-        gaps_out = 14,
+        gaps_in  = 6,
+        gaps_out = 12,
 
-        border_size = 2,
+        border_size = 1,
 
         col = {
             active_border = { colors = { "rgb(ECEFF4)" }},
@@ -65,8 +65,8 @@ hl.config({
         blur = {
             enabled = true,
 
-            size = 4,
-            passes = 2,
+            size = 2,
+            passes = 3,
             vibrancy = 0.3,
 
             new_optimizations = true,
@@ -74,8 +74,8 @@ hl.config({
             xray = true,
 
             noise = 0.03,
-            contrast = 0.9,
-            brightness = 0.85,
+            contrast = 1,
+            brightness = 0.82,
 
             popups = true,
             special = true,
