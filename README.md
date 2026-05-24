@@ -95,3 +95,27 @@ chmod u+x install.sh
 - Super + Shift + F = fullscreen
 
 Check the ```./hypr/modules/binds.lua``` file to see all keybinds.
+
+---
+
+## 📸 Showcase
+
+<p align="center">
+  <img src="./screenshots/homescreen.png" width="49%" alt="Clean homescreen with default wallpaper" />
+  <img src="./screenshots/fastfetch.png" width="49%" alt="Fastfetch terminal" />
+</p>
+
+<p align="center">
+  <img src="./screenshots/intellij_terminal.png" width="49%" alt="IntelliJ, and a terminal with log messages" />
+  <img src="./screenshots/intellij_btop.png" width="49%" alt="IntelliJ, and a btop terminal" />
+</p>
+
+<p align="center">
+  <img src="./screenshots/spotify_pipes_cava.png" width="49%" alt="Spotify with pipes-rs and cava" />
+  <img src="./screenshots/wofi_nautilus.png" width="49%" alt="Nautilus and Wofi launcher" />
+</p>
+
+<p align="center">
+  <img src="./screenshots/codium_unimatrix_terminal.png" width="49%" alt="VsCodium with unimatrix terminal" />
+  <img src="./screenshots/theme-managers_tty-clock.png" width="49%" alt="Theme managers and tty-clock" />
+</p>
