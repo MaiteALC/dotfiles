@@ -8,6 +8,8 @@
 
 This repository contains my personal rice, based on Hyprland, focused on Catppuccin Mocha and automated by an installation script.
 
+The current dotfiles version is based on Hyprland v0.55, with **Lua-based** configurations. Check the [v1.0.0-legacy-hyprlang](https://github.com/MaiteALC/dotfiles/releases/tag/v1.0.0-legacy-hyprlang) to access the legacy version with static `.conf` files.
+
 ---
 
 # The Installation Script (install.sh)
