@@ -2,24 +2,29 @@
     font-family: "JetBrainsMono NF", "Symbols Nerd Font";
 }
 
+:root { 
+    --theme-color: #f2cdcd;
+    --default-text-color: #cdd6f4;
+}
+
 .control-center {
-    background: #1e1e2e;
+    background: #181825;
     border-radius: 20px;
-    color: #cdd6f4;
-    padding: 2px;
+    color: var(--default-text-color);
+    padding: 4px;
 }
 
 .notification-row {
     outline: none;
     margin: 6px;
-    padding: 0;
+    padding: 4px;
     background-color: transparent;
 }
 
 .notification {
-    background: #313244;
+    background: #1e1e2e;
     border-radius: 8px;
-    border: 1px solid #bd93f9;
+    border: 2px solid var(--theme-color);
     padding: 6px;
     transition: all 0.3s ease;
 }
@@ -29,18 +34,18 @@
 }
 
 .notification-title {
-    color: #f5c2e7;
+    color: var(--theme-color);
     font-weight: bold;
 }
 
 .summary {
     font-weight: bold;
     font-size: 16px;
-    color: #bd93f9;
+    color: var(--default-text-color);
 }
 
 .body {
-    color: #cdd6f4;
+    color: var(--default-text-color);
 }
 
 .widget-mpris-title {
@@ -53,8 +58,13 @@
     color: #a6adc8;
 }
 
+.widget-title {
+    color: var(--theme-color);
+    font-size: 1.2rem;
+}
+
 .widget-title > button {
-    background: #88b3fa;
+    background: var(--theme-color);
     color: #1e1e2e;
     border-radius: 4px;
     padding: 4px;

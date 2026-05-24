@@ -6,26 +6,30 @@
     "modules-right": ["network", "backlight", "pulseaudio", "battery", "custom/notification"],
     "scroll-step": 1,
     "ignored-sinks": ["Easy Effects Sink"],
-    "width": 1900,
+    "width": 1760,
 
     "hyprland/workspaces": {
         "format": "{icon}",
-        "on-click": "activate"
+        "format-icons": {
+            "urgent": "",
+            "active": "",
+            "default": ""
+        }
     },
 
     "battery": {
         "format": "{icon} {capacity}%",
         "format-icons": ["", "", "", "", ""],
-        "states": { "warning": 30, "critical": 15 }
+        "states": { "warning": 39, "critical": 19 }
     },
 
     "network": {
         "format-wifi": " ({signalStrength}%)",
         "format-ethernet": "󰈀",
         "format-disconnected": "󰤮",
-        "tooltip-format": "{ifname} via {gwaddr} 󰊗 ",
-        "tooltip-format-wifi": " {essid}",
-        "tooltip-format-ethernet": "{ifname}",
+        "tooltip-format": " {ifname} via {gwaddr} \n Total bandwidth: {bandwidthTotalBytes} ",
+        "tooltip-format-wifi": " SSID: {essid} \n Interface: {ifname} \n Up Speed: {bandwidthUpBytes} \n Down Speed: {bandwidthDownBytes} ",
+        "tooltip-format-ethernet": " Interface: {ifname} \n Up Speed: {bandwidthUpBytes} \n Down Speed: {bandwidthDownBytes} ",
         "tooltip-format-disconnected": "Disconnected",
         "max-length": 50
     },
@@ -54,20 +58,18 @@
     },
 
     "clock": {
-        "format": "{:%H:%M - %Y/%m/%d}"
+        "format": "{:%A, %H:%M - %Y/%m/%d}"
     },
 
     "tray": {
         "icon-size": 20,
-        "spacing": 10
+        "spacing": 8
     },
 
     "custom/sysmonitor": {
-        "format": "{}",
         "return-type": "json",
-        "interval": 3,
         "tooltip": true,
-        "exec": "~/dotfiles/scripts/system-monitor.sh",
+        "exec": "lua ~/dotfiles/scripts/sys-monitor.lua",
         "escape": false
     },
 

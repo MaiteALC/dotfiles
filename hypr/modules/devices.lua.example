@@ -1,0 +1,22 @@
+The 'hyprland.lua' main module attemps to load a module called 'devices.lua' (inside the 'hypr/modules/' directory). Any error won't be propagated, but if it doesn't exists, it will be safely ignored, without interrupting other modules loading.
+
+Inside the 'devices.lua' file you can write your own per-device configurations using the 'hl.device()' method.
+
+
+You should write your code like the example below: 
+
+hl.device({
+    name = "my-mouse-name",
+    sensitivity = -0.5,
+})
+
+hl.device({
+    name = "my-keyboard-name",
+    kb_layout = "br"
+})
+
+hl.device({
+    -- you can overwrite here the global touchpad configurations defined in 'input.lua'
+    name = "my-touchpad", 
+    clickfinger_behavior = false
+})
