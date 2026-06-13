@@ -329,6 +329,15 @@ LIBS_AND_PLUGINS=(
     libdbusmenu-gtk3
 )
 
+NVIM_PACKAGES=(
+    gcc
+    make
+    neovim
+    tree-sitter-cli
+    ripgrep
+    fd
+)
+
 AUR_PACKAGES=(
     papirus-folders-catppuccin-git
     pipes.sh
@@ -363,7 +372,7 @@ dry_run $AUR_HELPER -S --needed --noconfirm "${AUR_PACKAGES[@]}"
 dry_run printf "%s\n" "AUR packages installed."
 dry_run printf "%s\n" "Installing pacman packages..."
 
-dry_run sudo pacman -S --needed --noconfirm "${FONT_PACKAGES[@]}" "${TERMINAL_PACKAGES[@]}" "${HYPRLAND_AND_RELATED_PACKAGES[@]}" "${LIBS_AND_PLUGINS[@]}" "${UTIL_PACKAGES[@]}"
+dry_run sudo pacman -S --needed --noconfirm "${FONT_PACKAGES[@]}" "${TERMINAL_PACKAGES[@]}" "${HYPRLAND_AND_RELATED_PACKAGES[@]}" "${LIBS_AND_PLUGINS[@]}" "${UTIL_PACKAGES[@]}" "${NVIM_PACKAGES[@]}"
 
 dry_run printf "\n%s\n" "All required packages installed successfully!"
 
