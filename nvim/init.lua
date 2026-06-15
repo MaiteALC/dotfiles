@@ -1,4 +1,3 @@
-require 'options'
-require 'keymaps'
+require 'core'
 require 'theme'
 require 'plugins'
