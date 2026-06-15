@@ -47,14 +47,20 @@ require('lualine').setup {
     },
     lualine_c = {
       {
-        'filename',
-        file_status = true,
-        newfile_status = true,
+        'buffers',
+        show_filename_only = true, -- Shows shortened relative path when set to false.
+        hide_filename_extension = false,
+        show_modified_status = true,
+
+        mode = 0, -- 0: Shows buffer name
+        -- 1: Shows buffer index
+        -- 2: Shows buffer name + buffer index
+        -- 3: Shows buffer number
+        -- 4: Shows buffer name + buffer number
         symbols = {
-          modified = '[+]',
-          readonly = '[ro]',
-          unnamed = '[No Name]',
-          newfile = '[New]',
+          modified = ' ●',
+          directory = '',
+          alternate_file = '󰩌',
         },
       },
     },
