@@ -140,7 +140,7 @@ printf "\n%b%s\n" "$BLUE" "-----------------------------------------------------
 printf "%s\n" "Starting Arch linux ricing configuration + installation script"
 printf "%s%b\n" "---------------------------------------------------------------" "$NO_COLOR"
 
-CONFIG_FOLDERS=("hypr" "waybar" "wofi" "swaync" "kitty" "Kvantum" "fastfetch")
+CONFIG_FOLDERS=("hypr" "waybar" "wofi" "swaync" "kitty" "Kvantum" "fastfetch" "nvim")
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 BACKUP_DIR="$HOME/.rice_backup_$TIMESTAMP"
 
