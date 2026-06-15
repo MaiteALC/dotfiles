@@ -64,7 +64,12 @@ require('lualine').setup {
         },
       },
     },
-    lualine_x = { 'encoding', 'fileformat', 'filesize', 'filetype' },
+    lualine_x = {
+      'encoding',
+      'fileformat',
+      'filesize',
+      { 'filetype', colored = true, icon_only = true },
+    },
     lualine_y = { 'searchcount', 'location' },
     lualine_z = {
       {
@@ -82,11 +87,23 @@ require('lualine').setup {
   },
   -- Inactive windows configurations
   inactive_sections = {
-    lualine_a = { 'filename' },
+    lualine_a = {
+      {
+        'filename',
+        file_status = true,
+        newfile_status = true,
+        symbols = {
+          modified = ' ●',
+          readonly = '󰷋',
+          unnamed = '[No Name]',
+          newfile = '[New]',
+        },
+      },
+    },
     lualine_b = {},
     lualine_c = {},
     lualine_x = {},
-    lualine_y = { 'filetype' },
+    lualine_y = { { 'filetype', colored = false, icon_only = true } },
     lualine_z = { 'location' },
   },
   tabline = {},
