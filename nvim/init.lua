@@ -1,12 +1,6 @@
 require 'options'
 require 'keymaps'
-require 'plugins.utils'
-require 'plugins.gitsigns_config'
-require 'plugins.fuzzy_finder'
-require 'plugins.mini'
-require 'plugins.neo-tree'
-require 'plugins.language_support'
-require 'plugins.status_line'
+require 'plugins'
 
 vim.pack.add { 'https://github.com/binhtran432k/dracula.nvim' }
 

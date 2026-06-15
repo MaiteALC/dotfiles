@@ -1,0 +1,7 @@
+require 'plugins.status_line'
+require 'plugins.neo-tree'
+require 'plugins.utils'
+require 'plugins.gitsigns_config'
+require 'plugins.mini'
+require 'plugins.language_support'
+require 'plugins.fuzzy_finder'
