@@ -10,17 +10,21 @@ vim.pack.add {
 
 require('fidget').setup {}
 
--- Enable the following language servers
---  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
---  See `:help lsp-config` for information about keys and how to configure
 ---@type table<string, vim.lsp.Config>
 local servers = {
   clangd = {},
-  pyright = {},
+  basedpyright = {},
   rust_analyzer = {},
-  -- ts_ls = {},
+  ts_ls = {},
   stylua = {}, -- Lua formatter
   jdtls = {},
+  yamlls = {},
+  jsonls = {},
+  taplo = {}, -- TOML formatter, linter and LSP
+  bashls = {},
+  lemminx = {},
+  sqlls = {},
+  dockerls = {},
 
   -- Special Lua Config, as recommended by neovim help docs
   lua_ls = {
@@ -76,21 +80,23 @@ vim.list_extend(ensure_installed, {
   'shellcheck', -- Linter
 
   -- Python
-  'black', -- Formatter
-  'isort', -- Imports formatter
-  'flake8', -- Linter
+  'ruff', -- Formatter and linter
 
   -- C/C++
-  'clang-format', -- Formatter
+  'clang-format', -- Formatter and linter
 
-  -- Web / JavaScript
-  'prettierd', -- Formatter
-  'eslint_d', -- Linter
+  -- Web / JS / TS
+  'biome', -- Formatter and linter
 
   -- Other languages
   'markdownlint', -- Markdown linter
-  'jsonlint', -- JSON linter
   'hadolint', -- Dockerfile linter
+  'yamlfmt', -- YAML formatter
+  'yamllint', -- YAML linter
+  'lemminx', -- XML linter
+  'xmlformatter', -- XML formatter
+  'sql-formatter', -- SQL formatter
+  'sqlfluff' -- SQL linter
 })
 
 require('mason-tool-installer').setup { ensure_installed = ensure_installed }

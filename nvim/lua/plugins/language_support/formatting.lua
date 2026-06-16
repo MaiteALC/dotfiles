@@ -11,7 +11,12 @@ require('conform').setup {
       typescript = true,
       c = true,
       sh = true,
-      bash = true
+      bash = true,
+      json = true,
+      yaml = true,
+      toml = true,
+      xml = true,
+      sql = true,
     }
     if enabled_filetypes[vim.bo[bufnr].filetype] then
       return { timeout_ms = 500 }
@@ -24,14 +29,21 @@ require('conform').setup {
   },
   formatters_by_ft = {
     lua = { 'stylua' },
-    python = { 'isort', 'black' },
-    javascript = { 'prettierd', 'prettier', stop_after_first = true },
-    typescript = { 'prettierd', 'prettier', stop_after_first = true },
+    python = { 'ruff_organize_imports', 'ruff_format' },
+    javascript = { 'biome' },
+    typescript = { 'biome' },
     rust = { 'rustfmt' },
     java = { 'google-java-format' },
     sh = { 'shfmt' },
     bash = { 'shfmt' },
-    c = { 'clang-format' }
+    c = { 'clang-format' },
+    json = { 'biome' },
+    html = { 'biome' },
+    css = { 'biome' },
+    yaml = { 'yamlfmt' },
+    toml = { 'taplo' },
+    xml = { 'xmlformatter' },
+    sql = { 'sql-formatter' },
   },
 }
 

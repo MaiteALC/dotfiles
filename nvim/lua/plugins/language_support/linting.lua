@@ -4,14 +4,14 @@ local lint = require 'lint'
 
 lint.linters_by_ft = {
   markdown = { 'markdownlint' },
-  json = { 'jsonlint' },
   dockerfile = { 'hadolint' },
   java = { 'checkstyle' },
   bash = { 'shellcheck' },
   sh = { 'shellcheck' },
-  python = { 'flake8' },
-  javascript = { 'eslint_d' },
-  typescript = { 'eslint_d' },
+  python = { 'ruff' },
+  xml = { 'lemminx' },
+  toml = { 'taplo' },
+  sql = { 'sqlfluff' },
 }
 
 -- Create autocommand which carries out the actual linting
