@@ -53,3 +53,16 @@ require('mini.comment').setup {
     textobject = 'cm',
   },
 }
+
+require('mini.indentscope').setup {
+  symbol = '|',
+  mappings = {
+    -- Textobjects
+    object_scope = 'sc', -- [s][c]ope
+    object_scope_with_border = 'sb', -- [s]cope with [b]orders
+
+    -- Motions (jump to respective border line; if not present - body line)
+    goto_top = '[s',
+    goto_bottom = ']s',
+  },
+}
