@@ -37,3 +37,19 @@ require('mini.notify').setup {
 require('mini.cmdline').setup {
   autocorrection = { enable = false },
 }
+
+require('mini.comment').setup {
+  mappings = {
+    comment = 'cm',
+
+    -- Toggle comment on current line
+    comment_line = '<leader>cc',
+
+    -- Toggle comment on visual selection
+    comment_visual = '<leader>cc',
+
+    -- Define 'comment' textobject (like `dcm` - delete whole comment block)
+    -- Works also in Visual mode if mapping differs from `comment_visual`
+    textobject = 'cm',
+  },
+}
