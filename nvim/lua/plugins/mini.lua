@@ -28,6 +28,8 @@ require('mini.ai').setup {
 -- - sr)'  - [S]urround [R]eplace [)] [']
 require('mini.surround').setup()
 
+require('mini.pairs').setup()
+
 require('mini.notify').setup {
   content = {
     format = function(notif) return notif.msg end,
