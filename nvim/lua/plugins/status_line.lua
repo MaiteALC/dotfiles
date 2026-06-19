@@ -3,11 +3,25 @@ vim.pack.add {
   'https://github.com/nvim-lualine/lualine.nvim',
 }
 
+local custom_theme = require 'lualine.themes.dracula'
+
+local mocha_base = '#1e1e2e'
+local mocha_surface = '#1d1d2b'
+
+custom_theme.normal.b.bg = mocha_surface
+custom_theme.insert.b.bg = mocha_surface
+custom_theme.visual.b.bg = mocha_surface
+custom_theme.replace.b.bg = mocha_surface
+custom_theme.command.b.bg = mocha_surface
+
+-- Changing only the normal mode in section 'C' affects all modes.
+custom_theme.normal.c.bg = mocha_base
+
 require('lualine').setup {
   -- Global configurations
   options = {
     icons_enabled = true,
-    theme = 'dracula',
+    theme = custom_theme,
     component_separators = { left = '', right = '' },
     section_separators = { left = '', right = '' },
     disabled_filetypes = {
