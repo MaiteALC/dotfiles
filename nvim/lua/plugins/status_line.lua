@@ -30,41 +30,25 @@ require('lualine').setup {
     },
     ignore_focus = { 'neo-tree' },
     always_divide_middle = true,
-    always_show_tabline = false,
+    always_show_tabline = true,
     globalstatus = false,
   },
   -- Active window configurations
   sections = {
     lualine_a = { 'mode' },
     lualine_b = {
+      {
+        'branch',
+        icon = { '', align = 'left', color = { fg = '#e1392c' } },
+        draw_empty = 'false',
+        color = { fg = { custom_theme.normal.c.fg, gui = '' } },
+      },
       'diagnostics',
-      { 'branch', icon = { '', align = 'left' }, draw_empty = 'false' },
       'diff',
     },
-    lualine_c = {
-      {
-        'buffers',
-        show_filename_only = true, -- Shows shortened relative path when set to false.
-        hide_filename_extension = false,
-        show_modified_status = true,
-
-        mode = 0, -- 0: Shows buffer name
-        -- 1: Shows buffer index
-        -- 2: Shows buffer name + buffer index
-        -- 3: Shows buffer number
-        -- 4: Shows buffer name + buffer number
-        symbols = {
-          modified = ' ●',
-          directory = '',
-          alternate_file = '󰩌',
-        },
-      },
-    },
+    lualine_c = {},
     lualine_x = {
-      'encoding',
-      'fileformat',
-      'filesize',
-      { 'filetype', colored = true, icon_only = true },
+      'progress',
     },
     lualine_y = { 'searchcount', 'location' },
     lualine_z = {
@@ -82,28 +66,94 @@ require('lualine').setup {
     },
   },
   -- Inactive windows configurations
-  inactive_sections = {
-    lualine_a = {
+  inactive_sections = {},
+
+  tabline = {
+    lualine_a = {},
+    lualine_b = {},
+    lualine_c = {
+      {
+        'buffers',
+        show_filename_only = true, -- Shows shortened relative path when set to false.
+        hide_filename_extension = false,
+        show_modified_status = false,
+
+        mode = 0, -- 0: Shows buffer name
+        -- 1: Shows buffer index
+        -- 2: Shows buffer name + buffer index
+        -- 3: Shows buffer number
+        -- 4: Shows buffer name + buffer number
+        symbols = {
+          directory = ' ',
+          alternate_file = '󰩌 ',
+        },
+      },
+    },
+    lualine_x = {},
+    lualine_y = {},
+    lualine_z = {},
+  },
+
+  winbar = {
+    lualine_a = {},
+    lualine_b = {
       {
         'filename',
         file_status = true,
         newfile_status = true,
         symbols = {
-          modified = ' ●',
+          modified = '●',
           readonly = '󰷋',
           unnamed = '[No Name]',
           newfile = '[New]',
         },
+        path = 3, -- 0: Just the filename
+        -- 1: Relative path
+        -- 2: Absolute path
+        -- 3: Absolute path, with tilde as the home directory
+        -- 4: Filename and parent dir, with tilde as the home directory
       },
     },
-    lualine_b = {},
     lualine_c = {},
-    lualine_x = {},
-    lualine_y = { { 'filetype', colored = false, icon_only = true } },
-    lualine_z = { 'location' },
+    lualine_x = {
+      'fileformat',
+      'filesize',
+      { 'filetype', colored = true, icon_only = true, padding = { left = 1, right = 0 } },
+    },
+    lualine_y = { 'encoding' },
+    lualine_z = {},
   },
-  tabline = {},
-  winbar = {},
-  inactive_winbar = {},
+
+  inactive_winbar = {
+    lualine_a = {},
+    lualine_b = {
+      {
+        'filename',
+        file_status = true,
+        newfile_status = true,
+        symbols = {
+          modified = '●',
+          readonly = '󰷋',
+          unnamed = '[No Name]',
+          newfile = '[New]',
+        },
+        path = 3,
+      },
+    },
+    lualine_c = {},
+    lualine_x = {
+      'fileformat',
+      'filesize',
+      {
+        'filetype',
+        colored = false,
+        icon_only = true,
+        padding = { left = 1, right = 0 },
+      },
+    },
+    lualine_y = { 'encoding' },
+    lualine_z = {},
+  },
+
   extensions = {},
 }
