@@ -1,29 +1,38 @@
--- NOTE: You can also specify a branch or a specific commit
 vim.pack.add { { src = 'https://github.com/nvim-treesitter/nvim-treesitter', version = 'main' } }
 
 local parsers = {
-  'bash',
+  -- Programming & Scripting
   'c',
-  'diff',
+  'java',
+  'python',
+  'javascript',
+  'lua',
+  'bash',
+  'vim', -- For Vimscript files (.vim)
+  'sql',
+  -- NOTE: for Rust ecosystem: Since `rust-analzyer` is already downloaded, the ecosystem doesn't need a specific treesitter to be downloaded.
+
+  -- Markup & Styling
   'html',
   'css',
-  'javascript',
-  'java',
-  'javadoc',
-  'python',
-  'lua',
-  'luadoc',
+  'markdown',
+  'markdown_inline', -- Necessary for rendering markdown correctly in different contexts
+
+  -- Data Serialization & Configuration
   'json',
   'yaml',
   'toml',
   'xml',
-  'sql',
-  'http',
-  'markdown',
-  'markdown_inline',
-  'query',
-  'vim',
+
+  -- Documentation
   'vimdoc',
+  'javadoc',
+  'luadoc',
+
+  -- Tools, Protocols & Treesitter Internals
+  'diff',
+  'http',
+  'query', -- Tree-sitter's query language
 }
 
 local treesitter = require 'nvim-treesitter'
