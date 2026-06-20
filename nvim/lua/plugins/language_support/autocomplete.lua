@@ -1,4 +1,11 @@
-vim.pack.add { { src = 'https://github.com/saghen/blink.cmp', version = vim.version.range '1.*' } }
+vim.pack.add {
+  { src = 'https://github.com/saghen/blink.cmp', version = vim.version.range '1.*' },
+  { src = 'https://github.com/L3MON4D3/LuaSnip', version = vim.version.range '2.*' },
+  'https://github.com/rafamadriz/friendly-snippets',
+}
+
+require('luasnip').setup {}
+require('luasnip.loaders.from_vscode').lazy_load()
 
 require('blink.cmp').setup {
   keymap = {
@@ -40,7 +47,7 @@ require('blink.cmp').setup {
     default = { 'lsp', 'path', 'snippets' },
   },
 
-  --snippets = { preset = 'luasnip' },
+  snippets = { preset = 'luasnip' },
 
   -- Blink.cmp includes an optional, recommended rust fuzzy matcher,
   -- which automatically downloads a prebuilt binary when enabled.
