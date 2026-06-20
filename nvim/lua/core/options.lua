@@ -93,3 +93,5 @@ vim.diagnostic.config {
     end,
   },
 }
+
+vim.opt.cmdheight = 0
