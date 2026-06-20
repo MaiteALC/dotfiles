@@ -47,4 +47,4 @@ require('conform').setup {
   },
 }
 
-vim.keymap.set({ 'n', 'v' }, '<leader>fb', function() require('conform').format { async = true } end, { desc = 'Conform: [F]ormat [b]uffer' })
+vim.keymap.set({ 'n', 'v' }, '<leader>bf', function() require('conform').format { async = true } end, { desc = 'Conform: [B]uffer [f]ormatting' })
