@@ -7,6 +7,7 @@ local custom_theme = require 'lualine.themes.dracula'
 
 local mocha_base = '#1e1e2e'
 local mocha_surface = '#1d1d2b'
+local light_blue = '#86daeb'
 
 custom_theme.normal.b.bg = mocha_surface
 custom_theme.insert.b.bg = mocha_surface
@@ -16,6 +17,9 @@ custom_theme.command.b.bg = mocha_surface
 
 -- Changing only the normal mode in section 'C' affects all modes.
 custom_theme.normal.c.bg = mocha_base
+
+custom_theme.command.a.bg = light_blue
+custom_theme.command.b.fg = light_blue
 
 require('lualine').setup {
   -- Global configurations
