@@ -36,10 +36,6 @@ require('mini.notify').setup {
   },
 }
 
-require('mini.cmdline').setup {
-  autocorrection = { enable = false },
-}
-
 require('mini.comment').setup {
   mappings = {
     comment = 'cm',
