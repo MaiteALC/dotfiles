@@ -45,7 +45,7 @@ vim.o.smartcase = true
 vim.opt.signcolumn = 'yes'
 
 -- Decrease update time
-vim.o.updatetime = 50
+vim.o.updatetime = 150
 
 vim.o.timeoutlen = 500
 
