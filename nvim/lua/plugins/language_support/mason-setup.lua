@@ -16,7 +16,6 @@ local servers = {
   basedpyright = {},
   rust_analyzer = {},
   ts_ls = {},
-  stylua = {}, -- Lua formatter
   jdtls = {},
   yamlls = {},
   jsonls = {},
@@ -87,6 +86,8 @@ vim.list_extend(ensure_installed, {
 
   -- Web / JS / TS
   'biome', -- Formatter and linter
+
+  'stylua', -- Lua formatter
 
   -- Other languages
   'markdownlint', -- Markdown linter
