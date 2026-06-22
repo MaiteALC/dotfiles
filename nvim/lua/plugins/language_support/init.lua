@@ -1,4 +1,4 @@
-require 'plugins.language_support.mason-setup'
+require 'plugins.language_support.lang_setup'
 require 'plugins.language_support.lsp_autocmds'
 require 'plugins.language_support.linting'
 require 'plugins.language_support.formatting'
