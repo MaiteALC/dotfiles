@@ -28,11 +28,22 @@ require('blink.cmp').setup {
   },
 
   completion = {
-    menu = { border = 'rounded' },
+    menu = {
+      border = 'rounded',
+      auto_show = true,
+      auto_show_delay_ms = 250, -- add small delay to prevent lag
+    },
+
     documentation = {
       window = { border = 'rounded' },
       auto_show = true,
-      auto_show_delay_ms = 250, -- Add a small delay to prevent documentation window flickering
+      -- Add small delays to prevent documentation window flickering
+      auto_show_delay_ms = 270,
+      update_delay_ms = 120,
+    },
+
+    ghost_text = {
+      enabled = false,
     },
   },
 
