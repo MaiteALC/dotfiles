@@ -9,7 +9,7 @@ vim.pack.add {
   gh 'windwp/nvim-autopairs',
 }
 
-require('todo-comments').setup { signs = true }
+require('todo-comments').setup { signs = false }
 
 require('guess-indent').setup {}
 
