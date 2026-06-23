@@ -124,7 +124,7 @@ vim.list_extend(ensure_installed, {
 
 require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
-for name, server in pairs(servers) do
-  vim.lsp.config(name, server)
-  vim.lsp.enable(name)
+for server_name, user_overrides in pairs(servers) do
+  vim.lsp.config(server_name, user_overrides)
+  vim.lsp.enable(server_name)
 end
