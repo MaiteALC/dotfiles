@@ -14,7 +14,29 @@ require('fidget').setup {}
 local servers = {
   clangd = {},
   basedpyright = {},
-  rust_analyzer = {},
+
+  -- Special Rust config, as recommended by rust_analyzer manual
+  rust_analyzer = {
+    settings = {
+      ['rust-analyzer'] = {
+        imports = {
+          granularity = {
+            group = 'module',
+          },
+          prefix = 'self',
+        },
+        cargo = {
+          buildScripts = {
+            enable = true,
+          },
+        },
+        procMacro = {
+          enable = true,
+        },
+      },
+    },
+  },
+
   ts_ls = {},
   jdtls = {},
   yamlls = {},
@@ -106,25 +128,3 @@ for name, server in pairs(servers) do
   vim.lsp.config(name, server)
   vim.lsp.enable(name)
 end
-
--- Specific Rust configuration
-vim.lsp.config('rust_analyzer', {
-  settings = {
-    ['rust-analyzer'] = {
-      imports = {
-        granularity = {
-          group = 'module',
-        },
-        prefix = 'self',
-      },
-      cargo = {
-        buildScripts = {
-          enable = true,
-        },
-      },
-      procMacro = {
-        enable = true,
-      },
-    },
-  },
-})
