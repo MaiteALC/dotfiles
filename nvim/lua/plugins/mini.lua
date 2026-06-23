@@ -30,12 +30,6 @@ require('mini.surround').setup()
 
 require('mini.pairs').setup()
 
-require('mini.notify').setup {
-  content = {
-    format = function(notif) return notif.msg end,
-  },
-}
-
 require('mini.comment').setup {
   mappings = {
     comment = 'cm',
@@ -49,18 +43,5 @@ require('mini.comment').setup {
     -- Define 'comment' textobject (like `dcm` - delete whole comment block)
     -- Works also in Visual mode if mapping differs from `comment_visual`
     textobject = 'cm',
-  },
-}
-
-require('mini.indentscope').setup {
-  symbol = '|',
-  mappings = {
-    -- Textobjects
-    object_scope = 'sc', -- [s][c]ope
-    object_scope_with_border = 'sb', -- [s]cope with [b]orders
-
-    -- Motions (jump to respective border line; if not present - body line)
-    goto_top = '[s',
-    goto_bottom = ']s',
   },
 }

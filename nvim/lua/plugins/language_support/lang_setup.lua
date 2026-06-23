@@ -1,14 +1,11 @@
 local function gh(repo) return 'https://github.com/' .. repo end
 
 vim.pack.add {
-  gh 'j-hui/fidget.nvim',
   gh 'neovim/nvim-lspconfig',
   gh 'mason-org/mason.nvim',
   gh 'mason-org/mason-lspconfig.nvim',
   gh 'WhoIsSethDaniel/mason-tool-installer.nvim',
 }
-
-require('fidget').setup {}
 
 ---@type table<string, vim.lsp.Config>
 local servers = {
