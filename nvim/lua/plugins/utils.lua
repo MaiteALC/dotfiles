@@ -6,7 +6,6 @@ vim.pack.add {
   gh 'NMAC427/guess-indent.nvim',
   gh 'lewis6991/gitsigns.nvim',
   gh 'folke/which-key.nvim',
-  gh 'windwp/nvim-autopairs',
 }
 
 require('todo-comments').setup { signs = false }
