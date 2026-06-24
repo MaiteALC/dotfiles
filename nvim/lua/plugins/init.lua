@@ -1,4 +1,5 @@
 require 'plugins.status_line'
+require 'plugins.snacks'
 require 'plugins.neo-tree'
 require 'plugins.utils'
 require 'plugins.gitsigns_config'
