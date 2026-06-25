@@ -48,7 +48,7 @@ require('lualine').setup {
     ignore_focus = { 'neo-tree' },
     always_divide_middle = true,
     always_show_tabline = true,
-    globalstatus = false,
+    globalstatus = true,
   },
   -- Active window configurations
   sections = {
