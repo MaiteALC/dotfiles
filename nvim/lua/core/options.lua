@@ -62,6 +62,7 @@ vim.o.confirm = true
 vim.opt.termguicolors = true
 
 vim.diagnostic.config {
+  signs = false,
   update_in_insert = true,
   severity_sort = true,
   float = { border = 'rounded', source = 'if_many' },
