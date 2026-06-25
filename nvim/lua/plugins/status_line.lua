@@ -39,7 +39,7 @@ require('lualine').setup {
   options = {
     icons_enabled = true,
     theme = custom_theme,
-    component_separators = { left = '', right = '' },
+    component_separators = { left = '', right = '' },
     section_separators = { left = '', right = '' },
     disabled_filetypes = {
       statusline = { 'neo-tree' },
@@ -60,11 +60,20 @@ require('lualine').setup {
         draw_empty = 'false',
         color = { fg = { custom_theme.normal.c.fg, gui = '' } },
       },
-      'diff',
+      {
+        'diff',
+        padding = { left = 0, right = 1 },
+      },
     },
     lualine_c = { 'diagnostics' },
     lualine_x = { 'searchcount' },
-    lualine_y = { 'progress', 'location' },
+    lualine_y = {
+      'progress',
+      {
+        'location',
+        padding = { left = 0, right = 1 },
+      },
+    },
     lualine_z = { active_lsps },
   },
   -- Inactive windows configurations
@@ -149,12 +158,15 @@ require('lualine').setup {
     },
     lualine_c = {},
     lualine_x = {
-      'fileformat',
+      {
+        'fileformat',
+        padding = { left = 0, right = 0 },
+      },
       {
         'filetype',
         colored = false,
         icon_only = true,
-        padding = { left = 1, right = 0 },
+        padding = { left = 0, right = 0 },
       },
       'encoding',
     },
