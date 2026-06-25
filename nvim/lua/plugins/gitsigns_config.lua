@@ -2,11 +2,11 @@ vim.pack.add { 'https://github.com/lewis6991/gitsigns.nvim' }
 
 require('gitsigns').setup {
   signs = {
-    add = { text = '+' }, ---@diagnostic disable-line: missing-fields
-    change = { text = '~' }, ---@diagnostic disable-line: missing-fields
-    delete = { text = '_' }, ---@diagnostic disable-line: missing-fields
-    topdelete = { text = '‾' }, ---@diagnostic disable-line: missing-fields
-    changedelete = { text = '~' }, ---@diagnostic disable-line: missing-fields
+    add = { text = '+' },
+    change = { text = '~' },
+    delete = { text = '_' },
+    topdelete = { text = '‾' },
+    changedelete = { text = '~' },
   },
   on_attach = function(bufnr)
     local gitsigns = require 'gitsigns'
@@ -17,7 +17,6 @@ require('gitsigns').setup {
       vim.keymap.set(mode, l, r, opts)
     end
 
-    -- Navigation
     map('n', ']c', function()
       if vim.wo.diff then
         vim.cmd.normal { ']c', bang = true }
@@ -34,12 +33,9 @@ require('gitsigns').setup {
       end
     end, { desc = 'Jump to previous git [c]hange' })
 
-    -- Actions
-    -- visual mode
     map('v', '<leader>hs', function() gitsigns.stage_hunk { vim.fn.line '.', vim.fn.line 'v' } end, { desc = 'git [s]tage hunk' })
     map('v', '<leader>hr', function() gitsigns.reset_hunk { vim.fn.line '.', vim.fn.line 'v' } end, { desc = 'git [r]eset hunk' })
 
-    -- normal mode
     map('n', '<leader>hs', gitsigns.stage_hunk, { desc = 'git [s]tage hunk' })
     map('n', '<leader>hr', gitsigns.reset_hunk, { desc = 'git [r]eset hunk' })
     map('n', '<leader>hS', gitsigns.stage_buffer, { desc = 'git [S]tage buffer' })
@@ -52,7 +48,6 @@ require('gitsigns').setup {
     map('n', '<leader>hQ', function() gitsigns.setqflist 'all' end, { desc = 'git hunk [Q]uickfix list (all files in repo)' })
     map('n', '<leader>hq', gitsigns.setqflist, { desc = 'git hunk [q]uickfix list (all changes in this file)' })
 
-    -- Toggles
     map('n', '<leader>tgb', gitsigns.toggle_current_line_blame, { desc = '[T]oggle [g]it show [b]lame line' })
     map('n', '<leader>tw', gitsigns.toggle_word_diff, { desc = '[T]oggle git intra-line [w]ord diff' })
 

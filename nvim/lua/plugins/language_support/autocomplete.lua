@@ -9,17 +9,16 @@ require('luasnip.loaders.from_vscode').lazy_load()
 
 require('blink.cmp').setup {
   keymap = {
-    -- 'default' (recommended) for mappings similar to built-in completions
-    --   <c-y> to accept ([y]es) the completion.
-    --    This will auto-import if your LSP supports it.
-    --    This will expand snippets if the LSP sent a snippet.
+    -- <c-y> to accept ([y]es) the completion.
+    --  This will auto-import if your LSP supports it.
+    --  This will expand snippets if the LSP sent a snippet.
     --
     -- All presets have the following mappings:
-    -- <tab>/<s-tab>: move to right/left of your snippet expansion
-    -- <c-space>: Open menu or open docs if already open
-    -- <c-n>/<c-p> or <up>/<down>: Select next/previous item
-    -- <c-e>: Hide menu
-    -- <c-k>: Toggle signature help
+    --  <tab>/<s-tab>: move to right/left of your snippet expansion
+    --  <c-space>: Open menu or open docs if already open
+    --  <c-n>/<c-p> or <up>/<down>: Select next/previous item
+    --  <c-e>: Hide menu
+    --  <c-k>: Toggle signature help
     preset = 'default',
   },
 

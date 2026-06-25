@@ -8,17 +8,7 @@ if vim.fn.executable 'make' == 1 then table.insert(telescope_plugins, 'htpps://g
 
 vim.pack.add(telescope_plugins)
 
--- See `:help telescope` and `:help telescope.setup()`
 require('telescope').setup {
-  -- You can put your default mappings / updates / etc. in here
-  --  All the info you're looking for is in `:help telescope.setup()`
-  --
-  -- defaults = {
-  --   mappings = {
-  --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-  --   },
-  -- },
-  -- pickers = {}
   extensions = {
     ['ui-select'] = { require('telescope.themes').get_dropdown() },
   },
@@ -28,7 +18,6 @@ require('telescope').setup {
 pcall(require('telescope').load_extension, 'fzf')
 pcall(require('telescope').load_extension, 'ui-select')
 
--- See `:help telescope.builtin`
 local builtin = require 'telescope.builtin'
 
 vim.keymap.set('n', '<leader>lg', builtin.live_grep, { desc = 'Telescope: [L]ive [G]rep' })
@@ -64,15 +53,10 @@ vim.api.nvim_create_autocmd('LspAttach', {
   callback = function(event)
     local buf = event.buf
 
-    -- Find references for the word under your cursor.
     vim.keymap.set('n', '<leader>gr', builtin.lsp_references, { buffer = buf, desc = 'Telescope: [G]oto [R]eferences' })
 
-    -- Jump to the implementation of the word under your cursor.
-    -- Useful when your language has ways of declaring types without an actual implementation.
     vim.keymap.set('n', '<leader>gi', builtin.lsp_implementations, { buffer = buf, desc = 'Telescope: [G]oto [I]mplementation' })
 
-    -- Jump to the definition of the word under your cursor.
-    -- This is where a variable was first declared, or where a function is defined, etc.
     -- To jump back, press <C-t>.
     vim.keymap.set('n', '<leader>gdf', builtin.lsp_definitions, { buffer = buf, desc = 'Telescope: [G]oto [D]e[f]inition' })
 
@@ -80,28 +64,20 @@ vim.api.nvim_create_autocmd('LspAttach', {
     -- Symbols are things like variables, functions, types, etc.
     vim.keymap.set('n', '<leader>ds', builtin.lsp_document_symbols, { buffer = buf, desc = 'Telescope: Open [D]ocument [S]ymbols' })
 
-    -- Fuzzy find all the symbols in your current workspace.
     -- Similar to document symbols, except searches over your entire project.
     vim.keymap.set('n', '<leader>ws', builtin.lsp_dynamic_workspace_symbols, { buffer = buf, desc = 'Telescope: Open [W]orkspace [S]ymbols' })
 
-    -- Jump to the type of the word under your cursor.
-    -- Useful when you're not sure what type a variable is and you want to see
-    -- the definition of its *type*, not where it was *defined*.
     vim.keymap.set('n', '<leader>td', builtin.lsp_type_definitions, { buffer = buf, desc = 'Telescope: Goto [T]ype [D]efinition' })
   end,
 })
 
--- Override default behavior and theme when searching
 vim.keymap.set('n', '<leader>/', function()
-  -- You can pass additional configuration to Telescope to change the theme, layout, etc.
   builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
     winblend = 10,
     previewer = false,
   })
 end, { desc = '[/] Fuzzily search in current buffer' })
 
--- It's also possible to pass additional configuration options.
---  See `:help telescope.builtin.live_grep()` for information about particular keys
 vim.keymap.set(
   'n',
   '<leader>lo',
@@ -114,5 +90,4 @@ vim.keymap.set(
   { desc = '[L]ive grep in [O]pen Files' }
 )
 
--- Shortcut for searching your Neovim configuration files
 vim.keymap.set('n', '<leader>sn', function() builtin.find_files { cwd = vim.fn.stdpath 'config', follow = true } end, { desc = '[S]earch [N]eovim files' })
