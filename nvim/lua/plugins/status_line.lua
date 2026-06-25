@@ -65,7 +65,18 @@ require('lualine').setup {
         padding = { left = 0, right = 1 },
       },
     },
-    lualine_c = { 'diagnostics' },
+    lualine_c = {
+      {
+        'diagnostics',
+        update_in_insert = true,
+        symbols = {
+          error = ' ',
+          warn = ' ',
+          info = ' ',
+          hint = '󰌵 ',
+        },
+      },
+    },
     lualine_x = { 'searchcount' },
     lualine_y = {
       'progress',
