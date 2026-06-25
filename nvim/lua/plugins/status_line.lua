@@ -21,6 +21,19 @@ custom_theme.normal.c.bg = mocha_base
 custom_theme.command.a.bg = light_blue
 custom_theme.command.b.fg = light_blue
 
+local function active_lsps()
+  local clients = vim.lsp.get_clients { bufnr = 0 }
+
+  if #clients == 0 then return ' No LSP' end
+
+  local names = {}
+  for _, client in pairs(clients) do
+    table.insert(names, client.name)
+  end
+
+  return '  LSP: ' .. table.concat(names, ', ')
+end
+
 require('lualine').setup {
   -- Global configurations
   options = {
@@ -55,19 +68,7 @@ require('lualine').setup {
       'progress',
     },
     lualine_y = { 'searchcount', 'location' },
-    lualine_z = {
-      {
-        'lsp_status',
-        icon = ' LSP:',
-        symbols = {
-          spinner = { '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏' },
-          done = '✓',
-          separator = ' ',
-        },
-        ignore_lsp = {},
-        show_name = true,
-      },
-    },
+    lualine_z = { active_lsps },
   },
   -- Inactive windows configurations
   inactive_sections = {},
