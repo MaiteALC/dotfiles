@@ -37,4 +37,8 @@ require('snacks').setup {
     only_current = true,
     scope = { only_current = true },
   },
+
+  terminal = { enabled = true },
 }
+
+vim.keymap.set('n', '<leader>tt', function() Snacks.terminal.toggle() end, { desc = '[T]oggle snacks.nvim [t]erminal', silent = true })

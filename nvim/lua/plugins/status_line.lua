@@ -30,7 +30,7 @@ require('lualine').setup {
     section_separators = { left = '', right = '' },
     disabled_filetypes = {
       statusline = { 'neo-tree' },
-      winbar = { 'neo-tree' },
+      winbar = { 'neo-tree', 'snacks_terminal' },
     },
     ignore_focus = { 'neo-tree' },
     always_divide_middle = true,
