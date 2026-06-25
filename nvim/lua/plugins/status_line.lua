@@ -60,14 +60,11 @@ require('lualine').setup {
         draw_empty = 'false',
         color = { fg = { custom_theme.normal.c.fg, gui = '' } },
       },
-      'diagnostics',
       'diff',
     },
-    lualine_c = {},
-    lualine_x = {
-      'progress',
-    },
-    lualine_y = { 'searchcount', 'location' },
+    lualine_c = { 'diagnostics' },
+    lualine_x = { 'searchcount' },
+    lualine_y = { 'progress', 'location' },
     lualine_z = { active_lsps },
   },
   -- Inactive windows configurations
@@ -122,10 +119,15 @@ require('lualine').setup {
     lualine_c = {},
     lualine_x = {
       'fileformat',
-      'filesize',
-      { 'filetype', colored = true, icon_only = true, padding = { left = 1, right = 0 } },
+      {
+        'filetype',
+        colored = true,
+        icon_only = true,
+        padding = { left = 1, right = 0 },
+      },
+      'encoding',
     },
-    lualine_y = { 'encoding' },
+    lualine_y = { 'filesize' },
     lualine_z = {},
   },
 
@@ -148,15 +150,15 @@ require('lualine').setup {
     lualine_c = {},
     lualine_x = {
       'fileformat',
-      'filesize',
       {
         'filetype',
         colored = false,
         icon_only = true,
         padding = { left = 1, right = 0 },
       },
+      'encoding',
     },
-    lualine_y = { 'encoding' },
+    lualine_y = { 'filesize' },
     lualine_z = {},
   },
 
