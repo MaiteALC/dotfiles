@@ -1,6 +1,6 @@
 require 'plugins.status_line'
 require 'plugins.snacks'
-require 'plugins.neo-tree'
+require 'plugins.file_explorer'
 require 'plugins.utils'
 require 'plugins.gitsigns_config'
 require 'plugins.mini'
