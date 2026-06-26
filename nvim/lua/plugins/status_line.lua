@@ -171,7 +171,7 @@ require('lualine').setup {
     lualine_x = {
       {
         'fileformat',
-        padding = { left = 0, right = 0 },
+        padding = { left = 0, right = 1 },
       },
       {
         'filetype',
