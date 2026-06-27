@@ -12,6 +12,11 @@ hl.layer_rule({
     animation = "slide right"
 })
 
+hl.layer_rule({
+    match = { class = "selection" },
+    no_anim = true
+})
+
 hl.window_rule({
     match = {
         class = "xwayland:1",
