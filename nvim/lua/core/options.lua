@@ -10,10 +10,10 @@ vim.opt.shiftwidth = 2
 vim.opt.expandtab = true
 
 -- Enable undo/redo changes even after closing and reopening a file
-vim.opt.undodir = vim.fn.stdpath("data") .. "/undodir"
+vim.opt.undodir = vim.fn.stdpath 'data' .. '/undodir'
 vim.opt.undofile = true
 
-vim.opt.isfname:append("@-@")
+vim.opt.isfname:append '@-@'
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
