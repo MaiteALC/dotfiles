@@ -41,7 +41,7 @@ hl.animation({
     enabled = true,
     speed = 3.6,
     bezier = "easeOutQuint",
-    style = "slide bottom"
+    style = "popin 75%"
 })
 
 hl.animation({
@@ -72,7 +72,7 @@ hl.animation({
     enabled = true,
     speed = 6,
     bezier = "buttery",
-    style = "slidefade 18%"
+    style = "slidefade 20%"
 })
 
 hl.animation({
