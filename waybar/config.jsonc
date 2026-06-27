@@ -1,13 +1,26 @@
 {
-    "layer": "top", 
-    "position": "top",  
-    "modules-left": ["custom/sysmonitor", "tray", "hyprland/workspaces"],
-    "modules-center": ["clock"],
-    "modules-right": ["network", "backlight", "pulseaudio", "battery", "custom/notification"],
+    "layer": "top",
+    "position": "top",
+    "modules-left": [
+        "custom/sysmonitor",
+        "tray",
+        "hyprland/workspaces"
+    ],
+    "modules-center": [
+        "clock"
+    ],
+    "modules-right": [
+        "network",
+        "backlight",
+        "pulseaudio",
+        "battery",
+        "custom/notification"
+    ],
     "scroll-step": 1,
-    "ignored-sinks": ["Easy Effects Sink"],
+    "ignored-sinks": [
+        "Easy Effects Sink"
+    ],
     "width": 1760,
-
     "hyprland/workspaces": {
         "format": "{icon}",
         "format-icons": {
@@ -16,13 +29,20 @@
             "default": ""
         }
     },
-
     "battery": {
         "format": "{icon} {capacity}%",
-        "format-icons": ["", "", "", "", ""],
-        "states": { "warning": 39, "critical": 19 }
+        "format-icons": [
+            "",
+            "",
+            "",
+            "",
+            ""
+        ],
+        "states": {
+            "warning": 39,
+            "critical": 19
+        }
     },
-
     "network": {
         "format-wifi": " ({signalStrength}%)",
         "format-ethernet": "󰈀",
@@ -33,13 +53,11 @@
         "tooltip-format-disconnected": "Disconnected",
         "max-length": 50
     },
-
     "pulseaudio": {
         "format": "{icon} {volume}%",
         "format-bluetooth": "{icon}  {volume}%",
         "on-click": "pavucontrol",
         "format-muted": "",
-
         "format-icons": {
             "headphone": "",
             "hands-free": "󰋎",
@@ -48,31 +66,32 @@
             "phone-muted": "",
             "portable": "",
             "car": "",
-            "default": ["", ""]
+            "default": [
+                "",
+                ""
+            ]
         }
     },
-
     "backlight": {
         "format": "{icon} {percent}%",
-        "format-icons": ["", ""]
+        "format-icons": [
+            "",
+            ""
+        ]
     },
-
     "clock": {
         "format": "{:%A, %H:%M - %Y/%m/%d}"
     },
-
     "tray": {
         "icon-size": 20,
         "spacing": 8
     },
-
     "custom/sysmonitor": {
         "return-type": "json",
         "tooltip": true,
         "exec": "lua ~/dotfiles/scripts/sys-monitor.lua",
         "escape": false
     },
-
     "custom/notification": {
         "tooltip": true,
         "format": "{icon}",
@@ -86,7 +105,6 @@
             "dnd-inhibited-notification": "<span foreground='red'><sup></sup></span>",
             "dnd-inhibited-none": ""
         },
-        
         "return-type": "json",
         "exec-propagate": "swaync-client -swb",
         "exec": "swaync-client -swb",
