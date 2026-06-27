@@ -37,4 +37,3 @@ vim.keymap.set('v', '<', '<gv', { desc = 'Unindent and keep selection' })
 vim.keymap.set('v', '>', '>gv', { desc = 'Indent and keep selection' })
 
 vim.keymap.set('n', '<leader>fe', '<cmd>!chmod +x %<CR>', { desc = 'Make the current [f]ile [e]xecutable', silent = true })
-

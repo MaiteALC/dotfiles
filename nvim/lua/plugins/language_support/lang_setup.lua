@@ -116,7 +116,7 @@ vim.list_extend(ensure_installed, {
   'lemminx', -- XML linter
   'xmlformatter', -- XML formatter
   'sql-formatter', -- SQL formatter
-  'sqlfluff' -- SQL linter
+  'sqlfluff', -- SQL linter
 })
 
 require('mason-tool-installer').setup { ensure_installed = ensure_installed }
