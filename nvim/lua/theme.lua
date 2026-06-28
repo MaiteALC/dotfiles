@@ -1,5 +1,3 @@
-vim.pack.add { 'https://github.com/binhtran432k/dracula.nvim' }
-
 local use_transparency = true
 local siderbar_style = 'dark'
 local float_Style = 'dark'

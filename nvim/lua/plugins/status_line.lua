@@ -1,8 +1,3 @@
-vim.pack.add {
-  'https://github.com/nvim-tree/nvim-web-devicons',
-  'https://github.com/nvim-lualine/lualine.nvim',
-}
-
 local custom_theme = require 'lualine.themes.dracula'
 
 local mocha_base = '#1e1e2e'
