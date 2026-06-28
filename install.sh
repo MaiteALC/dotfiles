@@ -18,8 +18,8 @@ printf "\n%b%s\n" "$BLUE" "-----------------------------------------------------
 printf "%s\n" "Starting Arch linux ricing configuration + installation script"
 printf "%s%b\n" "---------------------------------------------------------------" "$NO_COLOR"
 
-DOTFILE_FOLDER="$HOME/dotfiles"
-CONFIG_FOLDERS=("hypr" "waybar" "wofi" "swaync" "kitty" "Kvantum" "fastfetch" "nvim")
+DOTFILE_DIR="$HOME/dotfiles"
+CONFIG_DIRS=("hypr" "waybar" "wofi" "swaync" "kitty" "Kvantum" "fastfetch" "nvim")
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 BACKUP_DIR="$HOME/.rice_backup_$TIMESTAMP"
 
@@ -31,7 +31,7 @@ if [[ "$1" == "--dry-run" || "$1" == "-d" ]]; then
 
 else
   printf "\n%b%s\n" "$YELLOW" "  NOTE: This script will create a backup of some configuration directories (if they exist)"
-  printf "%s\n" "Directories to backup: ${CONFIG_FOLDERS[*]} and greetd"
+  printf "%s\n" "Directories to backup: ${CONFIG_DIRS[*]} and greetd"
   printf "%s%b\n" "Backup directory path: $BACKUP_DIR" "$NO_COLOR"
 
   printf "%s" "Proceed? [Y/n] "
@@ -67,12 +67,12 @@ else
   sudo pacman -Sy
 
   # shellcheck source=./scripts/gpu-config.sh
-  source "$DOTFILE_FOLDER/scripts/gpu-config.sh"
+  source "$DOTFILE_DIR/scripts/gpu-config.sh"
   gpu_environment_setup
 fi
 
 # shellcheck source=./scripts/package-installation.sh
-source "$DOTFILE_FOLDER/scripts/package-installation.sh"
+source "$DOTFILE_DIR/scripts/package-installation.sh"
 install_packages "$1"
 
 dry_run printf "%s\n" "Customizing icons with Catppuccin Mocha Flamingo..."
@@ -89,8 +89,8 @@ dry_run printf "%s\n" "Creating symlinks..."
 dry_run mkdir -p "$HOME/.config/"
 dry_run mkdir -p "$BACKUP_DIR"
 
-for folder in "${CONFIG_FOLDERS[@]}"; do
-  SOURCE="$DOTFILE_FOLDER/$folder"
+for folder in "${CONFIG_DIRS[@]}"; do
+  SOURCE="$DOTFILE_DIR/$folder"
   TARGET="$HOME/.config/$folder"
 
   if [ -d "$SOURCE" ]; then
@@ -102,13 +102,13 @@ for folder in "${CONFIG_FOLDERS[@]}"; do
     dry_run printf "%s\n" " Linked: $SOURCE -> $TARGET"
 
   else
-    dry_run printf "%b%s\n" "$RED" " Folder $folder not found in $DOTFILE_FOLDER"
+    dry_run printf "%b%s\n" "$RED" " Folder $folder not found in $DOTFILE_DIR"
     dry_run printf "%s%b\n" "Skipping..." "$NO_COLOR"
   fi
 done
 
 dry_run mv "$HOME/.config/starship.toml" "$BACKUP_DIR/starship.toml"
-dry_run ln -snf "$DOTFILE_FOLDER/starship.toml" "$HOME/.config/starship.toml"
+dry_run ln -snf "$DOTFILE_DIR/starship.toml" "$HOME/.config/starship.toml"
 dry_run printf "%s\n" " Linked file: starship.toml"
 
 DM_NAME=""
@@ -123,7 +123,7 @@ if [ -z "$DM_NAME" ]; then
     dry_run sudo mv /etc/greetd "$BACKUP_DIR/"
   fi
 
-  dry_run sudo ln -snf "$DOTFILE_FOLDER/greetd" "/etc/greetd"
+  dry_run sudo ln -snf "$DOTFILE_DIR/greetd" "/etc/greetd"
 
   dry_run sudo systemctl enable greetd.service
   dry_run printf "%s\n" "The login manager Greetd with Tuigreet was enabled"
@@ -135,7 +135,7 @@ elif [ "$DM_NAME" = "greetd" ]; then
     dry_run sudo mv /etc/greetd "$BACKUP_DIR/"
   fi
 
-  dry_run sudo ln -snf "$DOTFILE_FOLDER/greetd" "/etc/greetd"
+  dry_run sudo ln -snf "$DOTFILE_DIR/greetd" "/etc/greetd"
 
 else
   dry_run printf "%s\n" "An enable login manager was founded: $DM_NAME"
@@ -148,7 +148,7 @@ else
     dry_run printf "%s\n" "Your $DM_NAME will be mantained."
 
   else
-    dry_run sudo ln -snf "$DOTFILE_FOLDER/greetd" "/etc/greetd"
+    dry_run sudo ln -snf "$DOTFILE_DIR/greetd" "/etc/greetd"
 
     dry_run sudo systemctl disable "$DM_NAME"
     dry_run sudo systemctl enable greetd.service
@@ -158,7 +158,7 @@ else
 fi
 
 dry_run touch ~/.zshrc
-CUSTOM_ZSH="$DOTFILE_FOLDER/scripts/zsh_custom.zsh"
+CUSTOM_ZSH="$DOTFILE_DIR/scripts/zsh_custom.zsh"
 
 if ! grep -q "source $CUSTOM_ZSH" ~/.zshrc; then
   dry_run printf "\n%s\n" "# Injected configurations by ricing script" >>~/.zshrc
