@@ -56,8 +56,7 @@
     },
     "neo-tree.nvim": {
       "rev": "83e7a2982fd12b9c3d35bc39dd5877cd91a02a61",
-      "src": "https://github.com/nvim-neo-tree/neo-tree.nvim",
-      "version": ">=0.0.0"
+      "src": "https://github.com/nvim-neo-tree/neo-tree.nvim"
     },
     "noice.nvim": {
       "rev": "7bfd942445fb63089b59f97ca487d605e715f155",

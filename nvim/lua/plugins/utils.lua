@@ -1,13 +1,3 @@
----@return string
-local function gh(repo) return 'https://github.com/' .. repo end
-
-vim.pack.add {
-  gh 'folke/todo-comments.nvim',
-  gh 'NMAC427/guess-indent.nvim',
-  gh 'lewis6991/gitsigns.nvim',
-  gh 'folke/which-key.nvim',
-}
-
 require('todo-comments').setup { signs = false }
 
 require('guess-indent').setup {}

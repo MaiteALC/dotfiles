@@ -1,11 +1,3 @@
-vim.pack.add {
-  'https://github.com/mfussenegger/nvim-dap',
-  'https://github.com/rcarriga/nvim-dap-ui',
-  'https://github.com/nvim-neotest/nvim-nio',
-  'https://github.com/mason-org/mason.nvim',
-  'https://github.com/jay-babu/mason-nvim-dap.nvim',
-}
-
 vim.keymap.set('n', '<leader>tb', function() require('dap').toggle_breakpoint() end, { desc = 'Debug: [T]oggle [B]reakpoint' })
 vim.keymap.set('n', '<leader>cb', function() require('dap').set_breakpoint(vim.fn.input 'Conditional Breakpoint: ') end, { desc = 'Debug: Set Breakpoint' })
 

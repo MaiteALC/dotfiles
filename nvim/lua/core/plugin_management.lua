@@ -48,3 +48,74 @@ vim.api.nvim_create_user_command('PackUpdate', function(opts)
     vim.pack.update()
   end
 end, { nargs = '*', desc = 'Update all plugins or specific ones' })
+
+local function gh(repo) return 'https://github.com/' .. repo end
+
+local plugins_to_install = {
+  -- Dependencies
+  -- NOTE: The plugins in this section are common dependencies for
+  -- another plugins, that's why they are dowloaded first.
+  gh 'nvim-lua/plenary.nvim',
+  gh 'MunifTanjim/nui.nvim',
+  gh 'nvim-tree/nvim-web-devicons',
+
+  -- Autocomplete
+  { src = gh 'saghen/blink.cmp', version = vim.version.range '1.*' },
+  { src = gh 'L3MON4D3/LuaSnip', version = vim.version.range '2.*' },
+  gh 'rafamadriz/friendly-snippets',
+
+  -- Debugging
+  gh 'mfussenegger/nvim-dap',
+  gh 'rcarriga/nvim-dap-ui',
+  gh 'nvim-neotest/nvim-nio',
+  gh 'jay-babu/mason-nvim-dap.nvim',
+
+  -- Formatting
+  gh 'stevearc/conform.nvim',
+
+  -- Language support set up
+  gh 'neovim/nvim-lspconfig',
+  gh 'mason-org/mason.nvim',
+  gh 'mason-org/mason-lspconfig.nvim',
+  gh 'WhoIsSethDaniel/mason-tool-installer.nvim',
+
+  -- Lintting
+  gh 'mfussenegger/nvim-lint',
+
+  -- Tree-sitter
+  { src = gh 'nvim-treesitter/nvim-treesitter', version = 'main' },
+
+  -- File explorer
+  gh 'nvim-neo-tree/neo-tree.nvim',
+
+  -- Fuzzy finder (Telescope)
+  gh 'nvim-telescope/telescope.nvim',
+  gh 'nvim-telescope/telescope-ui-select.nvim',
+
+  -- Mini.nvim
+  gh 'nvim-mini/mini.nvim',
+
+  -- Noice
+  gh 'folke/noice.nvim',
+
+  -- Snacks.nvim
+  gh 'folke/snacks.nvim',
+
+  -- Status line
+  gh 'nvim-lualine/lualine.nvim',
+
+  -- Git integration
+  gh 'lewis6991/gitsigns.nvim',
+
+  -- Utility plugins
+  gh 'folke/todo-comments.nvim',
+  gh 'NMAC427/guess-indent.nvim',
+  gh 'folke/which-key.nvim',
+
+  -- Theme
+  gh 'binhtran432k/dracula.nvim',
+}
+
+if vim.fn.executable 'make' == 1 then table.insert(plugins_to_install, gh 'nvim-telescope/telescope-fzf-native.nvim') end
+
+vim.pack.add(plugins_to_install)
