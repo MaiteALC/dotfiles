@@ -135,6 +135,8 @@ NVIM_PACKAGES=(
 AUR_PACKAGES=(
   papirus-folders-catppuccin-git
   pipes-rs
+  tty-clock
+  cbonsai
   wlogout
   bibata-cursor-theme-bin
 )
