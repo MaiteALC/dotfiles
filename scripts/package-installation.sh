@@ -169,15 +169,14 @@ install_packages() {
     dry_run cd - >/dev/null
   fi
 
-  dry_run printf "%s\n" "Installing AUR packages with $AUR_HELPER..."
-  dry_run $AUR_HELPER -S --needed --noconfirm "${AUR_PACKAGES[@]}"
-
-  dry_run printf "%s\n" "AUR packages installed."
-  dry_run printf "%s\n" "Installing pacman packages..."
-
+  dry_run printf "\n%s\n" "Installing pacman packages..."
   dry_run sudo pacman -S --needed --noconfirm "${FONT_PACKAGES[@]}" "${TERMINAL_PACKAGES[@]}" "${HYPRLAND_AND_RELATED_PACKAGES[@]}" "${LIBS_AND_PLUGINS[@]}" "${UTIL_PACKAGES[@]}" "${NVIM_PACKAGES[@]}"
 
-  dry_run printf "\n%s\n" "All required packages installed successfully!"
+  dry_run printf "\n%s\n" "Installing AUR packages with $AUR_HELPER..."
+  dry_run $AUR_HELPER -S --needed --noconfirm "${AUR_PACKAGES[@]}"
+  dry_run printf "%s\n" "AUR packages installed."
+
+  dry_run printf "\n%s\n\n" "All required packages installed successfully!"
 
   dry_run rm -rf "/tmp/yay"
 }
