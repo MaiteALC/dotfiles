@@ -1,9 +1,10 @@
 #!/bin/bash
 
-dry_run() {
-  local YELLOW='\033[0;33m'
-  local NO_COLOR='\033[0m'
+YELLOW='\033[0;33m'
+GREEN='\033[0;32m'
+NO_COLOR='\033[0m'
 
+dry_run() {
   if [ "$DRY_RUN" = true ]; then
     printf "%b[DRY-RUN]%b %s\n" "$YELLOW" "$NO_COLOR" "Would execute: $*"
   else
@@ -139,7 +140,7 @@ AUR_PACKAGES=(
 )
 
 install_packages() {
-  DRY_RUN=false
+  local DRY_RUN=false
   if [[ "$1" == "--dry-run" || "$1" == "-d" ]]; then
     DRY_RUN=true
   fi
@@ -148,7 +149,7 @@ install_packages() {
   dry_run printf "%s\n" "Installing the required packages..."
   dry_run printf "%s\n" "-----------------------------------"
 
-  AUR_HELPER=""
+  local AUR_HELPER=""
   if command -v yay &>/dev/null; then
     AUR_HELPER="yay"
 
@@ -156,8 +157,8 @@ install_packages() {
     AUR_HELPER="paru"
 
   else
-    dry_run printf "%s\n" " Warning: None AUR helper (yay or paru) was found."
-    dry_run printf "%s\n" "Installing yay automatically..."
+    dry_run printf "%b%s%b\n" "$YELLOW" " Warning: None AUR helper (yay or paru) was found." "$NO_COLOR"
+    dry_run printf "%b%s%b\n" "$YELLOW" "Installing yay automatically..." "$NO_COLOR"
 
     dry_run sudo pacman -S --needed --noconfirm git base-devel
 
@@ -176,7 +177,7 @@ install_packages() {
   dry_run $AUR_HELPER -S --needed --noconfirm "${AUR_PACKAGES[@]}"
   dry_run printf "%s\n" "AUR packages installed."
 
-  dry_run printf "\n%s\n\n" "All required packages installed successfully!"
+  dry_run printf "\n%b%s%b\n\n" "$GREEN" "All required packages installed successfully!" "$NO_COLOR"
 
   dry_run rm -rf "/tmp/yay"
 }
