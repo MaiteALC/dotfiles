@@ -27,7 +27,7 @@ UTIL_PACKAGES=(
   polkit-gnome
   polkit-kde-agent
   powertop
-  htop
+  btop
   smartmontools
   brightnessctl
   kio-admin
@@ -119,6 +119,7 @@ LIBS_AND_PLUGINS=(
 
   libappindicator-gtk3
   libdbusmenu-gtk3
+  libnotify
 )
 
 NVIM_PACKAGES=(
@@ -132,7 +133,7 @@ NVIM_PACKAGES=(
 
 AUR_PACKAGES=(
   papirus-folders-catppuccin-git
-  pipes.sh
+  pipes-rs
   wlogout
   bibata-cursor-theme-bin
 )
