@@ -1,14 +1,66 @@
-require("modules.env-vars")
-require("modules.autostart")
-require("modules.binds")
-require("modules.input")
-require("modules.animations")
-require("modules.rules")
+local function load_module(module_name)
+	local default_font_size = 22
+	local is_valid = module_name:match("^[%w_.-]+$")
 
-local success = pcall(require("modules.devices"))
+	if not is_valid then
+		hl.notification.create({
+			text = string.format(" Unable to load module with invalid name.\n Name: `%s`", module_name),
+			timeout = 6000,
+			icon = 3, -- -1: No icon
+			-- 0: WARNING
+			-- 1: INFO
+			-- 2: HINT
+			-- 3: ERROR
+			-- 4: CONFUSED
+			-- 5: OK
+			font_size = default_font_size,
+		})
+		return
+	end
 
-if not success then
-	print("Module 'modules/devices.lua' cannot be loaded. Proceding with default configurations.")
+	local modules_root_dir = "modules."
+	local success, module = pcall(require, modules_root_dir .. module_name)
+
+	if success then return end
+
+	local not_found_error_prefix = "module 'modules." .. module_name .. "' not found:"
+	local notification_msg_prefix = string.format(" The module `%s` cannot be loaded.\n", module_name)
+	local icon = 0
+
+	if module_name == "devices" then
+		notification_msg_prefix = " Optional per-device configuration module (modules/devices.lua) cannot be loaded.\n Proceeding with default settings.\n"
+		icon = 1
+	end
+
+	if module:sub(1, #not_found_error_prefix) == not_found_error_prefix then -- equivalent to a starts_with() method
+		hl.notification.create({
+			text = notification_msg_prefix .. " Error: module not found.",
+			icon = icon,
+			timeout = 6000,
+			font_size = default_font_size,
+		})
+	else
+		hl.notification.create({
+			text = notification_msg_prefix .. " Error: " .. module,
+			timeout = 7000,
+			icon = icon,
+			font_size = default_font_size,
+		})
+	end
+end
+
+local modules_list = {
+	"env-vars",
+	"autostart",
+	"binds",
+	"input",
+	"animations",
+	"rules",
+	"devices",
+}
+
+for _, module in pairs(modules_list) do
+	load_module(module)
 end
 
 ------------------
