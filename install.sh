@@ -90,7 +90,7 @@ dry_run mkdir -p "$HOME/.config/"
 dry_run mkdir -p "$BACKUP_DIR"
 
 for folder in "${CONFIG_DIRS[@]}"; do
-  SOURCE="$DOTFILE_DIR/$folder"
+  SOURCE="$DOTFILE_DIR/.config/$folder"
   TARGET="$HOME/.config/$folder"
 
   if [ -d "$SOURCE" ]; then
@@ -108,7 +108,7 @@ for folder in "${CONFIG_DIRS[@]}"; do
 done
 
 dry_run mv "$HOME/.config/starship.toml" "$BACKUP_DIR/starship.toml"
-dry_run ln -snf "$DOTFILE_DIR/starship.toml" "$HOME/.config/starship.toml"
+dry_run ln -snf "$DOTFILE_DIR/.config/starship.toml" "$HOME/.config/starship.toml"
 dry_run printf "%s\n" " Linked file: starship.toml"
 
 DM_NAME=""
