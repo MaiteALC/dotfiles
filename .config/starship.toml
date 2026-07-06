@@ -28,26 +28,26 @@ disabled = false
 style = "bg:sapphire fg:crust"
 
 [os.symbols]
-Windows = ""
-Ubuntu = "󰕈"
-SUSE = ""
-Raspbian = "󰐿"
-Mint = "󰣭"
-Macos = "󰀵"
-Manjaro = ""
-Linux = "󰌽"
-Gentoo = "󰣨"
-Fedora = "󰣛"
-Alpine = ""
-Amazon = ""
-Android = ""
-AOSC = ""
-Arch = "󰣇"
-Artix = "󰣇"
-CentOS = ""
-Debian = "󰣚"
-Redhat = "󱄛"
-RedHatEnterprise = "󱄛"
+Windows = " "
+Ubuntu = "󰕈 "
+SUSE = " "
+Raspbian = "󰐿 "
+Mint = "󰣭 "
+Macos = "󰀵 "
+Manjaro = " "
+Linux = "󰌽 "
+Gentoo = "󰣨 "
+Fedora = "󰣛 "
+Alpine = " "
+Amazon = " "
+Android = " "
+AOSC = " "
+Arch = "󰣇 "
+Artix = "󰣇 "
+CentOS = " "
+Debian = "󰣚 "
+Redhat = "󱄛 "
+RedHatEnterprise = "󱄛 "
 
 [directory]
 style = "bg:sapphire fg:crust"
@@ -63,63 +63,63 @@ truncation_symbol = "…/"
 "Developer" = "󰲋 "
 
 [git_branch]
-symbol = ""
+symbol = " "
 style = "bg:mantle"
-format = '[[ $symbol $branch ](fg:text bg:mantle)]($style)'
+format = '[[ $symbol$branch ](fg:text bg:mantle)]($style)'
 
 [git_status]
 style = "bg:red"
 format = '[[($all_status$ahead_behind )](fg:text bg:mantle)]($style)'
 
 [nodejs]
-symbol = ""
+symbol = " "
 style = "bg:mantle"
-format = '[[ $symbol( $version) ](fg:green bg:mantle)]($style)'
+format = '[[ $symbol($version) ](fg:green bg:mantle)]($style)'
 
 [c]
 symbol = " "
 style = "bg:mantle"
-format = '[[ $symbol( $version) ](fg:sapphire bg:mantle)]($style)'
+format = '[[ $symbol($version) ](fg:sapphire bg:mantle)]($style)'
 
 [rust]
-symbol = ""
+symbol = " "
 style = "bg:mantle"
-format = '[[ $symbol( $version) ](fg:peach bg:mantle)]($style)'
+format = '[[ $symbol($version) ](fg:peach bg:mantle)]($style)'
 
 [golang]
-symbol = ""
+symbol = " "
 style = "bg:mantle"
-format = '[[ $symbol( $version) ](fg:sky bg:mantle)]($style)'
+format = '[[ $symbol($version) ](fg:sky bg:mantle)]($style)'
 
 [php]
-symbol = ""
+symbol = " "
 style = "bg:mantle"
-format = '[[ $symbol( $version) ](fg:lavender bg:mantle)]($style)'
+format = '[[ $symbol($version) ](fg:lavender bg:mantle)]($style)'
 
 [java]
 symbol = " "
 style = "bg:mantle"
-format = '[[ $symbol( $version) ](fg:peach bg:mantle)]($style)'
+format = '[[ $symbol($version) ](fg:peach bg:mantle)]($style)'
 
 [kotlin]
-symbol = ""
+symbol = " "
 style = "bg:mantle"
-format = '[[ $symbol( $version) ](fg:mavue bg:mantle)]($style)'
+format = '[[ $symbol($version) ](fg:mavue bg:mantle)]($style)'
 
 [haskell]
-symbol = ""
+symbol = " "
 style = "bg:mantle"
-format = '[[ $symbol( $version) ](fg:mavue bg:mantle)]($style)'
+format = '[[ $symbol($version) ](fg:mavue bg:mantle)]($style)'
 
 [python]
-symbol = ""
+symbol = " "
 style = "bg:mantle"
-format = '[[ $symbol( $version)(\(#$virtualenv\)) ](fg:yellow bg:mantle)]($style)'
+format = '[[ $symbol($version)(\(#$virtualenv\)) ](fg:yellow bg:mantle)]($style)'
 
 [docker_context]
-symbol = ""
+symbol = " "
 style = "bg:mantle"
-format = '[[ $symbol( $context) ](fg:sapphire bg:mantle)]($style)'
+format = '[[ $symbol($context) ](fg:sapphire bg:mantle)]($style)'
 
 [line_break]
 disabled = false
