@@ -8,7 +8,7 @@ $directory\
 [](bg:yellow fg:peach)\
 $git_branch\
 $git_status\
-[](fg:yellow bg:green)\
+[](fg:yellow bg:mantle)\
 $c\
 $rust\
 $golang\
@@ -18,7 +18,7 @@ $java\
 $kotlin\
 $haskell\
 $python\
-[ ](fg:lavender)\
+[](fg:mantle)\
 $cmd_duration\
 $line_break\
 $character"""
@@ -75,53 +75,53 @@ format = '[[($all_status$ahead_behind )](fg:crust bg:yellow)]($style)'
 
 [nodejs]
 symbol = ""
-style = "bg:green"
-format = '[[ $symbol( $version) ](fg:crust bg:green)]($style)'
+style = "bg:mantle"
+format = '[[ $symbol( $version) ](fg:green bg:mantle)]($style)'
 
 [c]
 symbol = " "
-style = "bg:green"
-format = '[[ $symbol( $version) ](fg:crust bg:green)]($style)'
+style = "bg:mantle"
+format = '[[ $symbol( $version) ](fg:sapphire bg:mantle)]($style)'
 
 [rust]
 symbol = ""
-style = "bg:green"
-format = '[[ $symbol( $version) ](fg:crust bg:green)]($style)'
+style = "bg:mantle"
+format = '[[ $symbol( $version) ](fg:peach bg:mantle)]($style)'
 
 [golang]
 symbol = ""
-style = "bg:green"
-format = '[[ $symbol( $version) ](fg:crust bg:green)]($style)'
+style = "bg:mantle"
+format = '[[ $symbol( $version) ](fg:sky bg:mantle)]($style)'
 
 [php]
 symbol = ""
-style = "bg:green"
-format = '[[ $symbol( $version) ](fg:crust bg:green)]($style)'
+style = "bg:mantle"
+format = '[[ $symbol( $version) ](fg:lavender bg:mantle)]($style)'
 
 [java]
 symbol = " "
-style = "bg:green"
-format = '[[ $symbol( $version) ](fg:crust bg:green)]($style)'
+style = "bg:mantle"
+format = '[[ $symbol( $version) ](fg:peach bg:mantle)]($style)'
 
 [kotlin]
 symbol = ""
-style = "bg:green"
-format = '[[ $symbol( $version) ](fg:crust bg:green)]($style)'
+style = "bg:mantle"
+format = '[[ $symbol( $version) ](fg:mavue bg:mantle)]($style)'
 
 [haskell]
 symbol = ""
-style = "bg:green"
-format = '[[ $symbol( $version) ](fg:crust bg:green)]($style)'
+style = "bg:mantle"
+format = '[[ $symbol( $version) ](fg:mavue bg:mantle)]($style)'
 
 [python]
 symbol = ""
-style = "bg:green"
-format = '[[ $symbol( $version)(\(#$virtualenv\)) ](fg:crust bg:green)]($style)'
+style = "bg:mantle"
+format = '[[ $symbol( $version)(\(#$virtualenv\)) ](fg:yellow bg:mantle)]($style)'
 
 [docker_context]
 symbol = ""
-style = "bg:sapphire"
-format = '[[ $symbol( $context) ](fg:crust bg:sapphire)]($style)'
+style = "bg:mantle"
+format = '[[ $symbol( $context) ](fg:sapphire bg:mantle)]($style)'
 
 [line_break]
 disabled = false
