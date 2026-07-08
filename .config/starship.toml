@@ -13,6 +13,7 @@ $php\
 $java\
 $kotlin\
 $haskell\
+$lua\
 $python\
 $git_branch\
 $git_status\
@@ -110,6 +111,11 @@ format = '[[ $symbol($version) ](fg:mavue bg:mantle)]($style)'
 symbol = " "
 style = "bg:mantle"
 format = '[[ $symbol($version) ](fg:mavue bg:mantle)]($style)'
+
+[lua]
+symbol = "󰢱 "
+style = "fg:blue bg:mantle"
+format = "[ $symbol($version )]($style)"
 
 [python]
 symbol = " "
