@@ -62,6 +62,10 @@ truncation_symbol = "…/"
 "Music" = "󰝚 "
 "Pictures" = " "
 "Developer" = "󰲋 "
+"Projects" = "󰣞 "
+".config" = "󱁿 "
+"nvim" = " "
+"hypr" = " "
 
 [git_branch]
 symbol = " "
