@@ -108,12 +108,12 @@ format = '[[ $symbol($version) ]]($style)'
 
 [kotlin]
 symbol = " "
-style = "fg:mavue bg:mantle"
+style = "fg:mauve bg:mantle"
 format = '[ $symbol($version) ]($style)'
 
 [haskell]
 symbol = " "
-style = "fg:mavue bg:mantle"
+style = "fg:mauve bg:mantle"
 format = '[ $symbol($version) ]($style)'
 
 [lua]
