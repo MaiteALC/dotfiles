@@ -8,7 +8,6 @@ lint.linters_by_ft = {
   sh = { 'shellcheck' },
   python = { 'ruff' },
   xml = { 'lemminx' },
-  toml = { 'taplo' },
   sql = { 'sqlfluff' },
 }
 
