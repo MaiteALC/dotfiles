@@ -2,6 +2,17 @@ require('telescope').setup {
   extensions = {
     ['ui-select'] = { require('telescope.themes').get_dropdown() },
   },
+
+  defaults = {
+    file_ignore_patterns = {
+      '%.git',
+      'target/',
+      'bin/',
+      'out/',
+      'dist/',
+      'build/',
+    },
+  },
 }
 
 -- Enable Telescope extensions if they are installed
@@ -11,6 +22,17 @@ pcall(require('telescope').load_extension, 'ui-select')
 local builtin = require 'telescope.builtin'
 
 vim.keymap.set('n', '<leader>lg', builtin.live_grep, { desc = 'Telescope: [L]ive [G]rep' })
+vim.keymap.set('n', '<leader>lgh', function()
+  builtin.live_grep {
+    additional_args = function(_)
+      return {
+        '--hidden',
+        '--glob',
+        '!**/node_modules/*',
+      }
+    end,
+  }
+end, { desc = 'Telescope: [L]ive [g]rep including [h]idden files' })
 
 vim.keymap.set('n', '<leader>km', builtin.keymaps, { desc = 'Telescope: Search [K]ey[m]aps' })
 
@@ -19,6 +41,13 @@ vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = 'Telescope: [ 
 vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope: [F]ind [H]elp' })
 
 vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Telescope: [F]ind [F]iles in working directory' })
+vim.keymap.set(
+  'n',
+  '<leader>ffh',
+  function() builtin.find_files { hidden = true } end,
+  { desc = 'Telescope: [F]ind [f]iles in working directory including the [h]idden ones' }
+)
+
 vim.keymap.set('n', '<leader>fg', builtin.git_files, { desc = 'Telescope: [F]ind [G]it Files' })
 vim.keymap.set('n', '<leader>f.', builtin.oldfiles, { desc = 'Telescope: [F]ind Recent Files ("." for repeat)' })
 vim.keymap.set('n', '<leader>fc', builtin.current_buffer_fuzzy_find, { desc = 'Telescope: [F]ind in [C]urrent buffer' })
