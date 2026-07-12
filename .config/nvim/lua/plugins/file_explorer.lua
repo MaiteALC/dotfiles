@@ -22,4 +22,12 @@ require('neo-tree').setup {
       hide_gitignored = false,
     },
   },
+
+  default_component_configs = {
+    icon = {
+      folder_closed = '󰉋',
+      folder_open = '󰝰',
+      folder_empty = '󰉖',
+    },
+  },
 }
