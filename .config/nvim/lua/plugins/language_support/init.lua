@@ -1,0 +1,7 @@
+require 'plugins.language_support.lang_setup'
+require 'plugins.language_support.lsp_autocmds'
+require 'plugins.language_support.linting'
+require 'plugins.language_support.formatting'
+require 'plugins.language_support.treesitter'
+require 'plugins.language_support.autocomplete'
+require 'plugins.language_support.debug'

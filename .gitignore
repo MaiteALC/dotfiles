@@ -20,4 +20,4 @@ icon-theme.cache
 
 /scripts/env_hardware.sh
 /hypr/devices.conf
-/hypr/modules/devices.lua
+/.config/hypr/modules/devices.lua
