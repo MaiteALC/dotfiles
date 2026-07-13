@@ -104,7 +104,7 @@ chmod u+x install.sh
 
 - Super + Shift + F = fullscreen
 
-Check the ```./hypr/modules/binds.lua``` file to see all keybinds.
+Check the ```.config/hypr/modules/binds.lua``` file to see all keybinds.
 
 ---
 
