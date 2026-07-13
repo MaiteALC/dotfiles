@@ -41,11 +41,11 @@ vim.api.nvim_create_user_command('PackAdd', function(opts) vim.pack.add(opts.far
 vim.api.nvim_create_user_command('PackDel', function(opts) vim.pack.del(opts.fargs) end, { nargs = '+', desc = 'Delete plugins (:PackDel plugin1 plugin2)' })
 
 vim.api.nvim_create_user_command('PackUpdate', function(opts)
-  if opts.args.match '%s' then
-    local plugins = vim.split(opts.args, '%s+', { trimempty = true })
-    vim.pack.update(plugins)
-  else
+  if opts == nil or opts.args == nil or not opts.args:match '%w' then
     vim.pack.update()
+  else
+    local plugins = vim.split(opts.args, '%s', { trimempty = true })
+    vim.pack.update(plugins)
   end
 end, { nargs = '*', desc = 'Update all plugins or specific ones' })
 
