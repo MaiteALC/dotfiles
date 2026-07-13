@@ -21,23 +21,25 @@ in other words, without DEs (Desktop Environments) like KDE Plasma or GNOME.
 
 ### Script features
 
-- Hardware Detection: automatic GPUs detection to install the appropriated drivers
+- **Hardware Detection:** automatic GPUs detection to install the appropriated drivers
 (like nvidia-prime for Nvidia, vulkan-radeon for Amd, vulkan-intel for Intel).
 
-- Intelligent AUR Helper: Detects yay or paru. If none was found, installs yay automatically.
+- **Intelligent AUR Helper:** Detects yay or paru. If none was found, installs
+yay automatically.
 
-- Dry-Run Mode: Allows test all the script without alter a single file in your system.
+- **Dry-Run Mode:** Allows test all the script without alter a single file in
+your system.
 
-- Symlink Management: Make symlinks between the repository and your ~/.config/
+- **Symlink Management:** Make symlinks between the repository and your ~/.config/
 directory in a clean way.
 
-- Backup: Automatically creates a backup directory (~/.rice_backup) and put all
-your previous configuration to avoid losing files.
+- **Backup:** Automatically creates a backup directory (~/.rice_backup) and put
+all your previous configuration to avoid losing files.
 
-- Color Consistency: Applies the Catppuccin Mocha accents in the Papirus Dark
+- **Color Consistency:** Applies the Catppuccin Mocha accents in the Papirus Dark
 icon theme via CLI.
 
-- Wallpapers: Provides a set of wallpapers to match the Hyprland style.
+- **Wallpapers:** Provides a set of wallpapers to match the Hyprland style.
 
 ---
 
