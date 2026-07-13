@@ -60,15 +60,15 @@ icon theme via CLI.
 
 ---
 
-## 🛠️ How to install
+## 🛠️ How to Install
 
-*Note:* It's a good practice review scripts downloaded from internet before
-execute them.
+> [!NOTE]
+> It's a good practice review scripts downloaded from internet before execute them.
 
 *1. Clone the repository:*
 
 ```bash
-git clone https://github.com/maiteALC/dotfiles.git
+git clone https://github.com/MaiteALC/dotfiles.git
 cd ~/dotfiles
 ```
 
