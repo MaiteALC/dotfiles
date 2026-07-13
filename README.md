@@ -1,34 +1,41 @@
+# ☕ Catppuccin Mocha - Hyprland Dotfiles
+
 ![Arch Linux](https://img.shields.io/badge/Arch%20Linux-1793D1?logo=arch-linux&logoColor=white)
 ![Hyprland](https://img.shields.io/badge/Hyprland-33ccff?logo=hyprland&logoColor=white)
 ![Theme](https://img.shields.io/badge/Theme-Catppuccin%20Mocha-f5e0dc?labelColor=1e1e2e)
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-
-# ☕ Catppuccin Mocha - Hyprland Dotfiles
-
-This repository contains my personal rice, based on Hyprland, focused on Catppuccin Mocha and automated by an installation script.
-
-The current dotfiles version is based on Hyprland v0.55, with **Lua-based** configurations. Check the [v1.0.0-legacy-hyprlang](https://github.com/MaiteALC/dotfiles/releases/tag/v1.0.0-legacy-hyprlang) to access the legacy version with static `.conf` files.
+This repository contains my personal rice, based on Hyprland, focused on Catppuccin
+Mocha and automated by an installation script. The current dotfiles version is based
+on Hyprland v0.55, with **Lua-based** configurations. Check the
+[v1.0.0-legacy-hyprlang](https://github.com/MaiteALC/dotfiles/releases/tag/v1.0.0-legacy-hyprlang)
+to access the legacy version with static `.conf` files.
 
 ---
 
 ## ⚙️ The Installation Script (install.sh)
 
-The distinguishing feature of this repository is its self-sufficient post installation script. It was projected to be executed in a clean Arch Linux installation, in other words, without DEs (Desktop Environments) like KDE Plasma or GNOME.
+The distinguishing feature of this repository is its self-sufficient post
+installation script. It was projected to be executed in a clean Arch Linux installation,
+in other words, without DEs (Desktop Environments) like KDE Plasma or GNOME.
 
-### Script features:
+### Script features
 
-- Hardware Detection: automatic GPUs detection to install the appropriated drivers (like nvidia-prime for Nvidia, vulkan-radeon for Amd, vulkan-intel for Intel).
+- Hardware Detection: automatic GPUs detection to install the appropriated drivers
+(like nvidia-prime for Nvidia, vulkan-radeon for Amd, vulkan-intel for Intel).
 
 - Intelligent AUR Helper: Detects yay or paru. If none was found, installs yay automatically.
 
 - Dry-Run Mode: Allows test all the script without alter a single file in your system.
 
-- Symlink Management: Make symlinks between the repository and your ~/.config/ directory in a clean way.
+- Symlink Management: Make symlinks between the repository and your ~/.config/
+directory in a clean way.
 
-- Backup: Automatically creates a backup directory (~/.rice_backup) and put all your previous configuration to avoid losing files.
+- Backup: Automatically creates a backup directory (~/.rice_backup) and put all
+your previous configuration to avoid losing files.
 
-- Color Consistency: Applies the Catppuccin Mocha accents in the Papirus Dark icon theme via CLI.
+- Color Consistency: Applies the Catppuccin Mocha accents in the Papirus Dark
+icon theme via CLI.
 
 - Wallpapers: Provides a set of wallpapers to match the Hyprland style.
 
@@ -48,12 +55,12 @@ The distinguishing feature of this repository is its self-sufficient post instal
 | **Clipboard** | [Cliphist](https://github.com/sentriz/cliphist) | Minimalist and integrated with Wofi |
 | **Wallpapers** | [Hyprpaper](https://wiki.hypr.land/Hypr-Ecosystem/hyprpaper/) |  Native tool from hypr ecossystem |
 
-
 ---
 
 ## 🛠️ How to install
 
-*Note:* It's a good practice review scripts downloaded from internet before execute them.
+*Note:* It's a good practice review scripts downloaded from internet before
+execute them.
 
 *1. Clone the repository:*
 
@@ -82,7 +89,7 @@ chmod u+x install.sh
 
 ---
 
-## ⌨️ Main Keybinds:
+## ⌨️ Main Keybinds
 
 - Super + Return (Enter) = terminal (kitty)
 
