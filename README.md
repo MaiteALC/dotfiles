@@ -56,6 +56,7 @@ icon theme via CLI.
 | **Shell** | [Zsh](https://www.zsh.org/) | Modern, powerfull and customazible shell with starship prompt |
 | **Clipboard** | [Cliphist](https://github.com/sentriz/cliphist) | Minimalist and integrated with Wofi |
 | **Wallpapers** | [Hyprpaper](https://wiki.hypr.land/Hypr-Ecosystem/hyprpaper/) |  Native tool from hypr ecossystem |
+| **Text Editor** | [Neovim](https://github.com/neovim/neovim) | Vim-fork focused on extensibility and usability |
 
 ---
 
