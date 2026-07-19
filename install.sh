@@ -21,6 +21,69 @@ dry_run() {
   fi
 }
 
+#######
+# Backups the specified directory or file to the location specified in the $BACKUP_DIR global variable.
+#
+# Creates $BACKUP_DIR if it doesn't exists.
+#
+# Arguments:
+#   $1 - The directory/file to backup
+#######
+backup_dir() {
+  if ! [ -d "$BACKUP_DIR" ]; then
+    dry_run mkdir -p "$BACKUP_DIR"
+  fi
+
+  if [ -e "$1" ]; then
+    dry_run mv "$1" "$BACKUP_DIR"
+  else
+    dry_run printf "%s\n" "Fail to backup '$1'. It doesn't exists. Skipping..."
+  fi
+}
+
+#######
+# Symlinks each directory in the repo's own .config/ to user's ~/.config/
+#
+# Relies on backup_dir function to make the backup before perform the symlinking.
+#######
+symlink_config_dirs() {
+  dry_run printf "\n%s\n" "Symlinking configuration directories..."
+
+  if ! [ -d "$HOME/.config" ]; then
+    dry_run mkdir -p "$HOME/.config"
+  fi
+
+  for dir in "${CONFIG_DIRS[@]}"; do
+    SOURCE="$DOTFILE_DIR/.config/$dir"
+    TARGET="$HOME/.config/$dir"
+
+    if [ -d "$SOURCE" ]; then
+      backup_dir "$TARGET"
+
+      dry_run ln -snf "$SOURCE" "$TARGET"
+      dry_run printf "%s\n" " Linked: $SOURCE -> $TARGET"
+
+    else
+      dry_run printf "%b%s\n" "$RED" " Directory $dir not found in $DOTFILE_DIR"
+      dry_run printf "%s%b\n" "Skipping..." "$NO_COLOR"
+    fi
+  done
+}
+
+#######
+# Symlinks the starship.toml file in the repo's own .config/ to user's ~/.config/
+#
+# Relies on backup_dir function to make the backup before perform the symlinking.
+#######
+symlink_starship_config_file() {
+  dry_run printf "\n%s\n" "Symlinking starship configuration file (starship.toml)..."
+
+  backup_dir "$HOME/.config/starship.toml"
+  dry_run ln -snf "$DOTFILE_DIR/.config/starship.toml" "$HOME/.config/starship.toml"
+
+  dry_run printf "%s\n" " Linked file: starship.toml"
+}
+
 printf "\n%b%s\n" "$BLUE" "---------------------------------------------------------------"
 printf "%s\n" "Starting Arch linux ricing configuration + installation script"
 printf "%s%b\n" "---------------------------------------------------------------" "$NO_COLOR"
@@ -86,32 +149,9 @@ else
   dry_run printf "%b%s%b\n" "$YELLOW" "Package papirus-folders not founded. Verify the installation." "$NO_COLOR"
 fi
 
-dry_run printf "%s\n" "Creating symlinks..."
+symlink_config_dirs
 
-dry_run mkdir -p "$HOME/.config/"
-dry_run mkdir -p "$BACKUP_DIR"
-
-for folder in "${CONFIG_DIRS[@]}"; do
-  SOURCE="$DOTFILE_DIR/.config/$folder"
-  TARGET="$HOME/.config/$folder"
-
-  if [ -d "$SOURCE" ]; then
-    if [ -d "$TARGET" ] || [ -L "$TARGET" ]; then
-      dry_run mv "$TARGET" "$BACKUP_DIR/"
-    fi
-
-    dry_run ln -snf "$SOURCE" "$TARGET"
-    dry_run printf "%s\n" " Linked: $SOURCE -> $TARGET"
-
-  else
-    dry_run printf "%b%s\n" "$RED" " Folder $folder not found in $DOTFILE_DIR"
-    dry_run printf "%s%b\n" "Skipping..." "$NO_COLOR"
-  fi
-done
-
-dry_run mv "$HOME/.config/starship.toml" "$BACKUP_DIR/starship.toml"
-dry_run ln -snf "$DOTFILE_DIR/.config/starship.toml" "$HOME/.config/starship.toml"
-dry_run printf "%s\n" " Linked file: starship.toml"
+symlink_starship_config_file
 
 DM_NAME=""
 if systemctl is-active --quiet display-manager.service; then
