@@ -114,6 +114,72 @@ symlink_starship_config_file() {
   dry_run printf "%s\n" " Linked file: starship.toml"
 }
 
+#######
+# Sets up the Greetd display manager (a.k.a login manager).
+#
+# Applies the new configurations and back up the old ones if greetd is already active.
+# Automatically enables greetd if there is no other login manager.
+# If there is a login manager other than greetd, the user is prompted before the switch.
+#
+# Requires:
+#   Active sudo privileges. The caller must ensure the user is already authenticated
+#   (e.g., by running `sudo -v` beforehand) as this function does not prompt for a password.
+#
+# Returns:
+#   1 - If sudo privileges are missing/expired.
+######
+configure_login_manager() {
+  if ! sudo -n true 2>/dev/null; then
+    return 1
+  fi
+
+  local DM_NAME=""
+  if systemctl is-active --quiet display-manager.service; then
+    DM_NAME=$(basename "$(readlink /etc/systemd/system/display-manager.service)" | sed 's/.service//')
+  fi
+
+  if [ -z "$DM_NAME" ]; then
+    dry_run printf "%s\n" "No enabled login manager was found."
+
+    if [ -d "/etc/greetd" ] || [ -L "/etc/greetd" ]; then
+      dry_run sudo mv /etc/greetd "$BACKUP_DIR/"
+    fi
+
+    dry_run sudo ln -snf "$DOTFILE_DIR/greetd" "/etc/greetd"
+
+    dry_run sudo systemctl enable greetd.service
+    dry_run printf "%s\n" "The login manager Greetd with Tuigreet has been enabled"
+
+  elif [ "$DM_NAME" = "greetd" ]; then
+    dry_run printf "%s\n" "Aplying new configurations to Greetd"
+
+    if [ -d "/etc/greetd" ] || [ -L "/etc/greetd" ]; then
+      dry_run sudo mv /etc/greetd "$BACKUP_DIR/"
+    fi
+
+    dry_run sudo ln -snf "$DOTFILE_DIR/greetd" "/etc/greetd"
+
+  else
+    dry_run printf "%s\n" "An enable login manager was founded: $DM_NAME"
+    dry_run printf "%s" "Would you like to disable it to enable Greetd? [Y/n] "
+    dry_run read -r enable
+
+    enable=$(printf "%s" "$enable" | tr '[:upper:]' '[:lower:]')
+
+    if [[ "$enable" == "n" || "$enable" == "no" ]]; then
+      dry_run printf "%s\n" "Your $DM_NAME will be mantained."
+
+    else
+      dry_run sudo ln -snf "$DOTFILE_DIR/greetd" "/etc/greetd"
+
+      dry_run sudo systemctl disable "$DM_NAME"
+      dry_run sudo systemctl enable greetd.service
+
+      dry_run printf "%s\n" "$DM_NAME disabled and Greetd enabled!"
+    fi
+  fi
+}
+
 printf "\n%b%s\n" "$BLUE" "---------------------------------------------------------------"
 printf "%s\n" "Starting Arch linux ricing configuration + installation script"
 printf "%s%b\n" "---------------------------------------------------------------" "$NO_COLOR"
@@ -172,51 +238,7 @@ symlink_config_dirs
 
 symlink_starship_config_file
 
-DM_NAME=""
-if systemctl is-active --quiet display-manager.service; then
-  DM_NAME=$(basename "$(readlink /etc/systemd/system/display-manager.service)" | sed 's/.service//')
-fi
-
-if [ -z "$DM_NAME" ]; then
-  dry_run printf "%s\n" "No enabled login manager was found."
-
-  if [ -d "/etc/greetd" ] || [ -L "/etc/greetd" ]; then
-    dry_run sudo mv /etc/greetd "$BACKUP_DIR/"
-  fi
-
-  dry_run sudo ln -snf "$DOTFILE_DIR/greetd" "/etc/greetd"
-
-  dry_run sudo systemctl enable greetd.service
-  dry_run printf "%s\n" "The login manager Greetd with Tuigreet was enabled"
-
-elif [ "$DM_NAME" = "greetd" ]; then
-  dry_run printf "%s\n" "Aplying new configurations to Greetd"
-
-  if [ -d "/etc/greetd" ] || [ -L "/etc/greetd" ]; then
-    dry_run sudo mv /etc/greetd "$BACKUP_DIR/"
-  fi
-
-  dry_run sudo ln -snf "$DOTFILE_DIR/greetd" "/etc/greetd"
-
-else
-  dry_run printf "%s\n" "An enable login manager was founded: $DM_NAME"
-  dry_run printf "%s" "Would you like to disable it to enable Greetd? [Y/n] "
-  dry_run read -r enable
-
-  enable=$(printf "%s" "$enable" | tr '[:upper:]' '[:lower:]')
-
-  if [[ "$enable" == "n" || "$enable" == "no" ]]; then
-    dry_run printf "%s\n" "Your $DM_NAME will be mantained."
-
-  else
-    dry_run sudo ln -snf "$DOTFILE_DIR/greetd" "/etc/greetd"
-
-    dry_run sudo systemctl disable "$DM_NAME"
-    dry_run sudo systemctl enable greetd.service
-
-    dry_run printf "%s\n" "$DM_NAME disabled and Greetd enabled!"
-  fi
-fi
+configure_login_manager
 
 dry_run touch ~/.zshrc
 CUSTOM_ZSH="$DOTFILE_DIR/scripts/zsh_custom.zsh"
