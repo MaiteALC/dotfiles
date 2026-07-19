@@ -22,6 +22,36 @@ dry_run() {
 }
 
 #######
+# Configure /etc/pacman.conf, enabling features like parallel downloads and the ILoveCandy easter egg.
+#
+# Requires:
+#   Active sudo privileges. The caller must ensure the user is already authenticated
+#   (e.g., by running `sudo -v` beforehand) as this function does not prompt for a password.
+#
+# Returns:
+#   1 - If sudo privileges are missing/expired.
+#######
+setup_pacman_conf() {
+  if ! sudo -n true 2>/dev/null; then
+    printf "\n%s\n" " Sudo privileges missing or expired. Cannot configure pacman.conf." >&2
+    return 1
+  fi
+
+  printf "%s\n" "Optmizing pacman.conf..."
+  # Adds the ILoveCandy easter egg (ASCII Pacman)
+  if ! grep -q "ILoveCandy" /etc/pacman.conf; then
+    sudo sed -i '/^Color/a ILoveCandy' /etc/pacman.conf
+  fi
+
+  sudo sed -i 's/^#Color/Color/' /etc/pacman.conf
+  sudo sed -i 's/^#ParallelDownloads = 5/ParallelDownloads = 10/' /etc/pacman.conf
+  # Multilib repository is required for 32-bit packages
+  sudo sed -i '/^#\[multilib\]/,/^#Include = \/etc\/pacman.d\/mirrorlist/ s/^#//' /etc/pacman.conf
+
+  sudo pacman -Sy
+}
+
+#######
 # Backups the specified directory or file to the location specified in the $BACKUP_DIR global variable.
 #
 # Creates $BACKUP_DIR if it doesn't exists.
@@ -118,18 +148,7 @@ else
     kill -0 "$$" || exit
   done 2>/dev/null &
 
-  printf "%s\n" "Optmizing pacman.conf..."
-  # Adds the ILoveCandy easter egg (ASCII Pacman)
-  if ! grep -q "ILoveCandy" /etc/pacman.conf; then
-    sudo sed -i '/^Color/a ILoveCandy' /etc/pacman.conf
-  fi
-
-  sudo sed -i 's/^#Color/Color/' /etc/pacman.conf
-  sudo sed -i 's/^#ParallelDownloads = 5/ParallelDownloads = 10/' /etc/pacman.conf
-  # Multilib repository is required for 32-bit packages
-  sudo sed -i '/^#\[multilib\]/,/^#Include = \/etc\/pacman.d\/mirrorlist/ s/^#//' /etc/pacman.conf
-
-  sudo pacman -Sy
+  setup_pacman_conf
 
   # shellcheck source=./scripts/gpu-config.sh
   source "$DOTFILE_DIR/scripts/gpu-config.sh"
