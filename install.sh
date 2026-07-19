@@ -1,10 +1,17 @@
 #!/bin/bash
 
+# --- Global variables needed across the script ---
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 YELLOW='\033[0;33m'
 NO_COLOR='\033[0m'
+
+DOTFILE_DIR="$HOME/dotfiles"
+CONFIG_DIRS=("hypr" "waybar" "wofi" "swaync" "kitty" "Kvantum" "fastfetch" "nvim")
+TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
+BACKUP_DIR="$HOME/.rice_backup_$TIMESTAMP"
+# ---------------
 
 dry_run() {
   if [ "$DRY_RUN" = true ]; then
@@ -17,11 +24,6 @@ dry_run() {
 printf "\n%b%s\n" "$BLUE" "---------------------------------------------------------------"
 printf "%s\n" "Starting Arch linux ricing configuration + installation script"
 printf "%s%b\n" "---------------------------------------------------------------" "$NO_COLOR"
-
-DOTFILE_DIR="$HOME/dotfiles"
-CONFIG_DIRS=("hypr" "waybar" "wofi" "swaync" "kitty" "Kvantum" "fastfetch" "nvim")
-TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
-BACKUP_DIR="$HOME/.rice_backup_$TIMESTAMP"
 
 DRY_RUN=false
 if [[ "$1" == "--dry-run" || "$1" == "-d" ]]; then
