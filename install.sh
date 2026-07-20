@@ -12,6 +12,8 @@ STARSHIP=true
 LOGIN_MANAGER=true
 ZSH=true
 PACMAN=true
+SKIP_DOWNLOADS=false
+SKIP_AUR=false
 
 declare -A config_dirs=(
   [hypr]=true
@@ -50,6 +52,8 @@ Options:
   --no-starship           Skip Starship plugin configuration
   --no-greetd             Skip Greetd login manager configuration (requires sudo)
   --no-pacman-conf        Skip pacman.conf file optimizations (doesn't automatically activate parallel downloads, ILoveCandy, and multilib)
+  --no-downloads          Skip both pacman and AUR package downloads
+  --no-aur-downloads      Skip only AUR package downloads
 
   -h, --help              Display this help and exit
 
@@ -113,6 +117,14 @@ parse_cli_args() {
       ;;
     "--no-pacman-conf")
       PACMAN=false
+      shift
+      ;;
+    "--no-downloads")
+      SKIP_DOWNLOADS=true
+      shift
+      ;;
+    "--no-aur-downloads")
+      SKIP_AUR=true
       shift
       ;;
     "--help" | "-h")
@@ -360,7 +372,9 @@ else
   gpu_environment_setup
 fi
 
-DRY_RUN="$DRY_RUN" ./scripts/package-installation.sh
+if ! $SKIP_DOWNLOADS; then
+  DRY_RUN="$DRY_RUN" SKIP_AUR="$SKIP_AUR" ./scripts/package-installation.sh
+fi
 
 dry_run printf "%s\n" "Customizing icons with Catppuccin Mocha Flamingo..."
 

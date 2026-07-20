@@ -204,4 +204,8 @@ install_pacman_packages() {
 
 install_pacman_packages
 
-install_aur_packages
+if [ "$SKIP_AUR" = true ]; then
+  printf "%s\n" "Skipping AUR downloads..."
+else
+  install_aur_packages
+fi
