@@ -363,7 +363,7 @@ else
     kill -0 "$$" || exit
   done 2>/dev/null &
 
-  if PACMAN; then
+  if $PACMAN; then
     setup_pacman_conf
   fi
 
@@ -387,15 +387,15 @@ fi
 
 symlink_config_dirs
 
-if STARSHIP; then
+if $STARSHIP; then
   symlink_starship_config_file
 fi
 
-if LOGIN_MANAGER; then
+if $LOGIN_MANAGER; then
   configure_login_manager
 fi
 
-if ZSH; then
+if $ZSH; then
   configure_zsh
 fi
 
