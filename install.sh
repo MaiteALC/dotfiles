@@ -7,6 +7,12 @@ BLUE='\033[0;34m'
 YELLOW='\033[0;33m'
 NO_COLOR='\033[0m'
 
+DRY_RUN=false
+STARSHIP=true
+LOGIN_MANAGER=true
+ZSH=true
+PACMAN=true
+
 declare -A config_dirs=(
   [hypr]=true
   [waybar]=true
@@ -21,6 +27,106 @@ DOTFILE_DIR="$HOME/dotfiles"
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 BACKUP_DIR="$HOME/.rice_backup_$TIMESTAMP"
 # ---------------
+
+help_menu() {
+  cat <<'EOF'
+
+Usage: install.sh [OPTIONS]
+
+Sets up the rice by downloading dependencies, backing up previous configs,
+and symlinking the repo's configurations to your system.
+
+Options:
+  -d, --dry-run           Print commands but do not execute them (test mode)
+  --no-kvantum            Skip Kvantum configuration
+  --no-fastfetch          Skip Fastfetch configuration
+  --no-hyprland           Skip Hyprland configuration
+  --no-kitty              Skip Kitty terminal configuration
+  --no-nvim               Skip Neovim configuration
+  --no-swaync             Skip SwayNC configuration
+  --no-waybar             Skip Waybar configuration
+  --no-wofi               Skip Wofi configuration
+  --no-zsh                Skip Zsh configuration
+  --no-starship           Skip Starship plugin configuration
+  --no-greetd             Skip Greetd login manager configuration (requires sudo)
+  --no-pacman-conf        Skip pacman.conf file optimizations (doesn't automatically activate parallel downloads, ILoveCandy, and multilib)
+
+  -h, --help              Display this help and exit
+
+NOTES:
+  At the start of the script, you will be prompted for sudo permissions to configure the pacman.conf file, greetd and install pacman and AUR packages (you can check what will be installed in ./scripts/package-installation.sh).
+
+  Existing configurations (except those that are skipped by --no-* flags) will be backed up to ~/.rice_backup_TIMESTAMP before creating symlinks.
+EOF
+}
+
+parse_cli_args() {
+  while [[ "$#" -gt 0 ]]; do
+    case $1 in
+    "--dry-run" | "-d")
+      DRY_RUN=true
+      shift
+      ;;
+    "--no-kvantum")
+      config_dirs[Kvantum]=false
+      shift
+      ;;
+    "--no-fastfetch")
+      config_dirs[fastfetch]=false
+      shift
+      ;;
+    "--no-hyprland")
+      config_dirs[hypr]=false
+      shift
+      ;;
+    "--no-kitty")
+      config_dirs[kitty]=false
+      shift
+      ;;
+    "--no-nvim")
+      config_dirs[nvim]=false
+      shift
+      ;;
+    "--no-swaync")
+      config_dirs[swaync]=false
+      shift
+      ;;
+    "--no-waybar")
+      config_dirs[waybar]=false
+      shift
+      ;;
+    "--no-wofi")
+      config_dirs[wofi]=false
+      shift
+      ;;
+    "--no-zsh")
+      ZSH=false
+      shift
+      ;;
+    "--no-starship")
+      STARSHIP=false
+      shift
+      ;;
+    "--no-greetd")
+      LOGIN_MANAGER=false
+      shift
+      ;;
+    "--no-pacman-conf")
+      PACMAN=false
+      shift
+      ;;
+    "--help" | "-h")
+      help_menu
+      exit 0
+      ;;
+    *)
+      printf "\n%b%s\n" "$RED" " Unknow flag: $1 "
+      printf "%s%b\n" "Use --help or -h to see the available options." "$NO_COLOR"
+      exit 1
+      ;;
+    esac
+  done
+}
 
 dry_run() {
   if [ "$DRY_RUN" = true ]; then
@@ -211,13 +317,13 @@ configure_zsh() {
   fi
 }
 
+parse_cli_args "$@"
+
 printf "\n%b%s\n" "$BLUE" "---------------------------------------------------------------"
 printf "%s\n" "Starting Arch linux ricing configuration + installation script"
 printf "%s%b\n" "---------------------------------------------------------------" "$NO_COLOR"
 
-DRY_RUN=false
-if [[ "$1" == "--dry-run" || "$1" == "-d" ]]; then
-  DRY_RUN=true
+if DRY_RUN; then
   printf "\n%b%s\n" "$YELLOW" "--- DRY RUN MODE ACTIVATED ---"
   printf "%s%b\n" "Commands will be printed, but not executed." "$NO_COLOR"
 
@@ -245,7 +351,9 @@ else
     kill -0 "$$" || exit
   done 2>/dev/null &
 
-  setup_pacman_conf
+  if PACMAN; then
+    setup_pacman_conf
+  fi
 
   # shellcheck source=./scripts/gpu-config.sh
   source "$DOTFILE_DIR/scripts/gpu-config.sh"
@@ -267,11 +375,17 @@ fi
 
 symlink_config_dirs
 
-symlink_starship_config_file
+if STARSHIP; then
+  symlink_starship_config_file
+fi
 
-configure_login_manager
+if LOGIN_MANAGER; then
+  configure_login_manager
+fi
 
-configure_zsh
+if ZSH; then
+  configure_zsh
+fi
 
 printf "\n%b%s\n" "$GREEN" "------------------------------------------------------"
 printf "%s\n" "Script executed successfully!"
