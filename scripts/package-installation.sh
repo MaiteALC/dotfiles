@@ -141,16 +141,13 @@ AUR_PACKAGES=(
   bibata-cursor-theme-bin
 )
 
-install_packages() {
-  local DRY_RUN=false
-  if [[ "$1" == "--dry-run" || "$1" == "-d" ]]; then
-    DRY_RUN=true
-  fi
-
-  dry_run printf "\n%s\n" "-----------------------------------"
-  dry_run printf "%s\n" "Installing the required packages..."
-  dry_run printf "%s\n" "-----------------------------------"
-
+#######
+# Outputs the name of the available AUR helper, automatically downloading Yay if none of them was found.
+#
+# Outputs:
+#   The available AUR helper name (yay or paru)
+#######
+get_aur_helper() {
   local AUR_HELPER=""
   if command -v yay &>/dev/null; then
     AUR_HELPER="yay"
@@ -170,16 +167,41 @@ install_packages() {
     AUR_HELPER="yay"
 
     dry_run cd - >/dev/null
+    dry_run rm -rf "/tmp/yay" >/dev/null
   fi
 
+  printf "%s" $AUR_HELPER
+}
+
+#######
+# Install the AUR packages defined in $AUR_PACKAGES
+#
+# Requires:
+#   Active sudo privileges. The caller must ensure the user is already authenticated
+#   (e.g., by running `sudo -v` beforehand) as this function does not prompt for a password.
+######
+install_aur_packages() {
+  local AUR_HELPER
+  AUR_HELPER=$(get_aur_helper)
+
+  dry_run printf "\n%s\n" "Installing AUR packages with $AUR_HELPER..."
+  dry_run "$AUR_HELPER" -S --needed --noconfirm "${AUR_PACKAGES[@]}"
+
+  dry_run printf "%b%s%b\n" "$GREEN" "AUR packages installed" "$NO_COLOR"
+}
+
+# Install the pre defined pacman packages.
+#
+# Requires:
+#   Active sudo privileges. The caller must ensure the user is already authenticated
+#   (e.g., by running `sudo -v` beforehand) as this function does not prompt for a password.
+install_pacman_packages() {
   dry_run printf "\n%s\n" "Installing pacman packages..."
   dry_run sudo pacman -S --needed --noconfirm "${FONT_PACKAGES[@]}" "${TERMINAL_PACKAGES[@]}" "${HYPRLAND_AND_RELATED_PACKAGES[@]}" "${LIBS_AND_PLUGINS[@]}" "${UTIL_PACKAGES[@]}" "${NVIM_PACKAGES[@]}"
 
-  dry_run printf "\n%s\n" "Installing AUR packages with $AUR_HELPER..."
-  dry_run $AUR_HELPER -S --needed --noconfirm "${AUR_PACKAGES[@]}"
-  dry_run printf "%s\n" "AUR packages installed."
-
-  dry_run printf "\n%b%s%b\n\n" "$GREEN" "All required packages installed successfully!" "$NO_COLOR"
-
-  dry_run rm -rf "/tmp/yay"
+  dry_run printf "%b%s%b\n" "$GREEN" "Pacman packages installed" "$NO_COLOR"
 }
+
+install_pacman_packages
+
+install_aur_packages

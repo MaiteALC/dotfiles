@@ -360,9 +360,7 @@ else
   gpu_environment_setup
 fi
 
-# shellcheck source=./scripts/package-installation.sh
-source "$DOTFILE_DIR/scripts/package-installation.sh"
-install_packages "$1"
+DRY_RUN="$DRY_RUN" ./scripts/package-installation.sh
 
 dry_run printf "%s\n" "Customizing icons with Catppuccin Mocha Flamingo..."
 
