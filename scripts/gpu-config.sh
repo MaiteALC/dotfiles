@@ -169,4 +169,8 @@ download_gpu_drivers() {
 
 get_main_render_gpu
 
-download_gpu_drivers
+if [ "$SKIP_GPU_DRIVERS" = "true" ]; then
+  printf "%s\n" "Skipping GPU driver downloads..."
+else
+  download_gpu_drivers
+fi

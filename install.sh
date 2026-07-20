@@ -14,6 +14,8 @@ ZSH=true
 PACMAN=true
 SKIP_DOWNLOADS=false
 SKIP_AUR=false
+SKIP_GPU=false
+SKIP_GPU_DRIVERS=false
 
 declare -A config_dirs=(
   [hypr]=true
@@ -54,6 +56,8 @@ Options:
   --no-pacman-conf        Skip pacman.conf file optimizations (doesn't automatically activate parallel downloads, ILoveCandy, and multilib)
   --no-downloads          Skip both pacman and AUR package downloads
   --no-aur-downloads      Skip only AUR package downloads
+  --no-gpu-drivers        Skip dedicated GPU driver downloads
+  --no-gpu-config         Skip all GPU configurations, including driver downloads
 
   -h, --help              Display this help and exit
 
@@ -125,6 +129,14 @@ parse_cli_args() {
       ;;
     "--no-aur-downloads")
       SKIP_AUR=true
+      shift
+      ;;
+    "--no-gpu-drivers")
+      SKIP_GPU_DRIVERS=true
+      shift
+      ;;
+    "--no-gpu-config")
+      SKIP_GPU=true
       shift
       ;;
     "--help" | "-h")
@@ -367,7 +379,9 @@ else
     setup_pacman_conf
   fi
 
-  ./scripts/gpu-config.sh
+  if ! $SKIP_GPU; then
+    SKIP_GPU_DRIVERS="$SKIP_GPU_DRIVERS" ./scripts/gpu-config.sh
+  fi
 fi
 
 if ! $SKIP_DOWNLOADS; then
