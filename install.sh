@@ -7,8 +7,17 @@ BLUE='\033[0;34m'
 YELLOW='\033[0;33m'
 NO_COLOR='\033[0m'
 
+declare -A config_dirs=(
+  [hypr]=true
+  [waybar]=true
+  [wofi]=true
+  [swaync]=true
+  [kitty]=true
+  [Kvantum]=true
+  [fastfetch]=true
+  [nvim]=true
+)
 DOTFILE_DIR="$HOME/dotfiles"
-CONFIG_DIRS=("hypr" "waybar" "wofi" "swaync" "kitty" "Kvantum" "fastfetch" "nvim")
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 BACKUP_DIR="$HOME/.rice_backup_$TIMESTAMP"
 # ---------------
@@ -83,7 +92,11 @@ symlink_config_dirs() {
     dry_run mkdir -p "$HOME/.config"
   fi
 
-  for dir in "${CONFIG_DIRS[@]}"; do
+  for dir in "${!config_dirs[@]}"; do
+    if [ "${config_dirs[$dir]}" = false ]; then
+      continue
+    fi
+
     SOURCE="$DOTFILE_DIR/.config/$dir"
     TARGET="$HOME/.config/$dir"
 
@@ -210,7 +223,7 @@ if [[ "$1" == "--dry-run" || "$1" == "-d" ]]; then
 
 else
   printf "\n%b%s\n" "$YELLOW" "  NOTE: This script will create a backup of some configuration directories (if they exist)"
-  printf "%s\n" "Directories to backup: ${CONFIG_DIRS[*]} and greetd"
+  printf "%s\n" "Directories to backup: ${!config_dirs[*]} and greetd"
   printf "%s%b\n" "Backup directory path: $BACKUP_DIR" "$NO_COLOR"
 
   printf "%s" "Proceed? [Y/n] "
