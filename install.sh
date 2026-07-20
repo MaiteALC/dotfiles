@@ -180,6 +180,24 @@ configure_login_manager() {
   fi
 }
 
+#######
+# Configures the Zsh, automatically creating the .zshrc file if it doesn't exists.
+#######
+configure_zsh() {
+  dry_run touch ~/.zshrc
+  CUSTOM_ZSH="$DOTFILE_DIR/scripts/zsh_custom.zsh"
+
+  if ! grep -q "source $CUSTOM_ZSH" ~/.zshrc; then
+    dry_run printf "\n%s\n" "# Injected configurations by ricing script" >>~/.zshrc
+    dry_run printf "%s\n" "source $CUSTOM_ZSH" >>~/.zshrc
+
+    dry_run printf "%s\n" "Sourced custom Zsh configurations in your ~/.zshrc file"
+
+  else
+    dry_run printf "%s\n" "The zsh_custom.zsh is already sourced in your .zshrc file. Nothing has been chaged."
+  fi
+}
+
 printf "\n%b%s\n" "$BLUE" "---------------------------------------------------------------"
 printf "%s\n" "Starting Arch linux ricing configuration + installation script"
 printf "%s%b\n" "---------------------------------------------------------------" "$NO_COLOR"
@@ -240,18 +258,7 @@ symlink_starship_config_file
 
 configure_login_manager
 
-dry_run touch ~/.zshrc
-CUSTOM_ZSH="$DOTFILE_DIR/scripts/zsh_custom.zsh"
-
-if ! grep -q "source $CUSTOM_ZSH" ~/.zshrc; then
-  dry_run printf "\n%s\n" "# Injected configurations by ricing script" >>~/.zshrc
-  dry_run printf "%s\n" "source $CUSTOM_ZSH" >>~/.zshrc
-
-  dry_run printf "%s\n" "Sourced custom Zsh configurations in your ~/.zshrc file"
-
-else
-  dry_run printf "%s\n" "The zsh_custom.zsh is already sourced in your .zshrc file. Nothing has been chaged."
-fi
+configure_zsh
 
 printf "\n%b%s\n" "$GREEN" "------------------------------------------------------"
 printf "%s\n" "Script executed successfully!"
