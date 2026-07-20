@@ -122,8 +122,23 @@ get_main_render_gpu() {
   fi
 }
 
-gpu_environment_setup() {
-  get_main_render_gpu
+#######
+# Downloads the required dedicated GPU drivers.
+#
+# Relies on detect_gpu_vendor function to detect the GPU vendor.
+#
+# Requires:
+#   Active sudo privileges. The caller must ensure the user is already authenticated
+#   (e.g., by running `sudo -v` beforehand) as this function does not prompt for a password.
+#
+# Returns:
+#   1 - If sudo privileges are missing/expired.
+#######
+download_gpu_drivers() {
+  if ! sudo -n true 2>/dev/null; then
+    printf "\n%s\n" " Sudo privileges missing or expired. Unable to download GPU drivers using pacman" >&2
+    return 1
+  fi
 
   local GPU_VENDOR
   GPU_VENDOR=$(detect_gpu_vendor)
@@ -151,3 +166,7 @@ gpu_environment_setup() {
     ;;
   esac
 }
+
+get_main_render_gpu
+
+download_gpu_drivers

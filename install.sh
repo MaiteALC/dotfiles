@@ -367,9 +367,7 @@ else
     setup_pacman_conf
   fi
 
-  # shellcheck source=./scripts/gpu-config.sh
-  source "$DOTFILE_DIR/scripts/gpu-config.sh"
-  gpu_environment_setup
+  ./scripts/gpu-config.sh
 fi
 
 if ! $SKIP_DOWNLOADS; then
