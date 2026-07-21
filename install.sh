@@ -351,7 +351,7 @@ printf "\n%b%s\n" "$BLUE" "-----------------------------------------------------
 printf "%s\n" "Starting Arch linux ricing configuration + installation script"
 printf "%s%b\n" "---------------------------------------------------------------" "$NO_COLOR"
 
-if DRY_RUN; then
+if $DRY_RUN; then
   printf "\n%b%s\n" "$YELLOW" "--- DRY RUN MODE ACTIVATED ---"
   printf "%s%b\n" "Commands will be printed, but not executed." "$NO_COLOR"
 
