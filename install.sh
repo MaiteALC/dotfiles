@@ -16,6 +16,7 @@ SKIP_DOWNLOADS=false
 SKIP_AUR=false
 SKIP_GPU=false
 SKIP_GPU_DRIVERS=false
+REPLACE_DM=false
 
 declare -A config_dirs=(
   [hypr]=true
@@ -58,6 +59,7 @@ Options:
   --no-aur-downloads      Skip only AUR package downloads
   --no-gpu-drivers        Skip dedicated GPU driver downloads
   --no-gpu-config         Skip all GPU configurations, including driver downloads
+  --replace-dm            Replace the previous login manager if there is other than Greetd active
 
   -h, --help              Display this help and exit
 
@@ -137,6 +139,10 @@ parse_cli_args() {
       ;;
     "--no-gpu-config")
       SKIP_GPU=true
+      shift
+      ;;
+    "--replace-dm")
+      REPLACE_DM=true
       shift
       ;;
     "--help" | "-h")
@@ -262,7 +268,9 @@ symlink_starship_config_file() {
 #
 # Applies the new configurations and back up the old ones if greetd is already active.
 # Automatically enables greetd if there is no other login manager.
-# If there is a login manager other than greetd, the user is prompted before the switch.
+#
+# Arguments:
+#   $1 - Boolean ('true' or 'false'). If 'true' and there is other DM enable, replaces it with Greetd.
 #
 # Requires:
 #   Active sudo privileges. The caller must ensure the user is already authenticated
@@ -270,6 +278,7 @@ symlink_starship_config_file() {
 #
 # Returns:
 #   1 - If sudo privileges are missing/expired.
+#   2 - If a different display manager is currently active and replacement was not requested.
 ######
 configure_login_manager() {
   if ! sudo -n true 2>/dev/null; then
@@ -303,22 +312,17 @@ configure_login_manager() {
     dry_run sudo ln -snf "$DOTFILE_DIR/greetd" "/etc/greetd"
 
   else
-    dry_run printf "%s\n" "An enable login manager was founded: $DM_NAME"
-    dry_run printf "%s" "Would you like to disable it to enable Greetd? [Y/n] "
-    dry_run read -r enable
-
-    enable=$(printf "%s" "$enable" | tr '[:upper:]' '[:lower:]')
-
-    if [[ "$enable" == "n" || "$enable" == "no" ]]; then
-      dry_run printf "%s\n" "Your $DM_NAME will be mantained."
-
-    else
+    local REPLACE_DM="$1"
+    if [ "$REPLACE_DM" = "true" ]; then
       dry_run sudo ln -snf "$DOTFILE_DIR/greetd" "/etc/greetd"
 
       dry_run sudo systemctl disable "$DM_NAME"
       dry_run sudo systemctl enable greetd.service
 
       dry_run printf "%s\n" "$DM_NAME disabled and Greetd enabled!"
+    else
+      printf "%b%s%b\n" "$YELLOW" " Warning: Unable to configure Greetd. $DM_NAME is already active." "$NO_COLOR" >&2
+      return 2
     fi
   fi
 }
@@ -404,7 +408,7 @@ if $STARSHIP; then
 fi
 
 if $LOGIN_MANAGER; then
-  configure_login_manager
+  configure_login_manager "$REPLACE_DM"
 fi
 
 if $ZSH; then
