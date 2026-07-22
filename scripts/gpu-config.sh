@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source ../lib/logging.sh
+
 detect_gpu_vendor() {
   local gpu_info
   gpu_info=$(lspci | grep -iE "VGA|3D")
@@ -80,7 +82,7 @@ get_main_render_gpu() {
   touch "$GPU_FILE"
 
   if [ "${#pci_addresses[@]}" -eq 1 ]; then
-    printf "A single GPU was detected. Automatic configuring the environment variables...\n"
+    info "A single GPU has been detected. Automatically configuring environment variables..."
 
     local address
     local name
@@ -91,7 +93,8 @@ get_main_render_gpu() {
 
     printf "name=%s card_path=%s pci_address=%s" "$name" "$CARD_PATH" "${pci_addresses[0]}" >"$GPU_FILE"
   else
-    printf "%s\n" "More than one GPU detected. Which would you like to use to render Hyprland?"
+    info "More than one GPU detected. Which would you like to use to render Hyprland?" \
+      "Select by typing the number of the GPU you want to use: "
 
     while true; do
       local i=0
@@ -101,7 +104,6 @@ get_main_render_gpu() {
         ((i++))
       done
 
-      printf "%s" "Select by typing the number of the GPU you want to use: "
       read -r choice
 
       chosen_address="${pci_addresses[$choice]}"
@@ -136,7 +138,7 @@ get_main_render_gpu() {
 #######
 download_gpu_drivers() {
   if ! sudo -n true 2>/dev/null; then
-    printf "\n%s\n" " Sudo privileges missing or expired. Unable to download GPU drivers using pacman" >&2
+    error "Sudo privileges missing or expired. Unable to download GPU drivers using pacman"
     return 1
   fi
 
@@ -146,23 +148,30 @@ download_gpu_drivers() {
   case $GPU_VENDOR in
   "Nvidia")
     printf "%s\n" "Nvidia GPU detected. Installing required drivers..."
+
     sudo pacman -S --needed --noconfirm nvidia-open-dkms nvidia-prime nvidia-settings nvidia-utils opencl-nvidia
+
+    success "Nvidia drivers installed"
     ;;
 
   "Intel")
     printf "%s\n" "Intel GPU detected. Installing Required drivers..."
 
     sudo pacman -S --needed --noconfirm mesa lib32-mesa vulkan-intel lib32-vulkan-intel intel-media-driver libva-intel-driver intel-gpu-tools
+
+    success "Intel drivers installed"
     ;;
 
   "Amd")
     printf "%s\n" "AMD GPU detected. Installing Required drivers..."
 
     sudo pacman -S --needed --noconfirm mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver mesa-vdpau
+
+    success "AMD drivers installed"
     ;;
 
   *)
-    printf "%s\n" "No dedicated GPU detected, proceeding with normal installation."
+    info "No dedicated GPU detected, proceeding with normal installation."
     ;;
   esac
 }
@@ -170,7 +179,7 @@ download_gpu_drivers() {
 get_main_render_gpu
 
 if [ "$SKIP_GPU_DRIVERS" = "true" ]; then
-  printf "%s\n" "Skipping GPU driver downloads..."
+  info "Skipping GPU driver downloads..."
 else
   download_gpu_drivers
 fi

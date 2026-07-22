@@ -1,8 +1,6 @@
 #!/bin/bash
 
-YELLOW='\033[0;33m'
-GREEN='\033[0;32m'
-NO_COLOR='\033[0m'
+source ../lib/logging.sh
 
 dry_run() {
   if [ "$DRY_RUN" = true ]; then
@@ -156,8 +154,7 @@ get_aur_helper() {
     AUR_HELPER="paru"
 
   else
-    dry_run printf "%b%s%b\n" "$YELLOW" " Warning: None AUR helper (yay or paru) was found." "$NO_COLOR"
-    dry_run printf "%b%s%b\n" "$YELLOW" "Installing yay automatically..." "$NO_COLOR"
+    dry_run info "None AUR helper (yay or paru) was found." "Installing yay automatically..."
 
     dry_run sudo pacman -S --needed --noconfirm git base-devel
 
@@ -184,10 +181,10 @@ install_aur_packages() {
   local AUR_HELPER
   AUR_HELPER=$(get_aur_helper)
 
-  dry_run printf "\n%s\n" "Installing AUR packages with $AUR_HELPER..."
+  dry_run info "Installing AUR packages with $AUR_HELPER..."
   dry_run "$AUR_HELPER" -S --needed --noconfirm "${AUR_PACKAGES[@]}"
 
-  dry_run printf "%b%s%b\n" "$GREEN" "AUR packages installed" "$NO_COLOR"
+  dry_run success "AUR packages installed"
 }
 
 # Install the pre defined pacman packages.
@@ -196,16 +193,16 @@ install_aur_packages() {
 #   Active sudo privileges. The caller must ensure the user is already authenticated
 #   (e.g., by running `sudo -v` beforehand) as this function does not prompt for a password.
 install_pacman_packages() {
-  dry_run printf "\n%s\n" "Installing pacman packages..."
+  dry_run info "Installing pacman packages..."
   dry_run sudo pacman -S --needed --noconfirm "${FONT_PACKAGES[@]}" "${TERMINAL_PACKAGES[@]}" "${HYPRLAND_AND_RELATED_PACKAGES[@]}" "${LIBS_AND_PLUGINS[@]}" "${UTIL_PACKAGES[@]}" "${NVIM_PACKAGES[@]}"
 
-  dry_run printf "%b%s%b\n" "$GREEN" "Pacman packages installed" "$NO_COLOR"
+  dry_run success "Pacman packages installed"
 }
 
 install_pacman_packages
 
 if [ "$SKIP_AUR" = true ]; then
-  printf "%s\n" "Skipping AUR downloads..."
+  info "Skipping AUR downloads..."
 else
   install_aur_packages
 fi
