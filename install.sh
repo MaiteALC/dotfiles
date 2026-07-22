@@ -1,12 +1,6 @@
 #!/bin/bash
 
 # --- Global variables needed across the script ---
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-BLUE='\033[0;34m'
-YELLOW='\033[0;33m'
-NO_COLOR='\033[0m'
-
 DRY_RUN=false
 STARSHIP=true
 LOGIN_MANAGER=true
@@ -36,6 +30,8 @@ DOTFILES_PATH=$(dirname "$(realpath "$0")")
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 BACKUP_DIR="$HOME/.rice_backup_$TIMESTAMP"
 # ---------------
+
+source ./lib/logging.sh
 
 help_menu() {
   cat <<'EOF'
@@ -166,8 +162,7 @@ parse_cli_args() {
       exit 0
       ;;
     *)
-      printf "\n%b%s\n" "$RED" " Unknow flag: $1 "
-      printf "%s%b\n" "Use --help or -h to see the available options." "$NO_COLOR"
+      error "Unknow flag: $1 " "Use --help or -h to see the available options."
       exit 1
       ;;
     esac
@@ -194,7 +189,7 @@ dry_run() {
 #######
 setup_pacman_conf() {
   if ! sudo -n true 2>/dev/null; then
-    printf "\n%s\n" " Sudo privileges missing or expired. Cannot configure pacman.conf." >&2
+    error "Sudo privileges missing or expired. Cannot configure pacman.conf."
     return 1
   fi
 
@@ -228,7 +223,7 @@ backup_dir() {
   if [ -e "$1" ]; then
     dry_run mv "$1" "$BACKUP_DIR"
   else
-    dry_run printf "%s\n" "Fail to backup '$1'. It doesn't exists. Skipping..."
+    dry_run error "Fail to backup '$1'. It doesn't exists. Skipping..."
   fi
 }
 
@@ -256,11 +251,10 @@ symlink_config_dirs() {
       backup_dir "$TARGET"
 
       dry_run ln -snf "$SOURCE" "$TARGET"
-      dry_run printf "%s\n" " Linked: $SOURCE -> $TARGET"
+      dry_run success "Linked: $SOURCE -> $TARGET"
 
     else
-      dry_run printf "%b%s\n" "$RED" " Directory $dir not found in $DOTFILES_PATH"
-      dry_run printf "%s%b\n" "Skipping..." "$NO_COLOR"
+      dry_run error "Directory '$dir' not found in '$DOTFILES_PATH'. Skipping..."
     fi
   done
 }
@@ -276,7 +270,7 @@ symlink_starship_config_file() {
   backup_dir "$HOME/.config/starship.toml"
   dry_run ln -snf "$DOTFILES_PATH/.config/starship.toml" "$HOME/.config/starship.toml"
 
-  dry_run printf "%s\n" " Linked file: starship.toml"
+  dry_run success "Linked file: starship.toml"
 }
 
 #######
@@ -307,7 +301,7 @@ configure_login_manager() {
   fi
 
   if [ -z "$DM_NAME" ]; then
-    dry_run printf "%s\n" "No enabled login manager was found."
+    dry_run info "No enabled login manager was found. Activating Greetd..."
 
     if [ -d "/etc/greetd" ] || [ -L "/etc/greetd" ]; then
       dry_run sudo mv /etc/greetd "$BACKUP_DIR/"
@@ -316,10 +310,10 @@ configure_login_manager() {
     dry_run sudo ln -snf "$DOTFILES_PATH/greetd" "/etc/greetd"
 
     dry_run sudo systemctl enable greetd.service
-    dry_run printf "%s\n" "The login manager Greetd with Tuigreet has been enabled"
+    dry_run success "The login manager Greetd with Tuigreet has been enabled!"
 
   elif [ "$DM_NAME" = "greetd" ]; then
-    dry_run printf "%s\n" "Aplying new configurations to Greetd"
+    dry_run info "Aplying new configurations to Greetd..."
 
     if [ -d "/etc/greetd" ] || [ -L "/etc/greetd" ]; then
       dry_run sudo mv /etc/greetd "$BACKUP_DIR/"
@@ -335,9 +329,9 @@ configure_login_manager() {
       dry_run sudo systemctl disable "$DM_NAME"
       dry_run sudo systemctl enable greetd.service
 
-      dry_run printf "%s\n" "$DM_NAME disabled and Greetd enabled!"
+      dry_run success "$DM_NAME disabled and Greetd enabled!"
     else
-      printf "%b%s%b\n" "$YELLOW" " Warning: Unable to configure Greetd. $DM_NAME is already active." "$NO_COLOR" >&2
+      dry_run warn "Unable to configure Greetd. $DM_NAME is already active."
       return 2
     fi
   fi
@@ -354,10 +348,10 @@ configure_zsh() {
     dry_run printf "\n%s\n" "# Injected configurations by ricing script" >>~/.zshrc
     dry_run printf "%s\n" "source $CUSTOM_ZSH" >>~/.zshrc
 
-    dry_run printf "%s\n" "Sourced custom Zsh configurations in your ~/.zshrc file"
+    dry_run success "Sourced custom Zsh configurations in your ~/.zshrc file"
 
   else
-    dry_run printf "%s\n" "The zsh_custom.zsh is already sourced in your .zshrc file. Nothing has been chaged."
+    dry_run info "The zsh_custom.zsh is already sourced in your .zshrc file. Nothing has been chaged."
   fi
 }
 
@@ -367,32 +361,29 @@ customize_icons() {
   if command -v papirus-folders &>/dev/null; then
     dry_run papirus-folders -C cat-mocha-flamingo --theme Papirus-Dark
   else
-    dry_run printf "%b%s%b\n" "$YELLOW" "Package papirus-folders not founded. Verify the installation." "$NO_COLOR"
+    dry_run warn "Package papirus-folders not founded. Verify the installation."
   fi
 }
 
 parse_cli_args "$@"
 
-printf "\n%b%s\n" "$BLUE" "---------------------------------------------------------------"
-printf "%s\n" "Starting Arch linux ricing configuration + installation script"
-printf "%s%b\n" "---------------------------------------------------------------" "$NO_COLOR"
+printf "%b%s%b\n" "$BLUE" "Starting Arch Linux rice setup..." "$NO_COLOR"
 
 if $DRY_RUN; then
   printf "\n%b%s\n" "$YELLOW" "--- DRY RUN MODE ACTIVATED ---"
   printf "%s%b\n" "Commands will be printed, but not executed." "$NO_COLOR"
 
 else
-  printf "\n%b%s\n" "$YELLOW" "  NOTE: This script will create a backup of some configuration directories (if they exist)"
-  printf "%s\n" "Directories to backup: ${!config_dirs[*]} and greetd"
-  printf "%s%b\n" "Backup directory path: $BACKUP_DIR" "$NO_COLOR"
-
-  printf "%s" "Proceed? [Y/n] "
+  info "This script will create a backup of some configuration directories (if they exist)" \
+    "Directories to backup: ${!config_dirs[*]} and greetd" \
+    "Backup path: $BACKUP_DIR" \
+    "Proceed? [Y/n] "
   read -r confirm
 
   confirm=$(printf "%s" "$confirm" | tr '[:upper:]' '[:lower:]')
 
   if [[ "$confirm" == "n" || "$confirm" == "no" ]]; then
-    printf "%b%s%b\n" "$RED" " Script interrupted by the user." "$NO_COLOR"
+    info "Script interrupted by the user."
     exit 1
   fi
 
@@ -434,7 +425,4 @@ if $ZSH; then
   configure_zsh
 fi
 
-printf "\n%b%s\n" "$GREEN" "------------------------------------------------------"
-printf "%s\n" "Script executed successfully!"
-printf "%s\n" "Reboot your PC and enjoy your Arch Linux with Hyprland"
-printf "%s%b\n" "------------------------------------------------------" "$NO_COLOR"
+success "Script executed successfully!" "Reboot your PC and enjoy your Arch Linux with Hyprland!"
