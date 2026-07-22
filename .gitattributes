@@ -1,0 +1,2 @@
+.config/gtk-4.0/*.css linguist-vendored
+.config/gtk-4.0/assets/** linguist-vendored
