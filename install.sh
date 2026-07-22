@@ -32,7 +32,7 @@ declare -A config_dirs=(
   [qt5ct]=true
   [qt6ct]=true
 )
-DOTFILE_DIR="$HOME/dotfiles"
+DOTFILE_DIR=$(dirname "$(realpath "$0")")
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 BACKUP_DIR="$HOME/.rice_backup_$TIMESTAMP"
 # ---------------
