@@ -361,6 +361,16 @@ configure_zsh() {
   fi
 }
 
+customize_icons() {
+  dry_run printf "%s\n" "Customizing icons with Catppuccin Mocha..."
+
+  if command -v papirus-folders &>/dev/null; then
+    dry_run papirus-folders -C cat-mocha-flamingo --theme Papirus-Dark
+  else
+    dry_run printf "%b%s%b\n" "$YELLOW" "Package papirus-folders not founded. Verify the installation." "$NO_COLOR"
+  fi
+}
+
 parse_cli_args "$@"
 
 printf "\n%b%s\n" "$BLUE" "---------------------------------------------------------------"
@@ -408,16 +418,9 @@ if ! $SKIP_DOWNLOADS; then
   DRY_RUN="$DRY_RUN" SKIP_AUR="$SKIP_AUR" ./scripts/package-installation.sh
 fi
 
-dry_run printf "%s\n" "Customizing icons with Catppuccin Mocha Flamingo..."
-
-if command -v papirus-folders &>/dev/null; then
-  dry_run papirus-folders -C cat-mocha-flamingo --theme Papirus-Dark
-
-else
-  dry_run printf "%b%s%b\n" "$YELLOW" "Package papirus-folders not founded. Verify the installation." "$NO_COLOR"
-fi
-
 symlink_config_dirs
+
+customize_icons
 
 if $STARSHIP; then
   symlink_starship_config_file
