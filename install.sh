@@ -29,6 +29,8 @@ declare -A config_dirs=(
   [nvim]=true
   [gtk-3.0]=true
   [gtk-4.0]=true
+  [qt5ct]=true
+  [qt6ct]=true
 )
 DOTFILE_DIR="$HOME/dotfiles"
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
@@ -62,6 +64,7 @@ Options:
   --no-gpu-drivers        Skip dedicated GPU driver downloads
   --no-gpu-config         Skip all GPU configurations, including driver downloads
   --no-gtk                Skip GTK3 and GTK4 configuration
+  --no-qt                 Skip Qt5 and Qt6 configuration
   --replace-dm            Replace the previous login manager if there is other than Greetd active
 
   -h, --help              Display this help and exit
@@ -147,6 +150,11 @@ parse_cli_args() {
     "--no-gtk")
       config_dirs[gtk-3.0]=false
       config_dirs[gtk-4.0]=false
+      shift
+      ;;
+    "--no-qt")
+      config_dirs[qt5ct]=false
+      config_dirs[qt6ct]=false
       shift
       ;;
     "--replace-dm")
