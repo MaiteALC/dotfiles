@@ -32,7 +32,7 @@ declare -A config_dirs=(
   [qt5ct]=true
   [qt6ct]=true
 )
-DOTFILE_DIR=$(dirname "$(realpath "$0")")
+DOTFILES_PATH=$(dirname "$(realpath "$0")")
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 BACKUP_DIR="$HOME/.rice_backup_$TIMESTAMP"
 # ---------------
@@ -249,7 +249,7 @@ symlink_config_dirs() {
       continue
     fi
 
-    SOURCE="$DOTFILE_DIR/.config/$dir"
+    SOURCE="$DOTFILES_PATH/.config/$dir"
     TARGET="$HOME/.config/$dir"
 
     if [ -d "$SOURCE" ]; then
@@ -259,7 +259,7 @@ symlink_config_dirs() {
       dry_run printf "%s\n" " Linked: $SOURCE -> $TARGET"
 
     else
-      dry_run printf "%b%s\n" "$RED" " Directory $dir not found in $DOTFILE_DIR"
+      dry_run printf "%b%s\n" "$RED" " Directory $dir not found in $DOTFILES_PATH"
       dry_run printf "%s%b\n" "Skipping..." "$NO_COLOR"
     fi
   done
@@ -274,7 +274,7 @@ symlink_starship_config_file() {
   dry_run printf "\n%s\n" "Symlinking starship configuration file (starship.toml)..."
 
   backup_dir "$HOME/.config/starship.toml"
-  dry_run ln -snf "$DOTFILE_DIR/.config/starship.toml" "$HOME/.config/starship.toml"
+  dry_run ln -snf "$DOTFILES_PATH/.config/starship.toml" "$HOME/.config/starship.toml"
 
   dry_run printf "%s\n" " Linked file: starship.toml"
 }
@@ -313,7 +313,7 @@ configure_login_manager() {
       dry_run sudo mv /etc/greetd "$BACKUP_DIR/"
     fi
 
-    dry_run sudo ln -snf "$DOTFILE_DIR/greetd" "/etc/greetd"
+    dry_run sudo ln -snf "$DOTFILES_PATH/greetd" "/etc/greetd"
 
     dry_run sudo systemctl enable greetd.service
     dry_run printf "%s\n" "The login manager Greetd with Tuigreet has been enabled"
@@ -325,12 +325,12 @@ configure_login_manager() {
       dry_run sudo mv /etc/greetd "$BACKUP_DIR/"
     fi
 
-    dry_run sudo ln -snf "$DOTFILE_DIR/greetd" "/etc/greetd"
+    dry_run sudo ln -snf "$DOTFILES_PATH/greetd" "/etc/greetd"
 
   else
     local REPLACE_DM="$1"
     if [ "$REPLACE_DM" = "true" ]; then
-      dry_run sudo ln -snf "$DOTFILE_DIR/greetd" "/etc/greetd"
+      dry_run sudo ln -snf "$DOTFILES_PATH/greetd" "/etc/greetd"
 
       dry_run sudo systemctl disable "$DM_NAME"
       dry_run sudo systemctl enable greetd.service
@@ -348,7 +348,7 @@ configure_login_manager() {
 #######
 configure_zsh() {
   dry_run touch ~/.zshrc
-  CUSTOM_ZSH="$DOTFILE_DIR/scripts/zsh_custom.zsh"
+  CUSTOM_ZSH="$DOTFILES_PATH/scripts/zsh_custom.zsh"
 
   if ! grep -q "source $CUSTOM_ZSH" ~/.zshrc; then
     dry_run printf "\n%s\n" "# Injected configurations by ricing script" >>~/.zshrc
