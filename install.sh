@@ -27,6 +27,8 @@ declare -A config_dirs=(
   [Kvantum]=true
   [fastfetch]=true
   [nvim]=true
+  [gtk-3.0]=true
+  [gtk-4.0]=true
 )
 DOTFILE_DIR="$HOME/dotfiles"
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
@@ -59,6 +61,7 @@ Options:
   --no-aur-downloads      Skip only AUR package downloads
   --no-gpu-drivers        Skip dedicated GPU driver downloads
   --no-gpu-config         Skip all GPU configurations, including driver downloads
+  --no-gtk                Skip GTK3 and GTK4 configuration
   --replace-dm            Replace the previous login manager if there is other than Greetd active
 
   -h, --help              Display this help and exit
@@ -139,6 +142,11 @@ parse_cli_args() {
       ;;
     "--no-gpu-config")
       SKIP_GPU=true
+      shift
+      ;;
+    "--no-gtk")
+      config_dirs[gtk-3.0]=false
+      config_dirs[gtk-4.0]=false
       shift
       ;;
     "--replace-dm")
