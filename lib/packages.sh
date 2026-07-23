@@ -4,7 +4,6 @@
 
 _SYSTEM=(
   # Audio
-  pasystray
   pavucontrol
   pipewire-alsa
   pipewire-jack
