@@ -67,7 +67,8 @@ Options:
   -h, --help              Display this help and exit
 
 NOTES:
-  At the start of the script, you will be prompted for sudo permissions to configure the pacman.conf file, greetd and install pacman and AUR packages (you can check what will be installed in ./scripts/package-installation.sh).
+  At the start of the script, you will be prompted for sudo permissions to configure the pacman.conf file, greetd and install pacman and AUR packages.
+  You can audit the full package list by checking the './lib/packages.sh' file.
 
   Existing configurations (except those that are skipped by --no-* flags) will be backed up to ~/.rice_backup_TIMESTAMP before creating symlinks.
 EOF
