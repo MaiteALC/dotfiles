@@ -15,13 +15,10 @@ UTILITIES=(
   # System
   network-manager-applet
   networkmanager
-  polkit-gnome
-  polkit-kde-agent
   powertop
   btop
   smartmontools
   brightnessctl
-  kio-admin
 
   # Every day utilities
   cliphist
@@ -72,6 +69,7 @@ HYPRLAND_AND_RELATED=(
   hyprpicker
   hyprshot
   hyprsunset
+  hyprpolkitagent
 
   # Config related
   kvantum
