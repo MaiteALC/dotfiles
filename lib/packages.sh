@@ -2,7 +2,7 @@
 #
 # Manifest of all packages required for the rice setup.
 
-UTILITIES=(
+_SYSTEM=(
   # Audio
   pasystray
   pavucontrol
@@ -12,13 +12,30 @@ UTILITIES=(
   playerctl
   sof-firmware
 
-  # System
+  # Network
   network-manager-applet
   networkmanager
+
+  # Power
   powertop
+  tlp-rdw
+
+  # Monitoring
   btop
   smartmontools
+
+  # Brightness
   brightnessctl
+
+  # Bluetooth
+  blueman
+  bluez
+  bluez-utils
+)
+
+_UTILITIES=(
+  # Directories
+  xdg-user-dirs-gtk
 
   # Every day utilities
   cliphist
@@ -31,20 +48,16 @@ UTILITIES=(
   grim
   waybar
   swaync
+)
 
-  # Aesthetics
+_AESTHETICS=(
   cmatrix
   cava
   fastfetch
   papirus-icon-theme
-
-  # Bluetooth
-  blueman
-  bluez
-  bluez-utils
 )
 
-TERMINAL=(
+_TERMINAL=(
   zsh
   zsh-autosuggestions
   zsh-syntax-highlighting
@@ -52,7 +65,7 @@ TERMINAL=(
   starship
 )
 
-FONT=(
+_FONTS=(
   ttf-droid
   ttf-jetbrains-mono-nerd
   ttf-opensans
@@ -60,58 +73,65 @@ FONT=(
   woff2-font-awesome
 )
 
-HYPRLAND_AND_RELATED=(
+_HYPRLAND=(
+  hyprland
   hyprcursor
   hypridle
-  hyprland
   hyprlock
   hyprpaper
   hyprpicker
   hyprshot
   hyprsunset
   hyprpolkitagent
+)
 
-  # Config related
-  kvantum
-  nwg-displays
-  nwg-look
-
-  # Login manager
+_LOGIN_MANAGER=(
   greetd
   greetd-tuigreet
 )
 
-LIBS_AND_PLUGINS=(
-  qt5-graphicaleffects
-  qt5-imageformats
-  qt5-quickcontrols
-  qt5-quickcontrols2
-  qt5-wayland
-  qt5ct
-  qt6-wayland
-  qt6ct
+_LIBS=(
+  ffmpegthumbs
+  libappindicator-gtk3
+  libdbusmenu-gtk3
+  libnotify
+)
 
-  xdg-desktop-portal-gtk
-  xdg-desktop-portal-hyprland
-  xdg-user-dirs-gtk
-
+_MEDIA_CODECS=(
   gst-libav
   gst-plugin-pipewire
   gst-plugins-bad
   gst-plugins-base
   gst-plugins-good
   gst-plugins-ugly
-
-  kvantum-qt5
-  tlp-rdw
-  ffmpegthumbs
-
-  libappindicator-gtk3
-  libdbusmenu-gtk3
-  libnotify
 )
 
-NVIM_AND_RELATED=(
+_WAYLAND_PORTALS=(
+  xdg-desktop-portal-gtk
+  xdg-desktop-portal-hyprland
+)
+
+_QT_THEMING=(
+  qt5-graphicaleffects
+  qt5-imageformats
+  qt5-quickcontrols
+  qt5-quickcontrols2
+  qt5-wayland
+  qt6-wayland
+
+  qt5ct
+  qt6ct
+
+  kvantum
+  kvantum-qt5
+)
+
+_GTK_THEMING=(
+  nwg-displays
+  nwg-look
+)
+
+_NVIM_AND_RELATED=(
   gcc
   make
   neovim
@@ -121,15 +141,23 @@ NVIM_AND_RELATED=(
 )
 
 export PACMAN_PACKAGES=(
-  "${FONT[@]}"
-  "${UTILITIES[@]}"
-  "${LIBS_AND_PLUGINS[@]}"
-  "${TERMINAL[@]}"
-  "${HYPRLAND_AND_RELATED[@]}"
-  "${NVIM_AND_RELATED[@]}"
+  "${_SYSTEM[@]}"
+  "${_UTILITIES[@]}"
+  "${_AESTHETICS[@]}"
+  "${_FONTS[@]}"
+  "${_TERMINAL[@]}"
+  "${_LIBS[@]}"
+  "${_MEDIA_CODECS[@]}"
+  "${_WAYLAND_PORTALS[@]}"
+  "${_HYPRLAND[@]}"
+  "${_LOGIN_MANAGER[@]}"
+  "${_QT_THEMING[@]}"
+  "${_GTK_THEMING[@]}"
+  "${_NVIM_AND_RELATED[@]}"
 )
 
 export AUR_PACKAGES=(
+  catppuccin-gtk-theme-mocha
   papirus-folders-catppuccin-git
   pipes-rs
   tty-clock
