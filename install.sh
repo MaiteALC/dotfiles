@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # --- Global variables needed across the script ---
-DRY_RUN=false
+DRY_RUN_MODE=false
 STARSHIP=true
 LOGIN_MANAGER=true
 ZSH=true
@@ -32,6 +32,7 @@ BACKUP_DIR="$HOME/.rice_backup_$TIMESTAMP"
 # ---------------
 
 source ./lib/logging.sh
+source ./lib/dry-run.sh
 
 help_menu() {
   cat <<'EOF'
@@ -76,7 +77,7 @@ parse_cli_args() {
   while [[ "$#" -gt 0 ]]; do
     case $1 in
     "--dry-run" | "-d")
-      DRY_RUN=true
+      DRY_RUN_MODE=true
       shift
       ;;
     "--no-kvantum")
@@ -167,14 +168,6 @@ parse_cli_args() {
       ;;
     esac
   done
-}
-
-dry_run() {
-  if [ "$DRY_RUN" = true ]; then
-    printf "%b[DRY-RUN]%b %s\n" "$YELLOW" "$NO_COLOR" "Would execute: $*"
-  else
-    "$@"
-  fi
 }
 
 #######
@@ -369,7 +362,7 @@ parse_cli_args "$@"
 
 printf "%b%s%b\n" "$BLUE" "Starting Arch Linux rice setup..." "$NO_COLOR"
 
-if $DRY_RUN; then
+if $DRY_RUN_MODE; then
   printf "\n%b%s\n" "$YELLOW" "--- DRY RUN MODE ACTIVATED ---"
   printf "%s%b\n" "Commands will be printed, but not executed." "$NO_COLOR"
 
@@ -406,7 +399,7 @@ else
 fi
 
 if ! $SKIP_DOWNLOADS; then
-  DRY_RUN="$DRY_RUN" SKIP_AUR="$SKIP_AUR" ./scripts/package-installation.sh
+  DRY_RUN_MODE="$DRY_RUN_MODE" SKIP_AUR="$SKIP_AUR" ./scripts/package-installation.sh
 fi
 
 symlink_config_dirs

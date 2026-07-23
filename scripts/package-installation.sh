@@ -1,14 +1,7 @@
 #!/bin/bash
 
 source ../lib/logging.sh
-
-dry_run() {
-  if [ "$DRY_RUN" = true ]; then
-    printf "%b[DRY-RUN]%b %s\n" "$YELLOW" "$NO_COLOR" "Would execute: $*"
-  else
-    "$@"
-  fi
-}
+source ../lib/dry-run.sh
 
 UTIL_PACKAGES=(
   # Audio
@@ -202,7 +195,7 @@ install_pacman_packages() {
 install_pacman_packages
 
 if [ "$SKIP_AUR" = true ]; then
-  info "Skipping AUR downloads..."
+  dry_run info "Skipping AUR downloads..."
 else
   install_aur_packages
 fi
