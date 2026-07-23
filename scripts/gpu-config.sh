@@ -1,6 +1,7 @@
 #!/bin/bash
 
 source ../lib/logging.sh
+source ../lib/packages.sh
 
 detect_gpu_vendor() {
   local gpu_info
@@ -149,7 +150,7 @@ download_gpu_drivers() {
   "Nvidia")
     printf "%s\n" "Nvidia GPU detected. Installing required drivers..."
 
-    sudo pacman -S --needed --noconfirm nvidia-open-dkms nvidia-prime nvidia-settings nvidia-utils opencl-nvidia
+    sudo pacman -S --needed --noconfirm "${NVIDIA_DRIVERS[@]}"
 
     success "Nvidia drivers installed"
     ;;
@@ -157,7 +158,7 @@ download_gpu_drivers() {
   "Intel")
     printf "%s\n" "Intel GPU detected. Installing Required drivers..."
 
-    sudo pacman -S --needed --noconfirm mesa lib32-mesa vulkan-intel lib32-vulkan-intel intel-media-driver libva-intel-driver intel-gpu-tools
+    sudo pacman -S --needed --noconfirm "${INTEL_DRIVERS[@]}"
 
     success "Intel drivers installed"
     ;;
@@ -165,7 +166,7 @@ download_gpu_drivers() {
   "Amd")
     printf "%s\n" "AMD GPU detected. Installing Required drivers..."
 
-    sudo pacman -S --needed --noconfirm mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver mesa-vdpau
+    sudo pacman -S --needed --noconfirm "${AMD_DRIVERS[@]}"
 
     success "AMD drivers installed"
     ;;

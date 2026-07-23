@@ -2,135 +2,7 @@
 
 source ../lib/logging.sh
 source ../lib/dry-run.sh
-
-UTIL_PACKAGES=(
-  # Audio
-  pasystray
-  pavucontrol
-  pipewire-alsa
-  pipewire-jack
-  pipewire-pulse
-  playerctl
-  sof-firmware
-
-  # System utilities
-  network-manager-applet
-  networkmanager
-  polkit-gnome
-  polkit-kde-agent
-  powertop
-  btop
-  smartmontools
-  brightnessctl
-  kio-admin
-
-  # Every day utilities
-  cliphist
-  wl-clip-persist
-  udiskie
-  mpv
-  nautilus
-  wofi
-  satty
-  grim
-  waybar
-  swaync
-
-  # Aesthetics
-  cmatrix
-  cava
-  fastfetch
-  papirus-icon-theme
-
-  # Bluetooth
-  blueman
-  bluez
-  bluez-utils
-)
-
-TERMINAL_PACKAGES=(
-  zsh
-  zsh-autosuggestions
-  zsh-syntax-highlighting
-  kitty
-  starship
-)
-
-FONT_PACKAGES=(
-  ttf-droid
-  ttf-jetbrains-mono-nerd
-  ttf-opensans
-  ttf-roboto
-  woff2-font-awesome
-)
-
-HYPRLAND_AND_RELATED_PACKAGES=(
-  hyprcursor
-  hypridle
-  hyprland
-  hyprlock
-  hyprpaper
-  hyprpicker
-  hyprshot
-  hyprsunset
-
-  # Config related
-  kvantum
-  nwg-displays
-  nwg-look
-
-  # Login manager
-  greetd
-  greetd-tuigreet
-)
-
-LIBS_AND_PLUGINS=(
-  qt5-graphicaleffects
-  qt5-imageformats
-  qt5-quickcontrols
-  qt5-quickcontrols2
-  qt5-wayland
-  qt5ct
-  qt6-wayland
-  qt6ct
-
-  xdg-desktop-portal-gtk
-  xdg-desktop-portal-hyprland
-  xdg-user-dirs-gtk
-
-  gst-libav
-  gst-plugin-pipewire
-  gst-plugins-bad
-  gst-plugins-base
-  gst-plugins-good
-  gst-plugins-ugly
-
-  kvantum-qt5
-  tlp-rdw
-  ffmpegthumbs
-
-  libappindicator-gtk3
-  libdbusmenu-gtk3
-  libnotify
-)
-
-NVIM_PACKAGES=(
-  gcc
-  make
-  neovim
-  tree-sitter-cli
-  ripgrep
-  fd
-)
-
-AUR_PACKAGES=(
-  papirus-folders-catppuccin-git
-  pipes-rs
-  tty-clock
-  cbonsai
-  wlogout
-  bibata-cursor-theme-bin
-)
+source ../lib/packages.sh
 
 #######
 # Outputs the name of the available AUR helper, automatically downloading Yay if none of them was found.
@@ -187,8 +59,7 @@ install_aur_packages() {
 #   (e.g., by running `sudo -v` beforehand) as this function does not prompt for a password.
 install_pacman_packages() {
   dry_run info "Installing pacman packages..."
-  dry_run sudo pacman -S --needed --noconfirm "${FONT_PACKAGES[@]}" "${TERMINAL_PACKAGES[@]}" "${HYPRLAND_AND_RELATED_PACKAGES[@]}" "${LIBS_AND_PLUGINS[@]}" "${UTIL_PACKAGES[@]}" "${NVIM_PACKAGES[@]}"
-
+  dry_run sudo pacman -S --needed --noconfirm "${PACMAN_PACKAGES[@]}"
   dry_run success "Pacman packages installed"
 }
 
