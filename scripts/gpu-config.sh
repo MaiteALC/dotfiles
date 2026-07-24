@@ -67,6 +67,45 @@ get_gpu_name() {
 }
 
 #######
+# Prompts the user which GPU they would like to use to render Hyprland.
+#
+# Arguments:
+#   $1 - An array containing all the found GPU PCI addresses
+#
+# Outputs:
+#   The chosen GPU's PCI address
+#######
+prompt_user() {
+  local pci_addresses
+  read -ar pci_addresses <<<"$1"
+
+  info "More than one GPU detected. Which would you like to use to render Hyprland?" \
+    "Select by typing the number of the GPU you want to use: "
+
+  while true; do
+    local i=0
+    for address in "${pci_addresses[@]}"; do
+      name=$(get_gpu_name "$address")
+      printf "%s\n" "GPU $i - $name"
+      ((i++))
+    done
+
+    read -r choice
+
+    chosen_address="${pci_addresses[$choice]}"
+
+    if [[ ! "$choice" =~ ^[0-9]+$ ]] || [ -z "$chosen_address" ]; then
+      printf "%s\n" "Invalid option. Try again."
+      continue
+    else
+      break
+    fi
+  done
+
+  printf "%s" "$chosen_address"
+}
+
+#######
 # Search for the available GPU(s) and prompt the user to select which one should be used to render Hyprland.
 # After the user's choice, it saves GPU data in a state file at '/tmp/hyprland-rice/gpu-info'.
 # The file and the directory are created if necessary.
@@ -94,34 +133,15 @@ get_main_render_gpu() {
 
     printf "name=%s card_path=%s pci_address=%s" "$name" "$CARD_PATH" "${pci_addresses[0]}" >"$GPU_FILE"
   else
-    info "More than one GPU detected. Which would you like to use to render Hyprland?" \
-      "Select by typing the number of the GPU you want to use: "
+    local chosen_address
+    chosen_address=$(prompt_user "${pci_addresses[@]}")
 
-    while true; do
-      local i=0
-      for address in "${pci_addresses[@]}"; do
-        name=$(get_gpu_name "$address")
-        printf "%s\n" "GPU $i - $name"
-        ((i++))
-      done
+    CARD_PATH=$(get_gpu_card_path "$chosen_address")
 
-      read -r choice
+    local name
+    name=$(get_gpu_name "$chosen_address")
 
-      chosen_address="${pci_addresses[$choice]}"
-
-      if [[ ! "$choice" =~ ^[0-9]+$ ]] || [ -z "$chosen_address" ]; then
-        printf "%s\n" "Invalid option. Try again."
-        continue
-      else
-        CARD_PATH=$(get_gpu_card_path "$chosen_address")
-        local name
-        name=$(get_gpu_name "$chosen_address")
-
-        printf "name=%s card_path=%s pci_address=%s" "$name" "$CARD_PATH" "$chosen_address" >"$GPU_FILE"
-
-        break
-      fi
-    done
+    printf "name=%s card_path=%s pci_address=%s" "$name" "$CARD_PATH" "$chosen_address" >"$GPU_FILE"
   fi
 }
 
