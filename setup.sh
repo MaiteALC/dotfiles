@@ -37,7 +37,7 @@ source ./lib/dry-run.sh
 help_menu() {
   cat <<'EOF'
 
-Usage: install.sh [OPTIONS]
+Usage: setup.sh [OPTIONS]
 
 Sets up the rice by downloading dependencies, backing up previous configs,
 and symlinking the repo's configurations to your system.
