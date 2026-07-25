@@ -17,3 +17,4 @@ export GPG_TTY=$(tty) # Useful to prevent terminal freezes when using GPG.
 
 export MANPAGER="bat -pl man"
 
+export BAT_THEME="Catppuccin-Mocha"

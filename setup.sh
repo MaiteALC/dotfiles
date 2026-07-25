@@ -25,6 +25,7 @@ declare -A config_dirs=(
   [qt5ct]=true
   [qt6ct]=true
   [zsh]=true
+  [bat]=true
 )
 DOTFILES_PATH=$(dirname "$(realpath "$0")")
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
