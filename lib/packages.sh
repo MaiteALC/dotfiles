@@ -62,6 +62,10 @@ _TERMINAL=(
   zsh-syntax-highlighting
   kitty
   starship
+  zoxide
+  eza
+  bat
+  fzf
 )
 
 _FONTS=(
