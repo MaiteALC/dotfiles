@@ -4,7 +4,6 @@
 DRY_RUN_MODE=false
 STARSHIP=true
 LOGIN_MANAGER=true
-ZSH=true
 PACMAN=true
 SKIP_DOWNLOADS=false
 SKIP_AUR=false
@@ -25,6 +24,7 @@ declare -A config_dirs=(
   [gtk-4.0]=true
   [qt5ct]=true
   [qt6ct]=true
+  [zsh]=true
 )
 DOTFILES_PATH=$(dirname "$(realpath "$0")")
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
@@ -114,7 +114,7 @@ parse_cli_args() {
       shift
       ;;
     "--no-zsh")
-      ZSH=false
+      config_dirs[zsh]=false
       shift
       ;;
     "--no-starship")
@@ -331,24 +331,6 @@ configure_login_manager() {
   fi
 }
 
-#######
-# Configures the Zsh, automatically creating the .zshrc file if it doesn't exists.
-#######
-configure_zsh() {
-  dry_run touch ~/.zshrc
-  CUSTOM_ZSH="$DOTFILES_PATH/scripts/zsh_custom.zsh"
-
-  if ! grep -q "source $CUSTOM_ZSH" ~/.zshrc; then
-    dry_run printf "\n%s\n" "# Injected configurations by ricing script" >>~/.zshrc
-    dry_run printf "%s\n" "source $CUSTOM_ZSH" >>~/.zshrc
-
-    dry_run success "Sourced custom Zsh configurations in your ~/.zshrc file"
-
-  else
-    dry_run info "The zsh_custom.zsh is already sourced in your .zshrc file. Nothing has been chaged."
-  fi
-}
-
 customize_icons() {
   dry_run printf "%s\n" "Customizing icons with Catppuccin Mocha..."
 
@@ -413,10 +395,6 @@ fi
 
 if $LOGIN_MANAGER; then
   configure_login_manager "$REPLACE_DM"
-fi
-
-if $ZSH; then
-  configure_zsh
 fi
 
 success "Script executed successfully!" "Reboot your PC and enjoy your Arch Linux with Hyprland!"
