@@ -332,6 +332,16 @@ configure_login_manager() {
   fi
 }
 
+build_bat_themes() {
+  printf "%s\n" "Building bat themes..."
+
+  if command -v bat &>/dev/null; then
+    dry_run bat cache --build
+  else
+    dry_run warn "The 'bat' command isn't available. Unable to build its themes." "The setup will proceed."
+  fi
+}
+
 customize_icons() {
   dry_run printf "%s\n" "Customizing icons with Catppuccin Mocha..."
 
@@ -387,6 +397,8 @@ if ! $SKIP_DOWNLOADS; then
 fi
 
 symlink_config_dirs
+
+build_bat_themes
 
 customize_icons
 
