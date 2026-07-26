@@ -1,7 +1,7 @@
 #!/bin/bash
 
-source ../lib/logging.sh
-source ../lib/packages.sh
+source "$DOTFILES_PATH/lib/logging.sh"
+source "$DOTFILES_PATH/lib/packages.sh"
 
 detect_gpu_vendor() {
   local gpu_info

@@ -1,8 +1,8 @@
 #!/bin/bash
 
-source ../lib/logging.sh
-source ../lib/dry-run.sh
-source ../lib/packages.sh
+source "$DOTFILES_PATH/lib/logging.sh"
+source "$DOTFILES_PATH/lib/dry-run.sh"
+source "$DOTFILES_PATH/lib/packages.sh"
 
 #######
 # Outputs the name of the available AUR helper, automatically downloading Yay if none of them was found.
