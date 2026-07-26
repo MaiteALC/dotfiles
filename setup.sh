@@ -223,6 +223,40 @@ backup_dir() {
 }
 
 #######
+# Configures the '.zshenv' file.
+#
+# Creates the '~/.zshenv' file if it doesn't exist.
+# Symlinks the repo's '.zshenv' as '~/.zshenv_rice', and if it isn't being
+# sourced by the user's file, injects the source command.
+#
+# Globals:
+#   DOTFILES_PATH
+#
+# Arguments:
+#   None
+#######
+zsh_pre_config() {
+  local SOURCE="$DOTFILES_PATH/.zshenv"
+  local TARGET="$HOME/.zshenv"
+
+  if ! [ -e "$TARGET" ]; then
+    dry_run touch "$TARGET"
+  fi
+
+  if [ -f "$SOURCE" ]; then
+    dry_run ln -snf "$SOURCE" "$HOME/.zshenv_rice"
+
+    if ! grep -q "source ~/.zshenv_rice" "$TARGET"; then
+      { printf "\n\n%s\n" "# Loads the rice configs";
+        printf "%s\n" "source ~/.zshenv_rice"; } >>"$TARGET"
+    fi
+  else
+    dry_run warn "The '.zshenv' file doesn't exist in the dotfiles root. Unable to source it." \
+      "The setup will proceed, but the Zsh configs will fail if the env vars defined in that file don't exist."
+  fi
+}
+
+#######
 # Symlinks each directory in the repo's own .config/ to user's ~/.config/
 #
 # Relies on backup_dir function to make the backup before perform the symlinking.
@@ -237,6 +271,10 @@ symlink_config_dirs() {
   for dir in "${!config_dirs[@]}"; do
     if [ "${config_dirs[$dir]}" = false ]; then
       continue
+    fi
+
+    if [ "$dir" = "zsh" ]; then
+      zsh_pre_config
     fi
 
     SOURCE="$DOTFILES_PATH/.config/$dir"
