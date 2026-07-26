@@ -35,8 +35,8 @@ TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 BACKUP_DIR="$HOME/.rice_backup_$TIMESTAMP"
 # ---------------
 
-source ./lib/logging.sh
-source ./lib/dry-run.sh
+source "$DOTFILES_PATH/lib/logging.sh"
+source "$DOTFILES_PATH/lib/dry-run.sh"
 
 help_menu() {
   cat <<'EOF'
@@ -429,12 +429,12 @@ else
   fi
 
   if ! $SKIP_GPU; then
-    SKIP_GPU_DRIVERS="$SKIP_GPU_DRIVERS" ./scripts/gpu-config.sh
+    SKIP_GPU_DRIVERS="$SKIP_GPU_DRIVERS" "$DOTFILES_PATH/scripts/gpu-config.sh"
   fi
 fi
 
 if ! $SKIP_DOWNLOADS; then
-  SKIP_AUR="$SKIP_AUR" ./scripts/package-installation.sh
+  SKIP_AUR="$SKIP_AUR" "$DOTFILES_PATH/scripts/package-installation.sh"
 fi
 
 symlink_config_dirs
