@@ -1,15 +1,19 @@
 #!/bin/bash
 
 # --- Global variables needed across the script ---
-DRY_RUN_MODE=false
+export DOTFILES_PATH
+DOTFILES_PATH=$(dirname "$(realpath "$0")")
+export DRY_RUN_MODE=false
+
 STARSHIP=true
 LOGIN_MANAGER=true
 PACMAN=true
+REPLACE_DM=false
+
 SKIP_DOWNLOADS=false
 SKIP_AUR=false
 SKIP_GPU=false
 SKIP_GPU_DRIVERS=false
-REPLACE_DM=false
 
 declare -A config_dirs=(
   [hypr]=true
@@ -27,7 +31,6 @@ declare -A config_dirs=(
   [zsh]=true
   [bat]=true
 )
-DOTFILES_PATH=$(dirname "$(realpath "$0")")
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 BACKUP_DIR="$HOME/.rice_backup_$TIMESTAMP"
 # ---------------
@@ -431,7 +434,7 @@ else
 fi
 
 if ! $SKIP_DOWNLOADS; then
-  DRY_RUN_MODE="$DRY_RUN_MODE" SKIP_AUR="$SKIP_AUR" ./scripts/package-installation.sh
+  SKIP_DOWNLOADS="$SKIP_DOWNLOADS" ./scripts/package-installation.sh
 fi
 
 symlink_config_dirs
