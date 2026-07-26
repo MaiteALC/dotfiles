@@ -434,7 +434,7 @@ else
 fi
 
 if ! $SKIP_DOWNLOADS; then
-  SKIP_DOWNLOADS="$SKIP_DOWNLOADS" ./scripts/package-installation.sh
+  SKIP_AUR="$SKIP_AUR" ./scripts/package-installation.sh
 fi
 
 symlink_config_dirs
