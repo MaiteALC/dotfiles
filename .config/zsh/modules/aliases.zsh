@@ -20,4 +20,7 @@ alias la='eza -lahmU --icons --git --total-size --time-style long-iso'
 
 # Tree view
 alias lt='eza -a --tree --icons --no-git'
+
+# List only files
+alias lf='eza -lahmU --icons --only-files --time-style long-iso'
 # -----------------------
