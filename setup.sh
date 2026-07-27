@@ -242,9 +242,7 @@ zsh_pre_config() {
   local SOURCE="$DOTFILES_PATH/.zshenv"
   local TARGET="$HOME/.zshenv"
 
-  if ! [ -e "$TARGET" ]; then
-    dry_run touch "$TARGET"
-  fi
+  dry_run touch "$TARGET"
 
   if [ -f "$SOURCE" ]; then
     dry_run ln -snf "$SOURCE" "$HOME/.zshenv_rice"
