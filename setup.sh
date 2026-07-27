@@ -244,12 +244,20 @@ zsh_pre_config() {
 
   dry_run touch "$TARGET"
 
+  append_to_zshenv() {
+    {
+      printf "\n\n"
+      printf "%s\n" "# Put your personal env vars in ~/.zshenv" \
+        "# That sourced file is intended to store commom env vars, like XDG_* and ZDOTDIR" \
+        "source $HOME/.zshenv_rice"
+    } >> "$TARGET"
+  }
+
   if [ -f "$SOURCE" ]; then
     dry_run ln -snf "$SOURCE" "$HOME/.zshenv_rice"
 
-    if ! grep -q "source ~/.zshenv_rice" "$TARGET"; then
-      { printf "\n\n%s\n" "# Loads the rice configs";
-        printf "%s\n" "source ~/.zshenv_rice"; } >>"$TARGET"
+    if ! grep -q "source $HOME/.zshenv_rice" "$TARGET"; then
+      dry_run append_to_zshenv
     fi
   else
     dry_run warn "The '.zshenv' file doesn't exist in the dotfiles root. Unable to source it." \
