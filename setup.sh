@@ -286,8 +286,8 @@ symlink_config_dirs() {
       zsh_pre_config
     fi
 
-    SOURCE="$DOTFILES_PATH/.config/$dir"
-    TARGET="$HOME/.config/$dir"
+    local SOURCE="$DOTFILES_PATH/.config/$dir"
+    local TARGET="$HOME/.config/$dir"
 
     if [ -d "$SOURCE" ]; then
       backup_dir "$TARGET"
