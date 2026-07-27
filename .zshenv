@@ -12,9 +12,3 @@ export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 export EDITOR="nvim"
 export VISUAL="nvim"
 # --------------------------
-
-export GPG_TTY=$(tty) # Useful to prevent terminal freezes when using GPG.
-
-export MANPAGER="bat -pl man"
-
-export BAT_THEME="Catppuccin-Mocha"
