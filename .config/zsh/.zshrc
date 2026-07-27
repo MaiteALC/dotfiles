@@ -22,3 +22,9 @@ export GPG_TTY=$(tty) # Useful to prevent terminal freezes when using GPG.
 export MANPAGER="bat -pl man"
 
 export BAT_THEME="Catppuccin-Mocha"
+
+#INFO: The following scripts will be loaded only if they exist.
+# Node.js (and consequently, NVM) are dependencies for 'bash_ls', used by Neovim.
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # Loads NVM
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # Loads the auto completion
