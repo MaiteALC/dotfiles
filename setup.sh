@@ -30,6 +30,7 @@ declare -A config_dirs=(
   [qt6ct]=true
   [zsh]=true
   [bat]=true
+  [cava]=true
 )
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 BACKUP_DIR="$HOME/.rice_backup_$TIMESTAMP"
@@ -66,6 +67,7 @@ Options:
   --no-gpu-config         Skip all GPU configurations, including driver downloads
   --no-gtk                Skip GTK3 and GTK4 configuration
   --no-qt                 Skip Qt5 and Qt6 configuration
+  --no-cava               Skip Cava configuration
   --replace-dm            Replace the previous login manager if there is other than Greetd active
 
   -h, --help              Display this help and exit
@@ -157,6 +159,10 @@ parse_cli_args() {
     "--no-qt")
       config_dirs[qt5ct]=false
       config_dirs[qt6ct]=false
+      shift
+      ;;
+    "--no-cava")
+      config_dirs[cava]=false
       shift
       ;;
     "--replace-dm")
