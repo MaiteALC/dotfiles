@@ -25,6 +25,19 @@ local servers = {
     },
   },
 
+  html = {
+    on_init = function(client) -- Disabling formatting to delegate it to biome
+      client.server_capabilities.documentFormattingProvider = false
+      client.server_capabilities.documentRangeFormattingProvider = false
+    end,
+  },
+  cssls = {
+    on_init = function(client) -- Disabling formatting to delegate it to biome
+      client.server_capabilities.documentFormattingProvider = false
+      client.server_capabilities.documentRangeFormattingProvider = false
+    end,
+  },
+  emmet_ls = {},
   ts_ls = {},
   jdtls = {},
   yamlls = {},
