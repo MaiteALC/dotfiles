@@ -1,3 +1,8 @@
+local function disable_lsp_formatting(client)
+  client.server_capabilities.documentFormattingProvider = false
+  client.server_capabilities.documentRangeFormattingProvider = false
+end
+
 ---@type table<string, vim.lsp.Config>
 local servers = {
   clangd = {},
@@ -27,21 +32,27 @@ local servers = {
 
   html = {
     on_init = function(client) -- Disabling formatting to delegate it to biome
-      client.server_capabilities.documentFormattingProvider = false
-      client.server_capabilities.documentRangeFormattingProvider = false
+      disable_lsp_formatting(client)
     end,
   },
   cssls = {
     on_init = function(client) -- Disabling formatting to delegate it to biome
-      client.server_capabilities.documentFormattingProvider = false
-      client.server_capabilities.documentRangeFormattingProvider = false
+      disable_lsp_formatting(client)
     end,
   },
   emmet_ls = {},
-  ts_ls = {},
+  ts_ls = {
+    on_init = function(client) -- Disabling formatting to delegate it to biome
+      disable_lsp_formatting(client)
+    end,
+  },
   jdtls = {},
   yamlls = {},
-  jsonls = {},
+  jsonls = {
+    on_init = function(client) -- Disabling formatting to delegate it to biome
+      disable_lsp_formatting(client)
+    end,
+  },
   taplo = {}, -- TOML formatter, linter and LSP
   bashls = {},
   lemminx = {},
