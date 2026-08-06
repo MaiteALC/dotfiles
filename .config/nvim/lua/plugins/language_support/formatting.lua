@@ -5,6 +5,8 @@ require('conform').setup {
     local enabled_filetypes = {
       rust = true,
       python = true,
+      html = true,
+      css = true,
       javascript = true,
       typescript = true,
       c = true,
