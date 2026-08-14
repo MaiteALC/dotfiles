@@ -49,6 +49,14 @@ _UTILITIES=(
   grim
   waybar
   swaync
+
+  # Yazi external utilities
+  ffmpeg
+  7zip
+  jq
+  poppler
+  resvg
+  imagemagick
 )
 
 _AESTHETICS=(
