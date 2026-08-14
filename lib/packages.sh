@@ -23,6 +23,9 @@ _SYSTEM=(
   btop
   smartmontools
 
+  # File exploring
+  yazi
+
   # Brightness
   brightnessctl
 
@@ -41,7 +44,6 @@ _UTILITIES=(
   wl-clip-persist
   udiskie
   mpv
-  nautilus
   wofi
   satty
   grim
