@@ -3,7 +3,7 @@
 ---------------------
 
 local terminal = "kitty"
-local fileManager = "nautilus"
+local fileManager = terminal .. " yazi"
 local menu = "wofi --show drun"
 local browser = "firefox"
 
