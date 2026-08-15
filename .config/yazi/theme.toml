@@ -1,2 +1,17 @@
 [flavor]
 dark = "dracula"
+
+
+[icon]
+dirs = [
+  { name = ".config", text = "󱁿", fg = "#ff79c6" },
+  { name = ".git", text = "󰊢", fg = "#8be9fd" },
+  { name = ".github", text = "󰊤", fg = "#bd93f9" },
+  { name = ".npm", text = "󰛷", fg = "#bd93f9" },
+]
+
+conds = [
+  { if = "dir & hovered", text = "", fg = "#bd93f9" },
+  { if = "dir", text = "", fg = "#bd93f9" },
+  { if = "!dir", text = "", fg = "#f8f8f2" },
+]
