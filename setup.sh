@@ -31,6 +31,7 @@ declare -A config_dirs=(
   [zsh]=true
   [bat]=true
   [cava]=true
+  [yazi]=true
 )
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 BACKUP_DIR="$HOME/.rice_backup_$TIMESTAMP"
@@ -68,6 +69,7 @@ Options:
   --no-gtk                Skip GTK3 and GTK4 configuration
   --no-qt                 Skip Qt5 and Qt6 configuration
   --no-cava               Skip Cava configuration
+  --no-yazi               Skip Yazi configuration
   --replace-dm            Replace the previous login manager if there is other than Greetd active
 
   -h, --help              Display this help and exit
@@ -163,6 +165,10 @@ parse_cli_args() {
       ;;
     "--no-cava")
       config_dirs[cava]=false
+      shift
+      ;;
+    "--no-yazi")
+      config_dirs[yazi]=false
       shift
       ;;
     "--replace-dm")
@@ -271,6 +277,16 @@ zsh_pre_config() {
   fi
 }
 
+download_yazi_theme() {
+  info "Downloading Yazi dracula flavor..."
+
+  if command -v ya &>/dev/null; then
+    ya pkg add yazi-rs/flavors:dracula
+  else
+    info "Yazi packager manager not available." "Proceeding without Yazi flavors."
+  fi
+}
+
 #######
 # Symlinks each directory in the repo's own .config/ to user's ~/.config/
 #
@@ -290,6 +306,8 @@ symlink_config_dirs() {
 
     if [ "$dir" = "zsh" ]; then
       zsh_pre_config
+    elif [ "$dir" = "yazi" ]; then
+      download_yazi_theme
     fi
 
     local SOURCE="$DOTFILES_PATH/.config/$dir"

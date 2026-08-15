@@ -23,6 +23,9 @@ _SYSTEM=(
   btop
   smartmontools
 
+  # File exploring
+  yazi
+
   # Brightness
   brightnessctl
 
@@ -41,12 +44,19 @@ _UTILITIES=(
   wl-clip-persist
   udiskie
   mpv
-  nautilus
   wofi
   satty
   grim
   waybar
   swaync
+
+  # Yazi external utilities
+  ffmpeg
+  7zip
+  jq
+  poppler
+  resvg
+  imagemagick
 )
 
 _AESTHETICS=(
