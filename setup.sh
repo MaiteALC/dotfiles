@@ -31,6 +31,7 @@ declare -A config_dirs=(
   [zsh]=true
   [bat]=true
   [cava]=true
+  [yazi]=true
 )
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 BACKUP_DIR="$HOME/.rice_backup_$TIMESTAMP"
@@ -68,6 +69,7 @@ Options:
   --no-gtk                Skip GTK3 and GTK4 configuration
   --no-qt                 Skip Qt5 and Qt6 configuration
   --no-cava               Skip Cava configuration
+  --no-yazi               Skip Yazi configuration
   --replace-dm            Replace the previous login manager if there is other than Greetd active
 
   -h, --help              Display this help and exit
@@ -163,6 +165,10 @@ parse_cli_args() {
       ;;
     "--no-cava")
       config_dirs[cava]=false
+      shift
+      ;;
+    "--no-yazi")
+      config_dirs[yazi]=false
       shift
       ;;
     "--replace-dm")
