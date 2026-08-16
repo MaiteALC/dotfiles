@@ -39,8 +39,8 @@ your system.
 - **Symlink Management:** Make symlinks between the repository and your ~/.config/
 directory in a clean way.
 
-- **Backup:** Automatically creates a backup directory (~/.rice_backup) and put
-all your previous configuration to avoid losing files.
+- **Backup:** Automatically creates a backup directory (~/.rice_backup_TIMESTAMP)
+and put all your previous configuration to avoid losing files.
 
 - **Color Consistency:** Applies the Catppuccin Mocha accents in the Papirus Dark
 icon theme via CLI.
