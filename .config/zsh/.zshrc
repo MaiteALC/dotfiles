@@ -11,7 +11,7 @@ eval "$(starship init zsh)"
 
 mkdir -p "$XDG_CACHE_HOME/zsh"
 
-autoload -Uz compinit && compinit
+autoload -Uz compinit
 compinit -d "$XDG_CACHE_HOME/zsh/.zcompdump"
 
 # Case insensitive
