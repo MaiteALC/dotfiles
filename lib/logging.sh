@@ -9,7 +9,7 @@ export CYAN="\033[36m"
 export NO_COLOR="\033[0m"
 
 #######################################
-# Prints an informative message in cyan.
+# Prints an informative message with cyan prefix.
 #
 # Globals:
 #   CYAN
@@ -31,18 +31,18 @@ info() {
     return 1
   fi
 
-  printf "\n%b󰌵 [INFO] %s\n" "$CYAN" "$1"
+  printf "\n%b󰌵 [INFO]%b %s\n" "$CYAN" "$NO_COLOR" "$1"
   shift
 
-  if [[ "$#" -gt 0 ]]; then
-    printf "%s\n" "$@"
-  fi
+  local INDENTATION="         " # prefix length
 
-  printf "%b" "$NO_COLOR"
+  if [[ "$#" -gt 0 ]]; then
+    printf "$INDENTATION%s\n" "$@"
+  fi
 }
 
 #######################################
-# Prints a warning message in orange.
+# Prints a warning message with orange prefix.
 #
 # Globals:
 #   ORANGE
@@ -64,18 +64,18 @@ warn() {
     return 1
   fi
 
-  printf "\n%b  [WARNING] %s\n" "$ORANGE" "$1"
+  printf "\n%b  [WARNING]%b %s\n" "$ORANGE" "$NO_COLOR" "$1"
   shift
 
-  if [[ "$#" -gt 0 ]]; then
-    printf "%s\n" "$@"
-  fi
+  local INDENTATION="             " # prefix length
 
-  printf "%b" "$NO_COLOR"
+  if [[ "$#" -gt 0 ]]; then
+    printf "$INDENTATION%s\n" "$@"
+  fi
 }
 
 #######################################
-# Prints an error message in red.
+# Prints an error message with red prefix.
 #
 # Globals:
 #   RED
@@ -97,18 +97,18 @@ error() {
     return 1
   fi
 
-  printf "\n%b [ERROR] %s\n" "$RED" "$1" >&2
+  printf "\n%b [ERROR]%b %s\n" "$RED" "$NO_COLOR" "$1" >&2
   shift
 
-  if [[ "$#" -gt 0 ]]; then
-    printf "%s\n" "$@" >&2
-  fi
+  local INDENTATION="          " # prefix length
 
-  printf "%b" "$NO_COLOR"
+  if [[ "$#" -gt 0 ]]; then
+    printf "$INDENTATION%s\n" "$@" >&2
+  fi
 }
 
 #######################################
-# Prints a success message in green.
+# Prints a success message with green prefix.
 #
 # Globals:
 #   GREEN
@@ -130,12 +130,12 @@ success() {
     return 1
   fi
 
-  printf "\n%b [SUCCESS] %s\n" "$GREEN" "$1"
+  printf "\n%b [SUCCESS]%b %s\n" "$GREEN" "$NO_COLOR" "$1"
   shift
 
-  if [[ "$#" -gt 0 ]]; then
-    printf "%s\n" "$@"
-  fi
+  local INDENTATION="            " # prefix length
 
-  printf "%b" "$NO_COLOR"
+  if [[ "$#" -gt 0 ]]; then
+    printf "$INDENTATION%s\n" "$@"
+  fi
 }

@@ -29,6 +29,11 @@ end
 ---- ENVIRONMENT VARIABLES ----
 -------------------------------
 
+-- Default editor
+-- used by git, crontab, etc.
+hl.env("EDITOR", "nvim")
+hl.env("VISUAL", "nvim")
+
 -- Cursor variables
 hl.env("XCURSOR_SIZE", "20")
 hl.env("XCURSOR_THEME", "Bibata-Modern-Ice")

@@ -1,16 +1,19 @@
 #!/bin/bash
 
 # --- Global variables needed across the script ---
-DRY_RUN_MODE=false
+export DOTFILES_PATH
+DOTFILES_PATH=$(dirname "$(realpath "$0")")
+export DRY_RUN_MODE=false
+
 STARSHIP=true
 LOGIN_MANAGER=true
-ZSH=true
 PACMAN=true
+REPLACE_DM=false
+
 SKIP_DOWNLOADS=false
 SKIP_AUR=false
 SKIP_GPU=false
 SKIP_GPU_DRIVERS=false
-REPLACE_DM=false
 
 declare -A config_dirs=(
   [hypr]=true
@@ -25,14 +28,17 @@ declare -A config_dirs=(
   [gtk-4.0]=true
   [qt5ct]=true
   [qt6ct]=true
+  [zsh]=true
+  [bat]=true
+  [cava]=true
+  [yazi]=true
 )
-DOTFILES_PATH=$(dirname "$(realpath "$0")")
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 BACKUP_DIR="$HOME/.rice_backup_$TIMESTAMP"
 # ---------------
 
-source ./lib/logging.sh
-source ./lib/dry-run.sh
+source "$DOTFILES_PATH/lib/logging.sh"
+source "$DOTFILES_PATH/lib/dry-run.sh"
 
 help_menu() {
   cat <<'EOF'
@@ -62,6 +68,9 @@ Options:
   --no-gpu-config         Skip all GPU configurations, including driver downloads
   --no-gtk                Skip GTK3 and GTK4 configuration
   --no-qt                 Skip Qt5 and Qt6 configuration
+  --no-bat                Skip Bat configuration
+  --no-cava               Skip Cava configuration
+  --no-yazi               Skip Yazi configuration
   --replace-dm            Replace the previous login manager if there is other than Greetd active
 
   -h, --help              Display this help and exit
@@ -114,7 +123,7 @@ parse_cli_args() {
       shift
       ;;
     "--no-zsh")
-      ZSH=false
+      config_dirs[zsh]=false
       shift
       ;;
     "--no-starship")
@@ -153,6 +162,18 @@ parse_cli_args() {
     "--no-qt")
       config_dirs[qt5ct]=false
       config_dirs[qt6ct]=false
+      shift
+      ;;
+    "--no-bat")
+      config_dirs[bat]=false
+      shift
+      ;;
+    "--no-cava")
+      config_dirs[cava]=false
+      shift
+      ;;
+    "--no-yazi")
+      config_dirs[yazi]=false
       shift
       ;;
     "--replace-dm")
@@ -222,6 +243,56 @@ backup_dir() {
 }
 
 #######
+# Configures the '.zshenv' file.
+#
+# Creates the '~/.zshenv' file if it doesn't exist.
+# Symlinks the repo's '.zshenv' as '~/.zshenv_rice', and if it isn't being
+# sourced by the user's file, injects the source command.
+#
+# Globals:
+#   DOTFILES_PATH
+#
+# Arguments:
+#   None
+#######
+zsh_pre_config() {
+  local SOURCE="$DOTFILES_PATH/.zshenv"
+  local TARGET="$HOME/.zshenv"
+
+  dry_run touch "$TARGET"
+
+  append_to_zshenv() {
+    {
+      printf "\n\n"
+      printf "%s\n" "# Put your personal env vars in ~/.zshenv" \
+        "# That sourced file is intended to store commom env vars, like XDG_* and ZDOTDIR" \
+        "source $HOME/.zshenv_rice"
+    } >> "$TARGET"
+  }
+
+  if [ -f "$SOURCE" ]; then
+    dry_run ln -snf "$SOURCE" "$HOME/.zshenv_rice"
+
+    if ! grep -q "source $HOME/.zshenv_rice" "$TARGET"; then
+      dry_run append_to_zshenv
+    fi
+  else
+    dry_run warn "The '.zshenv' file doesn't exist in the dotfiles root. Unable to source it." \
+      "The setup will proceed, but the Zsh configs will fail if the env vars defined in that file don't exist."
+  fi
+}
+
+download_yazi_theme() {
+  info "Downloading Yazi dracula flavor..."
+
+  if command -v ya &>/dev/null; then
+    ya pkg add yazi-rs/flavors:dracula
+  else
+    info "Yazi packager manager not available." "Proceeding without Yazi flavors."
+  fi
+}
+
+#######
 # Symlinks each directory in the repo's own .config/ to user's ~/.config/
 #
 # Relies on backup_dir function to make the backup before perform the symlinking.
@@ -238,8 +309,14 @@ symlink_config_dirs() {
       continue
     fi
 
-    SOURCE="$DOTFILES_PATH/.config/$dir"
-    TARGET="$HOME/.config/$dir"
+    if [ "$dir" = "zsh" ]; then
+      zsh_pre_config
+    elif [ "$dir" = "yazi" ]; then
+      download_yazi_theme
+    fi
+
+    local SOURCE="$DOTFILES_PATH/.config/$dir"
+    local TARGET="$HOME/.config/$dir"
 
     if [ -d "$SOURCE" ]; then
       backup_dir "$TARGET"
@@ -331,21 +408,13 @@ configure_login_manager() {
   fi
 }
 
-#######
-# Configures the Zsh, automatically creating the .zshrc file if it doesn't exists.
-#######
-configure_zsh() {
-  dry_run touch ~/.zshrc
-  CUSTOM_ZSH="$DOTFILES_PATH/scripts/zsh_custom.zsh"
+build_bat_themes() {
+  printf "%s\n" "Building bat themes..."
 
-  if ! grep -q "source $CUSTOM_ZSH" ~/.zshrc; then
-    dry_run printf "\n%s\n" "# Injected configurations by ricing script" >>~/.zshrc
-    dry_run printf "%s\n" "source $CUSTOM_ZSH" >>~/.zshrc
-
-    dry_run success "Sourced custom Zsh configurations in your ~/.zshrc file"
-
+  if command -v bat &>/dev/null; then
+    dry_run bat cache --build
   else
-    dry_run info "The zsh_custom.zsh is already sourced in your .zshrc file. Nothing has been chaged."
+    dry_run warn "The 'bat' command isn't available. Unable to build its themes." "The setup will proceed."
   fi
 }
 
@@ -395,15 +464,17 @@ else
   fi
 
   if ! $SKIP_GPU; then
-    SKIP_GPU_DRIVERS="$SKIP_GPU_DRIVERS" ./scripts/gpu-config.sh
+    SKIP_GPU_DRIVERS="$SKIP_GPU_DRIVERS" "$DOTFILES_PATH/scripts/gpu-config.sh"
   fi
 fi
 
 if ! $SKIP_DOWNLOADS; then
-  DRY_RUN_MODE="$DRY_RUN_MODE" SKIP_AUR="$SKIP_AUR" ./scripts/package-installation.sh
+  SKIP_AUR="$SKIP_AUR" "$DOTFILES_PATH/scripts/package-installation.sh"
 fi
 
 symlink_config_dirs
+
+build_bat_themes
 
 customize_icons
 
@@ -413,10 +484,6 @@ fi
 
 if $LOGIN_MANAGER; then
   configure_login_manager "$REPLACE_DM"
-fi
-
-if $ZSH; then
-  configure_zsh
 fi
 
 success "Script executed successfully!" "Reboot your PC and enjoy your Arch Linux with Hyprland!"

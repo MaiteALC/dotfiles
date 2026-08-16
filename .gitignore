@@ -21,3 +21,5 @@ icon-theme.cache
 /scripts/env_hardware.sh
 /hypr/devices.conf
 /.config/hypr/modules/devices.lua
+.config/cava/shaders
+.config/cava/themes
