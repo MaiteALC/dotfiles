@@ -3,6 +3,8 @@
 source "$DOTFILES_PATH/lib/logging.sh"
 source "$DOTFILES_PATH/lib/packages.sh"
 
+CHOSEN_GPU_ADDRESS=""
+
 detect_gpu_vendor() {
   local gpu_info
   gpu_info=$(lspci | grep -iE "VGA|3D")
@@ -72,8 +74,8 @@ get_gpu_name() {
 # Arguments:
 #   $1 - An array containing all the found GPU PCI addresses
 #
-# Outputs:
-#   The chosen GPU's PCI address
+# Globals:
+#   CHOSEN_GPU_ADDRESS
 #######
 prompt_user() {
   local pci_addresses=("$@")
@@ -91,23 +93,25 @@ prompt_user() {
 
     read -r choice
 
-    chosen_address="${pci_addresses[$choice]}"
+    CHOSEN_GPU_ADDRESS="${pci_addresses[$choice]}"
 
-    if [[ ! "$choice" =~ ^[0-9]+$ ]] || [ -z "$chosen_address" ]; then
+    if [[ ! "$choice" =~ ^[0-9]+$ ]] || [ -z "$CHOSEN_GPU_ADDRESS" ]; then
       printf "%s\n" "Invalid option. Try again."
       continue
     else
       break
     fi
   done
-
-  printf "%s" "$chosen_address"
 }
 
 #######
 # Search for the available GPU(s) and prompt the user to select which one should be used to render Hyprland.
+#
 # After the user's choice, it saves GPU data in a state file at '/tmp/hyprland-rice/gpu-info'.
 # The file and the directory are created if necessary.
+#
+# Globals:
+#   CHOSEN_GPU_ADDRESS
 ########
 get_main_render_gpu() {
   local pci_addresses=($(get_gpu_pci_addresses))
@@ -132,15 +136,14 @@ get_main_render_gpu() {
 
     printf "name=%s card_path=%s pci_address=%s" "$name" "$CARD_PATH" "${pci_addresses[0]}" >"$GPU_FILE"
   else
-    local chosen_address
-    chosen_address=$(prompt_user "${pci_addresses[@]}")
+    prompt_user "${pci_addresses[@]}"
 
-    CARD_PATH=$(get_gpu_card_path "$chosen_address")
+    CARD_PATH=$(get_gpu_card_path "$CHOSEN_GPU_ADDRESS")
 
     local name
-    name=$(get_gpu_name "$chosen_address")
+    name=$(get_gpu_name "$CHOSEN_GPU_ADDRESS")
 
-    printf "name=%s card_path=%s pci_address=%s" "$name" "$CARD_PATH" "$chosen_address" >"$GPU_FILE"
+    printf "name=%s card_path=%s pci_address=%s" "$name" "$CARD_PATH" "$CHOSEN_GPU_ADDRESS" >"$GPU_FILE"
   fi
 }
 
