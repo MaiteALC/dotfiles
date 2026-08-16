@@ -117,7 +117,7 @@ Check the ```.config/hypr/modules/binds.lua``` file to see all keybinds.
 
 <p align="center">
   <img src="./screenshots/spotify_pipes_cava.png" width="49%" alt="Spotify with pipes-rs and cava" />
-  <img src="./screenshots/wofi_nautilus.png" width="49%" alt="Nautilus and Wofi launcher" />
+  <img src="./screenshots/yazi.png" width="49%" alt="Yazi terminal file manager" />
 </p>
 
 <p align="center">
