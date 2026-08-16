@@ -68,6 +68,7 @@ Options:
   --no-gpu-config         Skip all GPU configurations, including driver downloads
   --no-gtk                Skip GTK3 and GTK4 configuration
   --no-qt                 Skip Qt5 and Qt6 configuration
+  --no-bat                Skip Bat configuration
   --no-cava               Skip Cava configuration
   --no-yazi               Skip Yazi configuration
   --replace-dm            Replace the previous login manager if there is other than Greetd active
@@ -161,6 +162,10 @@ parse_cli_args() {
     "--no-qt")
       config_dirs[qt5ct]=false
       config_dirs[qt6ct]=false
+      shift
+      ;;
+    "--no-bat")
+      config_dirs[bat]=false
       shift
       ;;
     "--no-cava")
