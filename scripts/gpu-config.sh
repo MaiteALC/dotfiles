@@ -76,8 +76,7 @@ get_gpu_name() {
 #   The chosen GPU's PCI address
 #######
 prompt_user() {
-  local pci_addresses
-  read -ar pci_addresses <<<"$1"
+  local pci_addresses=("$@")
 
   info "More than one GPU detected. Which would you like to use to render Hyprland?" \
     "Select by typing the number of the GPU you want to use: "
