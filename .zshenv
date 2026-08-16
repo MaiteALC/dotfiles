@@ -6,9 +6,3 @@ export XDG_STATE_HOME="$HOME/.local/state"
 # --------------------------------
 
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
-
-# ----- Default Editor -----
-# used by git, crontab, etc.
-export EDITOR="nvim"
-export VISUAL="nvim"
-# --------------------------
