@@ -75,19 +75,19 @@ cd ~/dotfiles
 *2. Change the permissions:*
 
 ```bash
-chmod u+x install.sh
+chmod u+x setup.sh
 ```
 
 *3. Execute the Test (Dry-Run):*
 
 ```bash
-./install.sh --dry-run
+./setup.sh --dry-run
 ```
 
 *4. Real Execution:*
 
 ```bash
-./install.sh
+./setup.sh
 ```
 
 ---
