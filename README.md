@@ -47,6 +47,11 @@ icon theme via CLI.
 
 - **Wallpapers:** Provides a set of wallpapers to match the Hyprland style.
 
+- **Selectable Features:** Allows the users to skip the configurations they won't
+want to apply by passing the ```--no-*``` flags, like ```--no-nvim``` to skip
+Neovim configuration.
+Use the ```--help``` flag to see all the available options.
+
 ---
 
 ## 🍚 Rice Components
