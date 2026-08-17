@@ -29,6 +29,11 @@ end
 ---- ENVIRONMENT VARIABLES ----
 -------------------------------
 
+-- Default editor
+-- used by git, crontab, etc.
+hl.env("EDITOR", "nvim")
+hl.env("VISUAL", "nvim")
+
 -- Cursor variables
 hl.env("XCURSOR_SIZE", "20")
 hl.env("XCURSOR_THEME", "Bibata-Modern-Ice")
@@ -37,7 +42,6 @@ hl.env("HYPRCURSOR_THEME", "Bibata-Modern-Ice")
 
 -- XDG variables
 hl.env("XDG_SESSION_TYPE", "wayland")
-hl.env("XDG_CURRENT_DESKTOP", "Hyprland")
 hl.env("XDG_SESSION_DESKTOP", "Hyprland")
 
 -- Qt variables

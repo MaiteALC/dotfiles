@@ -89,3 +89,5 @@ vim.opt.laststatus = 3 -- 0: Never show the status line
 -- 1: Show the status line if there are at least two splits
 -- 2: Always show one status line per split
 -- 3: Always show one global status line at the bottom of the screen
+
+vim.opt.completeopt = { 'menu', 'noselect', 'menuone' }

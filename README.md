@@ -1,14 +1,20 @@
-# ☕ Catppuccin Mocha - Hyprland Dotfiles
+# Maite's Dotfiles
 
 ![Arch Linux](https://img.shields.io/badge/Arch%20Linux-1793D1?logo=arch-linux&logoColor=white)
 ![Hyprland](https://img.shields.io/badge/Hyprland-33ccff?logo=hyprland&logoColor=white)
-![Theme](https://img.shields.io/badge/Theme-Catppuccin%20Mocha-f5e0dc?labelColor=1e1e2e)
+![Theme](https://img.shields.io/badge/Theme-Dracula-ff5555?labelColor=1e1e2e)
+![Accents](https://img.shields.io/badge/Accents-Catppuccin%20Mocha-f5e0dc?labelColor=1e1e2e)
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-This repository contains my personal rice, based on Hyprland, focused on Catppuccin
-Mocha and automated by an installation script. The current dotfiles version is based
-on Hyprland v0.55, with **Lua-based** configurations. Check the
-[v1.0.0-legacy-hyprlang](https://github.com/MaiteALC/dotfiles/releases/tag/v1.0.0-legacy-hyprlang)
+This repository contains my personal Arch Linux rice, powered by Hyprland.
+Visually, the setup is primarily driven by the Dracula theme (prominently
+featured in Yazi and Neovim).
+It also incorporates the sleek dark tones of Catppuccin Mocha to complement
+the overall aesthetic and style the Starship prompt.
+
+Everything is automated by an easy-to-use installation script.
+The current dotfiles version is based on Hyprland v0.56, featuring Lua-based
+configurations. Check the [v1.0.0-legacy-hyprlang](https://github.com/MaiteALC/dotfiles/releases/tag/v1.0.0-legacy-hyprlang)
 to access the legacy version with static `.conf` files.
 
 ---
@@ -33,13 +39,18 @@ your system.
 - **Symlink Management:** Make symlinks between the repository and your ~/.config/
 directory in a clean way.
 
-- **Backup:** Automatically creates a backup directory (~/.rice_backup) and put
-all your previous configuration to avoid losing files.
+- **Backup:** Automatically creates a backup directory (~/.rice_backup_TIMESTAMP)
+and put all your previous configuration to avoid losing files.
 
 - **Color Consistency:** Applies the Catppuccin Mocha accents in the Papirus Dark
 icon theme via CLI.
 
 - **Wallpapers:** Provides a set of wallpapers to match the Hyprland style.
+
+- **Selectable Features:** Allows the users to skip the configurations they won't
+want to apply by passing the ```--no-*``` flags, like ```--no-nvim``` to skip
+Neovim configuration.
+Use the ```--help``` flag to see all the available options.
 
 ---
 
@@ -75,19 +86,19 @@ cd ~/dotfiles
 *2. Change the permissions:*
 
 ```bash
-chmod u+x install.sh
+chmod u+x setup.sh
 ```
 
 *3. Execute the Test (Dry-Run):*
 
 ```bash
-./install.sh --dry-run
+./setup.sh --dry-run
 ```
 
 *4. Real Execution:*
 
 ```bash
-./install.sh
+./setup.sh
 ```
 
 ---
@@ -117,7 +128,7 @@ Check the ```.config/hypr/modules/binds.lua``` file to see all keybinds.
 
 <p align="center">
   <img src="./screenshots/spotify_pipes_cava.png" width="49%" alt="Spotify with pipes-rs and cava" />
-  <img src="./screenshots/wofi_nautilus.png" width="49%" alt="Nautilus and Wofi launcher" />
+  <img src="./screenshots/yazi.png" width="49%" alt="Yazi terminal file manager" />
 </p>
 
 <p align="center">

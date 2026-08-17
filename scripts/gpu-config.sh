@@ -1,5 +1,10 @@
 #!/bin/bash
 
+source "$DOTFILES_PATH/lib/logging.sh"
+source "$DOTFILES_PATH/lib/packages.sh"
+
+CHOSEN_GPU_ADDRESS=""
+
 detect_gpu_vendor() {
   local gpu_info
   gpu_info=$(lspci | grep -iE "VGA|3D")
@@ -64,9 +69,49 @@ get_gpu_name() {
 }
 
 #######
+# Prompts the user which GPU they would like to use to render Hyprland.
+#
+# Arguments:
+#   $1 - An array containing all the found GPU PCI addresses
+#
+# Globals:
+#   CHOSEN_GPU_ADDRESS
+#######
+prompt_user() {
+  local pci_addresses=("$@")
+
+  info "More than one GPU detected. Which would you like to use to render Hyprland?" \
+    "Select by typing the number of the GPU you want to use: "
+
+  while true; do
+    local i=0
+    for address in "${pci_addresses[@]}"; do
+      name=$(get_gpu_name "$address")
+      printf "%s\n" "GPU $i - $name"
+      ((i++))
+    done
+
+    read -r choice
+
+    CHOSEN_GPU_ADDRESS="${pci_addresses[$choice]}"
+
+    if [[ ! "$choice" =~ ^[0-9]+$ ]] || [ -z "$CHOSEN_GPU_ADDRESS" ]; then
+      printf "%s\n" "Invalid option. Try again."
+      continue
+    else
+      break
+    fi
+  done
+}
+
+#######
 # Search for the available GPU(s) and prompt the user to select which one should be used to render Hyprland.
+#
 # After the user's choice, it saves GPU data in a state file at '/tmp/hyprland-rice/gpu-info'.
 # The file and the directory are created if necessary.
+#
+# Globals:
+#   CHOSEN_GPU_ADDRESS
 ########
 get_main_render_gpu() {
   local pci_addresses=($(get_gpu_pci_addresses))
@@ -80,7 +125,7 @@ get_main_render_gpu() {
   touch "$GPU_FILE"
 
   if [ "${#pci_addresses[@]}" -eq 1 ]; then
-    printf "A single GPU was detected. Automatic configuring the environment variables...\n"
+    info "A single GPU has been detected. Automatically configuring environment variables..."
 
     local address
     local name
@@ -91,39 +136,34 @@ get_main_render_gpu() {
 
     printf "name=%s card_path=%s pci_address=%s" "$name" "$CARD_PATH" "${pci_addresses[0]}" >"$GPU_FILE"
   else
-    printf "%s\n" "More than one GPU detected. Which would you like to use to render Hyprland?"
+    prompt_user "${pci_addresses[@]}"
 
-    while true; do
-      local i=0
-      for address in "${pci_addresses[@]}"; do
-        name=$(get_gpu_name "$address")
-        printf "%s\n" "GPU $i - $name"
-        ((i++))
-      done
+    CARD_PATH=$(get_gpu_card_path "$CHOSEN_GPU_ADDRESS")
 
-      printf "%s" "Select by typing the number of the GPU you want to use: "
-      read -r choice
+    local name
+    name=$(get_gpu_name "$CHOSEN_GPU_ADDRESS")
 
-      chosen_address="${pci_addresses[$choice]}"
-
-      if [[ ! "$choice" =~ ^[0-9]+$ ]] || [ -z "$chosen_address" ]; then
-        printf "%s\n" "Invalid option. Try again."
-        continue
-      else
-        CARD_PATH=$(get_gpu_card_path "$chosen_address")
-        local name
-        name=$(get_gpu_name "$chosen_address")
-
-        printf "name=%s card_path=%s pci_address=%s" "$name" "$CARD_PATH" "$chosen_address" >"$GPU_FILE"
-
-        break
-      fi
-    done
+    printf "name=%s card_path=%s pci_address=%s" "$name" "$CARD_PATH" "$CHOSEN_GPU_ADDRESS" >"$GPU_FILE"
   fi
 }
 
-gpu_environment_setup() {
-  get_main_render_gpu
+#######
+# Downloads the required dedicated GPU drivers.
+#
+# Relies on detect_gpu_vendor function to detect the GPU vendor.
+#
+# Requires:
+#   Active sudo privileges. The caller must ensure the user is already authenticated
+#   (e.g., by running `sudo -v` beforehand) as this function does not prompt for a password.
+#
+# Returns:
+#   1 - If sudo privileges are missing/expired.
+#######
+download_gpu_drivers() {
+  if ! sudo -n true 2>/dev/null; then
+    error "Sudo privileges missing or expired. Unable to download GPU drivers using pacman"
+    return 1
+  fi
 
   local GPU_VENDOR
   GPU_VENDOR=$(detect_gpu_vendor)
@@ -131,23 +171,38 @@ gpu_environment_setup() {
   case $GPU_VENDOR in
   "Nvidia")
     printf "%s\n" "Nvidia GPU detected. Installing required drivers..."
-    sudo pacman -S --needed --noconfirm nvidia-open-dkms nvidia-prime nvidia-settings nvidia-utils opencl-nvidia
+
+    sudo pacman -S --needed --noconfirm "${NVIDIA_DRIVERS[@]}"
+
+    success "Nvidia drivers installed"
     ;;
 
   "Intel")
     printf "%s\n" "Intel GPU detected. Installing Required drivers..."
 
-    sudo pacman -S --needed --noconfirm mesa lib32-mesa vulkan-intel lib32-vulkan-intel intel-media-driver libva-intel-driver intel-gpu-tools
+    sudo pacman -S --needed --noconfirm "${INTEL_DRIVERS[@]}"
+
+    success "Intel drivers installed"
     ;;
 
   "Amd")
     printf "%s\n" "AMD GPU detected. Installing Required drivers..."
 
-    sudo pacman -S --needed --noconfirm mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver mesa-vdpau
+    sudo pacman -S --needed --noconfirm "${AMD_DRIVERS[@]}"
+
+    success "AMD drivers installed"
     ;;
 
   *)
-    printf "%s\n" "No dedicated GPU detected, proceeding with normal installation."
+    info "No dedicated GPU detected, proceeding with normal installation."
     ;;
   esac
 }
+
+get_main_render_gpu
+
+if [ "$SKIP_GPU_DRIVERS" = "true" ]; then
+  info "Skipping GPU driver downloads..."
+else
+  download_gpu_drivers
+fi
