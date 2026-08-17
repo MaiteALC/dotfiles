@@ -282,13 +282,13 @@ zsh_pre_config() {
   fi
 }
 
-download_yazi_theme() {
-  info "Downloading Yazi dracula flavor..."
+download_yazi_packages() {
+  dry_run info "Downloading Yazi packages..."
 
   if command -v ya &>/dev/null; then
-    ya pkg add yazi-rs/flavors:dracula
+    dry_run ya pkg install
   else
-    info "Yazi packager manager not available." "Proceeding without Yazi flavors."
+    dry_run info "Ya package manager not available." "Proceeding without the downloads."
   fi
 }
 
@@ -312,7 +312,7 @@ symlink_config_dirs() {
     if [ "$dir" = "zsh" ]; then
       zsh_pre_config
     elif [ "$dir" = "yazi" ]; then
-      download_yazi_theme
+      download_yazi_packages
     fi
 
     local SOURCE="$DOTFILES_PATH/.config/$dir"

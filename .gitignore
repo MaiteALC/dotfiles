@@ -23,3 +23,4 @@ icon-theme.cache
 /.config/hypr/modules/devices.lua
 .config/cava/shaders
 .config/cava/themes
+.config/yazi/flavors

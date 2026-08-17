@@ -103,11 +103,11 @@ hl.config({
 		rounding_power = 2,
 
 		active_opacity = 1.0,
-		inactive_opacity = 0.95,
+		inactive_opacity = 0.98,
 		fullscreen_opacity = 1.0,
 
 		dim_inactive = true,
-		dim_strength = 0.03,
+		dim_strength = 0.02,
 
 		shadow = {
 			enabled = false,
@@ -117,7 +117,7 @@ hl.config({
 			enabled = true,
 
 			size = 3,
-			passes = 3,
+			passes = 4,
 			vibrancy = 0.2,
 
 			new_optimizations = true,
@@ -126,7 +126,7 @@ hl.config({
 
 			noise = 0.02,
 			contrast = 1,
-			brightness = 0.56,
+			brightness = 0.38,
 
 			popups = true,
 			special = true,
